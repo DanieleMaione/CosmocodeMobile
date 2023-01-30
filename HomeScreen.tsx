@@ -2,9 +2,17 @@
 import axios from 'axios';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {Text, ScrollView, View, StyleSheet, Image} from 'react-native';
+import {
+  Text,
+  ScrollView,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import {utilityGetExtension} from './getExtention';
 import RenderHtml from 'react-native-render-html';
+import {Header} from './Header';
 
 export interface TGist {
   _id?: string;
@@ -54,6 +62,7 @@ export default function HomeScreen() {
 
   return (
     <>
+      <Header title="Home" firstPage={true} />
       <ScrollView style={{backgroundColor: '#171c25'}}>
         <View style={styles.outer}>
           <Text style={styles.pageTitle}>
@@ -63,6 +72,14 @@ export default function HomeScreen() {
             Condividi e scopri in tempo reale a quali attività stanno lavorando
             professionisti e realtà IT, ovunque nel mondo.
           </Text>
+        </View>
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+            style={styles.btn}
+            // onPress={() => navigation.navigate('ScreenOne')}
+          >
+            <Text style={styles.text}>Login</Text>
+          </TouchableOpacity>
         </View>
         {gistList.map((gist: TGist) => {
           const source = {
@@ -157,7 +174,6 @@ const styles = StyleSheet.create({
   },
   outer: {
     textAlign: 'center',
-    paddingBottom: 40,
     paddingTop: 70,
   },
   pageTitle: {
@@ -171,5 +187,24 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     color: '#a0b3d7',
     textAlign: 'center',
+  },
+  text: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: 'white',
+  },
+  btn: {
+    width: '50%',
+    borderColor: '#4f57ef',
+    backgroundColor: '#4f57ef',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 3,
+    borderRadius: 10,
+    margin: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginHorizontal: 5,
   },
 });
