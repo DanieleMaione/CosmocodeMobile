@@ -58,7 +58,6 @@ export default function HomeScreen() {
     };
     fetchGists();
   }, []);
-  console.log(gistList);
 
   return (
     <>
