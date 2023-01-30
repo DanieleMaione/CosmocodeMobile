@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import axios from 'axios';
-import * as React from 'react';
+import React, {FC} from 'react';
 import {useEffect, useState} from 'react';
 import {
   Text,
@@ -36,7 +36,11 @@ export interface TGist {
   likes: Array<{avatar_url: string; username: string}>;
 }
 
-export default function HomeScreen() {
+export interface Props {
+  navigation: any;
+}
+
+export const HomeScreen: FC<Props> = ({navigation}) => {
   const [gistList, setGistList] = useState<Array<TGist>>([]);
 
   useEffect(() => {
@@ -75,8 +79,7 @@ export default function HomeScreen() {
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity
             style={styles.btn}
-            // onPress={() => navigation.navigate('ScreenOne')}
-          >
+            onPress={() => navigation.navigate('Login')}>
             <Text style={styles.text}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -93,7 +96,7 @@ export default function HomeScreen() {
           };
 
           return (
-            <View style={styles.gistContainer}>
+            <View style={styles.gistContainer} key={gist._id}>
               <View style={styles.userContainer}>
                 <View style={styles.userInfo}>
                   <View style={styles.statusContainer}>
@@ -118,7 +121,7 @@ export default function HomeScreen() {
       </ScrollView>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   gistContainer: {

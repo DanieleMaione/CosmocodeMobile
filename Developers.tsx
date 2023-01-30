@@ -8,7 +8,9 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 import {Header} from './Header';
+import {TLogin} from './slice/loginSlice';
 
 export type TDevelopers = {
   username: string;
@@ -18,6 +20,8 @@ export type TDevelopers = {
 
 export default function Developers() {
   const [developers, setDevelopers] = useState<Array<TDevelopers>>([]);
+  const {login} = useSelector((state: TLogin) => state);
+
   useEffect(() => {
     const getDevelopers = async () => {
       const response = await Axios.get('/users', {
@@ -32,35 +36,40 @@ export default function Developers() {
 
     getDevelopers();
   }, []);
+
   return (
     <>
       <Header title="Developers" firstPage={true} />
       <SafeAreaView style={{flex: 1, backgroundColor: '#463f3f'}}>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          {developers.length > 0 && (
-            <View style={styles.container}>
-              {developers.map((dev, index) => {
-                return (
-                  <View key={index} style={styles.containerTwo}>
-                    <Image
-                      style={{height: 150, width: 150, borderRadius: 20}}
-                      source={{uri: dev.avatar_url}}
-                    />
+        {login ? (
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {developers.length > 0 && (
+              <View style={styles.container}>
+                {developers.map((dev, index) => {
+                  return (
+                    <View key={index} style={styles.containerTwo}>
+                      <Image
+                        style={{height: 150, width: 150, borderRadius: 20}}
+                        source={{uri: dev.avatar_url}}
+                      />
 
-                    <Text style={styles.textTwo}>
-                      {dev.username} {dev.totalGists}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-          )}
-        </ScrollView>
+                      <Text style={styles.textTwo}>
+                        {dev.username} {dev.totalGists}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </View>
+            )}
+          </ScrollView>
+        ) : (
+          <Text>no login</Text>
+        )}
       </SafeAreaView>
     </>
   );

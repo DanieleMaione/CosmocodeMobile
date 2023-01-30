@@ -5,6 +5,8 @@ import Axios from 'axios';
 import {SafeAreaView, ScrollView, View, Text} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {Header} from './Header';
+import {useSelector} from 'react-redux';
+import {TLogin} from './slice/loginSlice';
 
 export type TStack = {
   name: string;
@@ -12,6 +14,7 @@ export type TStack = {
 
 export default function Stacks() {
   const [stacks, setStacks] = useState<Array<TStack>>([]);
+  const {login} = useSelector((state: TLogin) => state);
   useEffect(() => {
     const getStacks = async () => {
       const response = await Axios.get('/stacks', {
@@ -25,30 +28,34 @@ export default function Stacks() {
     };
 
     getStacks();
-  }, []);
+  }, [login]);
 
   return (
     <>
       <Header title="Stacks" firstPage={true} />
       <SafeAreaView style={{flex: 1, backgroundColor: '#463f3f'}}>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          {stacks.length > 0 && (
-            <View style={styles.container}>
-              {stacks.map((stack, index) => {
-                return (
-                  <View key={index} style={styles.containerTwo}>
-                    <Text style={styles.text}>{stack.name}</Text>
-                  </View>
-                );
-              })}
-            </View>
-          )}
-        </ScrollView>
+        {login?.username !== '' ? (
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {stacks.length > 0 && (
+              <View style={styles.container}>
+                {stacks.map((stack, index) => {
+                  return (
+                    <View key={index} style={styles.containerTwo}>
+                      <Text style={styles.text}>{stack.name}</Text>
+                    </View>
+                  );
+                })}
+              </View>
+            )}
+          </ScrollView>
+        ) : (
+          <Text>non sei loggato</Text>
+        )}
       </SafeAreaView>
     </>
   );
