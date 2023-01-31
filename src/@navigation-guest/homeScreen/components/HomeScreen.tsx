@@ -10,9 +10,9 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {utilityGetExtension} from './getExtention';
+import {utilityGetExtension} from '../../../../getExtention';
 import RenderHtml from 'react-native-render-html';
-import {Header} from './Header';
+import {Header} from '../../../components-shared/Header';
 
 export interface TGist {
   _id?: string;

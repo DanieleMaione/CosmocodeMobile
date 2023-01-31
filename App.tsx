@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Stacks from './Stacks';
-import Developers from './Developers';
-import Screen from './screens/Screen';
+import Stacks from './src/@navigation-guest/stackScreen/components/Stacks';
+import Developers from './src/@navigation-guest/developerScreen/components/Developers';
+import Screen from './src/@navigation-guest/homeScreen';
 import {Provider} from 'react-redux';
 import {store} from './store';
 

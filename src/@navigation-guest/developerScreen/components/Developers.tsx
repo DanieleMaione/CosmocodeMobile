@@ -9,8 +9,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-import {Header} from './Header';
-import {TLogin} from './slice/loginSlice';
+import {Header} from '../../../components-shared/Header';
+import {TLogin} from '../../../../slice/loginSlice';
 
 export type TDevelopers = {
   username: string;
@@ -20,6 +20,7 @@ export type TDevelopers = {
 
 export default function Developers() {
   const [developers, setDevelopers] = useState<Array<TDevelopers>>([]);
+  // @ts-ignore
   const {login} = useSelector((state: TLogin) => state);
 
   useEffect(() => {

@@ -9,12 +9,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {StyleSheet} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {TLogin, createLogin} from '../slice/loginSlice';
+import {useDispatch} from 'react-redux';
+import {createLogin} from '../../../../slice/loginSlice';
 
 export const Login = memo(() => {
-  const {login} = useSelector((state: Array<TLogin>) => state);
-
   const dispatch = useDispatch();
   const [userName, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -34,6 +32,7 @@ export const Login = memo(() => {
     dispatch(
       createLogin({
         id: Math.random() * 100,
+        // @ts-ignore
         username: user,
         email: response?.config?.data?.email,
       }),

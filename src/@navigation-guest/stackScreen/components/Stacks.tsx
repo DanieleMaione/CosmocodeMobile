@@ -4,9 +4,9 @@ import React, {useEffect, useState} from 'react';
 import Axios from 'axios';
 import {SafeAreaView, ScrollView, View, Text} from 'react-native';
 import {StyleSheet} from 'react-native';
-import {Header} from './Header';
+import {Header} from '../../../components-shared/Header';
 import {useSelector} from 'react-redux';
-import {TLogin} from './slice/loginSlice';
+import {TLogin} from '../../../../slice/loginSlice';
 
 export type TStack = {
   name: string;
@@ -14,6 +14,7 @@ export type TStack = {
 
 export default function Stacks() {
   const [stacks, setStacks] = useState<Array<TStack>>([]);
+  // @ts-ignore
   const {login} = useSelector((state: TLogin) => state);
   useEffect(() => {
     const getStacks = async () => {
