@@ -1,23 +1,31 @@
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
-import {Text, ScrollView, StyleSheet, Image, View} from 'react-native';
+import React, {FC, useEffect, useState} from 'react';
+import {
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import RenderHTML from 'react-native-render-html';
 import {utilityGetExtension} from '../../../getExtention';
 import {TGist} from '../homeScreen/components/HomeScreen';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
 
-export const StackDetail = ({route}) => {
+export interface Props {
+  route: any;
+}
+
+export const StackDetail: FC<Props> = ({route}) => {
   const {stack} = route.params;
   const [gistList, setGistList] = useState<Array<TGist>>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
-  console.log(stack);
 
   useEffect(() => {
     const fetchGists = async () => {
       try {
         const {data: gists} = await axios.get(
-          `https://cosmocode-test.herokuapp.com/search/gists?page=0&tag=${stack.name}&page_size=5`,
+          `https://cosmocode-test.herokuapp.com/search/gists?page=0&tag=${stack.item.name}&page_size=5`,
           {
             headers: {
               apiKey:
@@ -32,6 +40,7 @@ export const StackDetail = ({route}) => {
     };
 
     fetchGists();
+
     if (gistList.length > 0) {
       setLoading(true);
     }
@@ -39,22 +48,31 @@ export const StackDetail = ({route}) => {
 
   return (
     <ScrollView style={styles.scrollView}>
-      <View style={{flexDirection: 'row', alignItems: 'center', margin: 10}}>
-        {/* <Image source={{uri: `${stack.logo}`}} style={styles.image} /> */}
-        <Text style={styles.text}>{stack.name}</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 10,
+          marginLeft: 10,
+          marginBottom: -15,
+        }}>
+        <Image
+          source={{
+            uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png',
+          }}
+          style={[styles.image, {marginRight: 10}]}
+        />
+
+        <Text style={styles.text}>{stack.item.name}</Text>
       </View>
+      <Text style={styles.subTitle}>Trovati {stack.item.total} gist</Text>
       {!loading ? (
-        <>
-          <IconAntDesign
-            name="loading2"
-            size={30}
-            color="white"
-            style={{color: 'white', textAlign: 'center'}}
-          />
-          <Text style={{color: 'white', textAlign: 'center'}}>
-            Sto caricando
-          </Text>
-        </>
+        <View
+          style={{
+            alignItems: 'center',
+            marginTop: '50%',
+          }}>
+          <ActivityIndicator size="large" />
+        </View>
       ) : gistList.length > 0 ? (
         gistList.map((gist: TGist) => {
           const source = {
@@ -136,6 +154,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  subTitle: {
+    fontSize: 16,
+    marginBottom: 5,
+    marginHorizontal: 75,
+    color: '#a0b3d7',
   },
   title: {
     fontSize: 18,
