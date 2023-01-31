@@ -8,8 +8,8 @@ import {Provider} from 'react-redux';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import IconOcticons from 'react-native-vector-icons/Octicons';
 import {store} from '../store';
-import StackScreen from './@navigation-guest/stackScreen/StackScreen';
 import {DeveloperScreen} from './@navigation-guest/developerScreen';
+import StackScreen from './@navigation-guest/stackScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,7 +23,7 @@ export default function App() {
             tabBarInactiveTintColor: 'gray',
             headerShown: false,
             tabBarStyle: {
-              backgroundColor: 'rgb(32, 38, 49)',
+              backgroundColor: 'rgb(15, 23, 36)',
             },
           }}>
           <Tab.Screen

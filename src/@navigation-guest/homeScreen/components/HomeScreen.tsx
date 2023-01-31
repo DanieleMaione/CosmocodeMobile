@@ -13,6 +13,7 @@ import {
 import {utilityGetExtension} from '../../../../getExtention';
 import RenderHtml from 'react-native-render-html';
 import {Header} from '../../../components-shared/Header';
+import {UIButton} from '../../../components-shared/UIButton';
 
 export interface TGist {
   _id?: string;
@@ -76,13 +77,7 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
             professionisti e realtà IT, ovunque nel mondo.
           </Text>
         </View>
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.text}>Login</Text>
-          </TouchableOpacity>
-        </View>
+        <UIButton label="Login" onPress={() => navigation.navigate('Login')} />
         {gistList.map((gist: TGist) => {
           const source = {
             html: `
@@ -202,18 +197,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     color: 'white',
-  },
-  btn: {
-    width: '50%',
-    borderColor: '#4f57ef',
-    backgroundColor: '#4f57ef',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 3,
-    borderRadius: 10,
-    margin: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginHorizontal: 5,
   },
 });

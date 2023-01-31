@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, memo, useEffect, useState} from 'react';
 
 import Axios from 'axios';
 import {
@@ -22,7 +22,7 @@ export interface Props {
   navigation: any;
 }
 
-export const Stacks: FC<Props> = ({navigation}) => {
+export const Stacks: FC<Props> = memo(({navigation}) => {
   const [stacks, setStacks] = useState<Array<any>>([]);
   // @ts-ignore
   const {login} = useSelector((state: TLogin) => state);
@@ -45,8 +45,6 @@ export const Stacks: FC<Props> = ({navigation}) => {
     <>
       <Header title="Stacks" firstPage={true} />
       <SafeAreaView>
-        {/* {stacks.length > 0 && ( */}
-        {/* <View style={styles.container}> */}
         <FlatList
           contentContainerStyle={{paddingBottom: 100}}
           style={{backgroundColor: '#171c25', height: '100%'}}
@@ -55,119 +53,35 @@ export const Stacks: FC<Props> = ({navigation}) => {
           renderItem={stack => {
             return (
               <TouchableOpacity
-                style={{
-                  backgroundColor: '#1b212c',
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: 15,
-                }}
+                style={styles.wrapStack}
                 onPress={() => navigation.navigate('StackDetail', {stack})}>
                 <Image
                   style={styles.image}
                   source={{
-                    uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png',
+                    uri: stack.item.url,
                   }}
                 />
-                <Text
-                  style={{
-                    color: 'white',
-                    textAlign: 'center',
-                    fontSize: 16,
-                    marginTop: 10,
-                  }}>
-                  {stack.item.name}
-                </Text>
+                <Text style={styles.text}>{stack.item.name}</Text>
               </TouchableOpacity>
             );
           }}
         />
-        {/* </View> */}
-        {/* )} */}
-        {/* {login?.username !== '' ? (
-          <ScrollView
-            style={styles.scrollView}
-            contentContainerStyle={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            {stacks.length > 0 && stacks[0].name && (
-              <View style={styles.container}>
-                <FlatList
-                  data={stacks}
-                  numColumns={3}
-                  renderItem={stack => {
-                    return (
-                      <View>
-                        <Text>{stack.name}</Text>
-                      </View>
-                    );
-                  }}
-                />
-                {stacks.map((stack, index) => {
-                  return (
-                    <>
-                      <View style={styles.card} key={index}>
-                        <Image
-                          style={styles.image}
-                          source={{
-                            uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png',
-                          }}
-                        />
-                        <TouchableOpacity
-                          style={styles.containerTwo}
-                          onPress={() =>
-                            navigation.navigate('StackDetail', {stack})
-                          }>
-                          <Text style={styles.text}>{stack.name}</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </>
-                  );
-                })}
-              </View>
-            )}
-          </ScrollView>
-        ) : (
-          <Text>non sei loggato</Text>
-        )} */}
       </SafeAreaView>
     </>
   );
-};
+});
 
 const styles = StyleSheet.create({
-  container: {
+  wrapStack: {
     flex: 1,
     alignItems: 'center',
-  },
-  text: {color: 'white', textAlign: 'left', marginBottom: '2%', marginLeft: 2},
-  card: {
-    width: '100%',
-    borderRadius: 5,
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 10,
-    backgroundColor: 'rgb(32, 38, 49)',
-    position: 'relative',
-    marginTop: 10,
-    boxShadow: '-1px 6px 10px 1px #00000042',
   },
-  scrollView: {backgroundColor: '#171c25'},
+  text: {color: 'white', fontSize: 14},
   image: {
-    width: 60,
-    height: 60,
-    overflow: 'hidden',
-  },
-  containerTwo: {
-    marginTop: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textTwo: {
-    marginTop: 2,
-    textAlign: 'center',
-    fontSize: 14,
-    color: 'white',
+    borderRadius: 100,
+    marginVertical: 10,
+    height: 90,
+    width: 90,
   },
 });

@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {DeveloperDetail} from './components/DeveloperDetail';
-import Developers from './components/Developers';
+import {Developers} from './components/Developers';
 
 const Stack = createNativeStackNavigator();
 export const DeveloperScreen = () => {
@@ -14,11 +14,19 @@ export const DeveloperScreen = () => {
         headerTitleAlign: 'center',
         headerTitleStyle: {color: 'white'},
         headerStyle: {
-          backgroundColor: 'rgb(32, 38, 49)',
+          backgroundColor: 'rgb(15, 23, 36)',
         },
       })}>
-      <Stack.Screen name="Developers" component={Developers} />
-      <Stack.Screen name="DeveloperDetail" component={DeveloperDetail} />
+      <Stack.Screen
+        name="Developers"
+        component={Developers}
+        options={{title: 'Developers', headerShown: false}}
+      />
+      <Stack.Screen
+        name="DeveloperDetail"
+        component={DeveloperDetail}
+        options={{title: 'DeveloperDetail'}}
+      />
     </Stack.Navigator>
   );
 };

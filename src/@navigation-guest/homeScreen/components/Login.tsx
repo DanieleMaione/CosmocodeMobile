@@ -1,16 +1,10 @@
 import Axios from 'axios';
 import React, {memo, useState} from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  SafeAreaView,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {View, ScrollView, SafeAreaView, TextInput} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {createLogin} from '../../../../slice/loginSlice';
+import {UIButton} from '../../../components-shared/UIButton';
 
 export const Login = memo(() => {
   const dispatch = useDispatch();
@@ -58,11 +52,7 @@ export const Login = memo(() => {
             value={email}
           />
         </View>
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity style={styles.btn} onPress={() => onClickLogin()}>
-            <Text style={styles.text}>Login</Text>
-          </TouchableOpacity>
-        </View>
+        <UIButton label="login" onPress={() => onClickLogin()} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -81,8 +71,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   btn: {
-    borderColor: '#4f57ef',
-    backgroundColor: '#4f57ef',
+    borderColor: 'rgb(17, 236, 229)',
+    backgroundColor: 'rgb(17, 236, 229)',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
@@ -95,7 +85,7 @@ const styles = StyleSheet.create({
   },
   text: {
     paddingHorizontal: 10,
-    color: 'white',
+    color: 'black',
     textAlign: 'left',
     fontWeight: 'bold',
   },

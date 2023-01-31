@@ -15,7 +15,7 @@ export default function Screen() {
         headerTitleAlign: 'center',
         headerTitleStyle: {color: 'white'},
         headerStyle: {
-          backgroundColor: 'rgb(32, 38, 49)',
+          backgroundColor: 'rgb(15, 23, 36)',
         },
       })}>
       <Stack.Screen

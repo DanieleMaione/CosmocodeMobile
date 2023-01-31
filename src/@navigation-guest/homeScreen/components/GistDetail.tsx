@@ -4,7 +4,6 @@ import React, {FC, memo, useEffect, useState} from 'react';
 import {View, Text, ScrollView, Image} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {utilityGetExtension} from '../../../../getExtention';
-import {Header} from '../../../components-shared/Header';
 import {TGist} from './HomeScreen';
 import RenderHtml from 'react-native-render-html';
 
@@ -52,7 +51,6 @@ export const GistDetail: FC<Props> = memo(({route}) => {
 
   return (
     <>
-      <Header title={userGist?.filename} firstPage={true} />
       <ScrollView style={{backgroundColor: '#171c25'}}>
         <View style={styles.userGistContainer} key={userGist?._id}>
           <View style={styles.userContainer}>

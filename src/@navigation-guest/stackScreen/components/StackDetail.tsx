@@ -10,8 +10,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import RenderHTML from 'react-native-render-html';
-import {utilityGetExtension} from '../../../getExtention';
-import {TGist} from '../homeScreen/components/HomeScreen';
+import {utilityGetExtension} from '../../../../getExtention';
+import {TGist} from '../../homeScreen/components/HomeScreen';
 
 export interface Props {
   route: any;
@@ -45,7 +45,7 @@ export const StackDetail: FC<Props> = ({route}) => {
     fetchGists();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gistList.length, loading, stack.name]);
+  }, [gistList.length, loading, stack.item.name]);
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -58,7 +58,7 @@ export const StackDetail: FC<Props> = ({route}) => {
         }}>
         <Image
           source={{
-            uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/120px-React-icon.svg.png',
+            uri: stack.item.url,
           }}
           style={[styles.image, {marginRight: 10}]}
         />

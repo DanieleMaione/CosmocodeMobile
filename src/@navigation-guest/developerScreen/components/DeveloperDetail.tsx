@@ -1,6 +1,5 @@
-import {useRoute} from '@react-navigation/native';
 import Axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {FC, memo, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -13,7 +12,12 @@ import RenderHTML from 'react-native-render-html';
 import {utilityGetExtension} from '../../../../getExtention';
 import {TGist} from '../../homeScreen/components/HomeScreen';
 
-export const DeveloperDetail = () => {
+export interface Props {
+  route: any;
+}
+
+export const DeveloperDetail: FC<Props> = memo(({route}) => {
+  const {developer} = route.params;
   const [gistList, setGistList] = useState<Array<TGist>>([]);
   const [user, setUser] = useState<{
     username: string;
@@ -23,17 +27,16 @@ export const DeveloperDetail = () => {
     github_url: string | null;
     total_gists: number;
     following: Array<{username: string; avatar_url: string}>;
+    followers: Array<{username: string; avatar_url: string}>;
     isRegistered: boolean;
     registrationNumber: number | null;
     sponsor?: {avatar_url: string; username: string};
   }>();
-  const route = useRoute();
-  const {dev} = route.params;
 
   useEffect(() => {
     const getGist = async () => {
       const {data: gists} = await Axios.get(
-        `/users/${dev.username}/gists?page_size=5&page=1`,
+        `/users/${developer.item.username}/gists?page_size=5&page=1`,
         {
           baseURL: 'https://cosmocode-test.herokuapp.com',
           headers: {
@@ -45,19 +48,22 @@ export const DeveloperDetail = () => {
       setGistList(gists);
     };
     const getUser = async () => {
-      const {data: user} = await Axios.get(`/users/${dev.username}`, {
-        baseURL: 'https://cosmocode-test.herokuapp.com',
-        headers: {
-          apiKey:
-            'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+      const {data: user} = await Axios.get(
+        `/users/${developer.item.username}`,
+        {
+          baseURL: 'https://cosmocode-test.herokuapp.com',
+          headers: {
+            apiKey:
+              'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+          },
         },
-      });
+      );
       setUser(user);
     };
 
     getGist();
     getUser();
-  }, []);
+  }, [developer.item.username]);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#171c25'}}>
       <View
@@ -70,11 +76,11 @@ export const DeveloperDetail = () => {
         }}>
         <Image
           style={{height: 100, width: 100, borderRadius: 100}}
-          source={{uri: dev.avatar_url}}
+          source={{uri: developer.item.avatar_url}}
         />
         <View style={{gap: 15}}>
           <Text style={{color: 'white', fontSize: 17.5, fontWeight: 'bold'}}>
-            {dev.username}
+            {developer.item.username}
           </Text>
           <View
             style={{
@@ -84,7 +90,9 @@ export const DeveloperDetail = () => {
             }}>
             <View style={styles.followers}>
               <Text style={styles.genericText}>Post</Text>
-              <Text style={styles.publicNumber}>{dev.totalGists}</Text>
+              <Text style={styles.publicNumber}>
+                {developer.item.totalGists}
+              </Text>
             </View>
             <View style={styles.followers}>
               <Text style={styles.genericText}>Follower</Text>
@@ -98,30 +106,17 @@ export const DeveloperDetail = () => {
         </View>
       </View>
 
-      {dev.totalGists <= 0 ? (
-        dev.username !== 'cristianpalermo-bitrocketdev' ? (
-          <Text
-            style={{
-              width: '100%',
-              fontSize: 15,
-              fontWeight: 'bold',
-              color: 'white',
-              textAlign: 'center',
-            }}>
-            Non ci sono post :C
-          </Text>
-        ) : (
-          <Text
-            style={{
-              width: '100%',
-              fontSize: 15,
-              fontWeight: 'bold',
-              color: 'white',
-              textAlign: 'center',
-            }}>
-            Cristian è gay
-          </Text>
-        )
+      {developer.item.totalGists <= 0 ? (
+        <Text
+          style={{
+            width: '100%',
+            fontSize: 15,
+            fontWeight: 'bold',
+            color: 'white',
+            textAlign: 'center',
+          }}>
+          Non ci sono post :c
+        </Text>
       ) : (
         <ScrollView style={{backgroundColor: '#171c25'}}>
           {gistList.map((gist: TGist) => {
@@ -152,7 +147,7 @@ export const DeveloperDetail = () => {
       )}
     </SafeAreaView>
   );
-};
+});
 
 const styles = StyleSheet.create({
   gistContainer: {

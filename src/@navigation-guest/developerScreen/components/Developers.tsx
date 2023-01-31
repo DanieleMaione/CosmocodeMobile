@@ -1,30 +1,25 @@
 import Axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {FC, memo, useEffect, useState} from 'react';
 import {
-  View,
   Text,
   SafeAreaView,
-  ScrollView,
   Image,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
-import {useSelector} from 'react-redux';
-import {TLogin} from '../../../../slice/loginSlice';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/native';
+import {FlatList} from 'react-native';
+import {Header} from '../../../components-shared/Header';
 
 export type TDeveloper = {
   username: string;
   totalGists: string;
   avatar_url: string;
 };
-
-export default function Developers() {
+export interface Props {
+  navigation: any;
+}
+export const Developers: FC<Props> = memo(({navigation}) => {
   const [developers, setDevelopers] = useState<Array<TDeveloper>>([]);
-  // @ts-ignore
-  const {login} = useSelector((state: TLogin) => state);
-
-  const navigation = useNavigation();
 
   useEffect(() => {
     const getDevelopers = async () => {
@@ -43,85 +38,59 @@ export default function Developers() {
 
   return (
     <>
-      <SafeAreaView style={{flex: 1, backgroundColor: '#463f3f'}}>
-        {login ? (
-          <ScrollView
-            style={styles.scrollView}
-            contentContainerStyle={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            {developers.length > 0 && (
-              <View style={styles.container}>
-                {developers.map((dev, index) => {
-                  return (
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('DeveloperDetail', {dev})
-                      }
-                      key={index}
-                      style={styles.containerTwo}>
-                      <Image
-                        style={{height: 150, width: 150, borderRadius: 20}}
-                        source={{uri: dev.avatar_url}}
-                      />
-
-                      <Text style={styles.textTwo}>
-                        {dev.username} {dev.totalGists}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            )}
-          </ScrollView>
-        ) : (
-          <Text>no login</Text>
-        )}
+      <Header title="Developers" firstPage={true} />
+      <SafeAreaView>
+        <FlatList
+          contentContainerStyle={{paddingBottom: 100}}
+          style={{
+            backgroundColor: '#171c25',
+            height: '100%',
+          }}
+          data={developers}
+          numColumns={2}
+          renderItem={developer => {
+            return (
+              <TouchableOpacity
+                style={styles.wrapUser}
+                onPress={() =>
+                  navigation.navigate('DeveloperDetail', {developer})
+                }>
+                <Image
+                  style={styles.userImg}
+                  source={{
+                    uri: developer.item.avatar_url,
+                  }}
+                />
+                <Text style={styles.subTitle}>
+                  {developer.item.totalGists} Gist
+                </Text>
+                <Text style={styles.text}>{developer.item.username}</Text>
+              </TouchableOpacity>
+            );
+          }}
+        />
       </SafeAreaView>
     </>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
   },
-  text: {color: 'white', textAlign: 'left', marginBottom: '2%', marginLeft: 2},
-  card: {
-    width: '90%',
-    borderRadius: 5,
-    justifyContent: 'center',
-    paddingTop: 10,
-    backgroundColor: 'rgb(32, 38, 49)',
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'relative',
-    marginTop: 10,
-    boxShadow: '-1px 6px 10px 1px #00000042',
-  },
-  scrollView: {backgroundColor: '#171c25'},
+  text: {color: 'white', fontSize: 12},
+  subTitle: {color: '#a0b3d7', fontSize: 11},
   userImg: {
-    marginTop: 10,
-    marginBottom: 10,
-    height: 150,
-    width: 150,
-    borderRadius: 75,
+    padding: 50,
+    borderRadius: 100,
+    marginVertical: 10,
+    height: 125,
+    width: 125,
   },
-  userName: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  containerTwo: {
-    marginTop: 10,
-    justifyContent: 'center',
+  wrapUser: {
+    flex: 1,
     alignItems: 'center',
-  },
-  textTwo: {
-    marginTop: 2,
-    textAlign: 'center',
-    fontSize: 14,
-    color: 'white',
+    justifyContent: 'center',
   },
 });
