@@ -48,6 +48,7 @@ export const Stacks: FC<Props> = ({navigation}) => {
         {/* {stacks.length > 0 && ( */}
         {/* <View style={styles.container}> */}
         <FlatList
+          contentContainerStyle={{paddingBottom: 100}}
           style={{backgroundColor: '#171c25', height: '100%'}}
           data={stacks}
           numColumns={3}
