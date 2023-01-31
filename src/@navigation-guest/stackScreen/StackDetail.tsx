@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import axios from 'axios';
 import React, {FC, useEffect, useState} from 'react';
 import {
@@ -19,20 +20,22 @@ export interface Props {
 export const StackDetail: FC<Props> = ({route}) => {
   const {stack} = route.params;
   const [gistList, setGistList] = useState<Array<TGist>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchGists = async () => {
       try {
-        const {data: gists} = await axios.get(
-          `https://cosmocode-test.herokuapp.com/search/gists?page=0&tag=${stack.item.name}&page_size=5`,
-          {
-            headers: {
-              apiKey:
-                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+        const {data: gists} = await axios
+          .get(
+            `https://cosmocode-test.herokuapp.com/search/gists?page=0&tag=${stack.item.name}&page_size=5`,
+            {
+              headers: {
+                apiKey:
+                  'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+              },
             },
-          },
-        );
+          )
+          .finally(() => setLoading(false));
         setGistList(gists.results);
       } catch (error) {
         console.log(error);
@@ -41,9 +44,7 @@ export const StackDetail: FC<Props> = ({route}) => {
 
     fetchGists();
 
-    if (gistList.length > 0) {
-      setLoading(true);
-    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gistList.length, loading, stack.name]);
 
   return (
@@ -65,7 +66,7 @@ export const StackDetail: FC<Props> = ({route}) => {
         <Text style={styles.text}>{stack.item.name}</Text>
       </View>
       <Text style={styles.subTitle}>Trovati {stack.item.total} gist</Text>
-      {!loading ? (
+      {loading ? (
         <View
           style={{
             alignItems: 'center',
