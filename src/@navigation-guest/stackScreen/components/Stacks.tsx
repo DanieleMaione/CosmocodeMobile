@@ -1,8 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 
 import Axios from 'axios';
-import {SafeAreaView, ScrollView, View, Text} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {Header} from '../../../components-shared/Header';
 import {useSelector} from 'react-redux';
@@ -12,7 +18,11 @@ export type TStack = {
   name: string;
 };
 
-export default function Stacks() {
+export interface Props {
+  navigation: any;
+}
+
+export const Stacks: FC<Props> = ({navigation}) => {
   const [stacks, setStacks] = useState<Array<TStack>>([]);
   // @ts-ignore
   const {login} = useSelector((state: TLogin) => state);
@@ -34,7 +44,7 @@ export default function Stacks() {
   return (
     <>
       <Header title="Stacks" firstPage={true} />
-      <SafeAreaView style={{flex: 1, backgroundColor: '#463f3f'}}>
+      <SafeAreaView>
         {login?.username !== '' ? (
           <ScrollView
             style={styles.scrollView}
@@ -46,9 +56,14 @@ export default function Stacks() {
               <View style={styles.container}>
                 {stacks.map((stack, index) => {
                   return (
-                    <View key={index} style={styles.containerTwo}>
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.containerTwo}
+                      onPress={() =>
+                        navigation.navigate('StackDetail', {stack})
+                      }>
                       <Text style={styles.text}>{stack.name}</Text>
-                    </View>
+                    </TouchableOpacity>
                   );
                 })}
               </View>
@@ -60,7 +75,7 @@ export default function Stacks() {
       </SafeAreaView>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

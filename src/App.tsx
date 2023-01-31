@@ -1,14 +1,15 @@
 /* eslint-disable react/no-unstable-nested-components */
-import * as React from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Stacks from './src/@navigation-guest/stackScreen/components/Stacks';
-import Developers from './src/@navigation-guest/developerScreen/components/Developers';
-import Screen from './src/@navigation-guest/homeScreen';
+
+import Developers from './@navigation-guest/developerScreen/components/Developers';
+import Screen from './@navigation-guest/homeScreen';
 import {Provider} from 'react-redux';
-import {store} from './store';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import IconOcticons from 'react-native-vector-icons/Octicons';
+import {store} from '../store';
+import StackScreen from './@navigation-guest/stackScreen/StackScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,8 +49,8 @@ export default function App() {
             }}
           />
           <Tab.Screen
-            name="Stacks"
-            component={Stacks}
+            name="StackScreen"
+            component={StackScreen}
             options={{
               title: 'Stacks',
               headerTintColor: 'white',
