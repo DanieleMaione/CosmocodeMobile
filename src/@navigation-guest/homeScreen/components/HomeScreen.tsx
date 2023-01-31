@@ -110,9 +110,15 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
               </View>
               <Text style={styles.title}>{gist.title}</Text>
               <View style={styles.fileNameContainer}>
-                <View style={styles.fileName}>
-                  <Text>{gist.filename}</Text>
-                </View>
+                <TouchableOpacity
+                  style={styles.fileName}
+                  onPress={() =>
+                    navigation.navigate('Gist Detail', {
+                      idGist: gist._id,
+                    })
+                  }>
+                  <Text style={styles.fileName}>{gist.filename}</Text>
+                </TouchableOpacity>
               </View>
               <RenderHtml contentWidth={200} source={source} />
             </View>
@@ -167,7 +173,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   fileName: {
-    opacity: 0.5,
+    opacity: 0.8,
+    color: '#a0b3d7',
   },
   username: {
     fontSize: 20,
