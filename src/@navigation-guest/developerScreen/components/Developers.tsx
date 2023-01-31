@@ -9,19 +9,22 @@ import {
   StyleSheet,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-import {Header} from '../../../components-shared/Header';
 import {TLogin} from '../../../../slice/loginSlice';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 
-export type TDevelopers = {
+export type TDeveloper = {
   username: string;
   totalGists: string;
   avatar_url: string;
 };
 
 export default function Developers() {
-  const [developers, setDevelopers] = useState<Array<TDevelopers>>([]);
+  const [developers, setDevelopers] = useState<Array<TDeveloper>>([]);
   // @ts-ignore
   const {login} = useSelector((state: TLogin) => state);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     const getDevelopers = async () => {
@@ -40,7 +43,6 @@ export default function Developers() {
 
   return (
     <>
-      <Header title="Developers" firstPage={true} />
       <SafeAreaView style={{flex: 1, backgroundColor: '#463f3f'}}>
         {login ? (
           <ScrollView
@@ -53,7 +55,12 @@ export default function Developers() {
               <View style={styles.container}>
                 {developers.map((dev, index) => {
                   return (
-                    <View key={index} style={styles.containerTwo}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('DeveloperDetail', {dev})
+                      }
+                      key={index}
+                      style={styles.containerTwo}>
                       <Image
                         style={{height: 150, width: 150, borderRadius: 20}}
                         source={{uri: dev.avatar_url}}
@@ -62,7 +69,7 @@ export default function Developers() {
                       <Text style={styles.textTwo}>
                         {dev.username} {dev.totalGists}
                       </Text>
-                    </View>
+                    </TouchableOpacity>
                   );
                 })}
               </View>
