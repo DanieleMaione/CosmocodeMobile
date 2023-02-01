@@ -1,15 +1,23 @@
 /* eslint-disable react-native/no-inline-styles */
 import Axios from 'axios';
 import React, {FC, memo, useEffect, useState} from 'react';
-import {View, Text, Image, StyleSheet, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {Gist} from '../../../components-shared/Gist';
 import {TGist} from '../../../components-shared/types';
 
 export interface Props {
   route: any;
+  navigation: any;
 }
 
-export const DeveloperDetail: FC<Props> = memo(({route}) => {
+export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
   const {params} = route;
 
   const [gistList, setGistList] = useState<Array<TGist>>([]);
@@ -55,6 +63,11 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
     getGist();
     getUser();
   }, [params]);
+
+  const onPressNavigate = (tab: string, user: any) => {
+    navigation.navigate('DeveloperInfo', {tab, user});
+  };
+
   return (
     <ScrollView
       style={{
@@ -95,14 +108,18 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
               <Text style={styles.genericText}>Post</Text>
               <Text style={styles.publicNumber}>{user?.total_gists}</Text>
             </View>
-            <View style={styles.followers}>
-              <Text style={styles.genericText}>Follower</Text>
-              <Text style={styles.publicNumber}>{user?.following.length}</Text>
-            </View>
-            <View style={styles.followers}>
-              <Text style={styles.genericText}>Seguiti</Text>
+            <TouchableOpacity
+              onPress={() => onPressNavigate('followers', user)}
+              style={styles.followers}>
+              <Text style={styles.genericText}>Followers</Text>
               <Text style={styles.publicNumber}>{user?.followers.length}</Text>
-            </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => onPressNavigate('followings', user)}
+              style={styles.followers}>
+              <Text style={styles.genericText}>Seguiti</Text>
+              <Text style={styles.publicNumber}>{user?.following.length}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

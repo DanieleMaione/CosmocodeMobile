@@ -1,6 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {DeveloperDetail} from './components/DeveloperDetail';
+import {DeveloperInfo} from './components/DeveloperInfo';
 import {DeveloperList} from './components/DeveloperList';
 
 const Stack = createNativeStackNavigator();
@@ -26,6 +27,11 @@ export const DeveloperScreen = () => {
         name="DeveloperDetail"
         component={DeveloperDetail}
         options={{title: 'DeveloperDetail'}}
+      />
+      <Stack.Screen
+        name="DeveloperInfo"
+        component={DeveloperInfo}
+        options={{title: 'DeveloperInfo'}}
       />
     </Stack.Navigator>
   );
