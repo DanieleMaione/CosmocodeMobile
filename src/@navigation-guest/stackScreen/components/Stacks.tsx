@@ -48,7 +48,7 @@ export const Stacks: FC<Props> = memo(({navigation}) => {
       <SafeAreaView>
         <FlatList
           contentContainerStyle={{paddingBottom: 100}}
-          style={{backgroundColor: '#171c25', height: '100%'}}
+          style={{backgroundColor: 'black', height: '100%'}}
           data={stacks}
           numColumns={3}
           renderItem={stack => {

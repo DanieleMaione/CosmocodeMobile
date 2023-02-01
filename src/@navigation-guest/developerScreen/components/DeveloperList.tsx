@@ -27,9 +27,6 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
         }}>
         <FlatList
           contentContainerStyle={{paddingBottom: 100}}
-          style={{
-            marginVertical: 50,
-          }}
           data={developers}
           numColumns={2}
           renderItem={developer => {
@@ -73,14 +70,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  text: {color: 'white', fontSize: 12},
-  subTitle: {color: '#a0b3d7', fontSize: 11},
+  text: {color: 'white', fontSize: 14},
+  subTitle: {color: '#a0b3d7', fontSize: 12},
   userImg: {
     padding: 50,
     borderRadius: 100,
     margin: 3,
-    height: 125,
-    width: 125,
+    height: 115,
+    width: 115,
   },
   wrapUser: {
     flex: 1,
