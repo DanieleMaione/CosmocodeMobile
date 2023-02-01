@@ -9,9 +9,8 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import RenderHTML from 'react-native-render-html';
-import {utilityGetExtension} from '../../../../getExtention';
-import {TGist} from '../../homeScreen/components/HomeScreen';
+import {Gist} from '../../../components-shared/Gist';
+import {TGist} from '../../../components-shared/types';
 
 export interface Props {
   route: any;
@@ -75,41 +74,7 @@ export const StackDetail: FC<Props> = ({route}) => {
           <ActivityIndicator size="large" />
         </View>
       ) : gistList.length > 0 ? (
-        gistList.map((gist: TGist) => {
-          const source = {
-            html: `
-            <pre style='color: #a0b3d7'}>
-              <code
-                className={language-${utilityGetExtension(gist.filename)}}
-                style={{fontSize: 15}}
-              >${gist.html}</code>
-            </pre>
-          `,
-          };
-
-          return (
-            <View style={styles.gistContainer} key={gist._id}>
-              <View style={styles.userContainer}>
-                <View style={styles.userInfo}>
-                  <View style={styles.statusContainer}>
-                    <Image
-                      source={{uri: `${gist.avatar_url}`}}
-                      style={styles.image}
-                    />
-                    <Text style={styles.username}>{gist.username}</Text>
-                  </View>
-                </View>
-              </View>
-              <Text style={styles.title}>{gist.title}</Text>
-              <View style={styles.fileNameContainer}>
-                <View style={styles.fileName}>
-                  <Text>{gist.filename}</Text>
-                </View>
-              </View>
-              <RenderHTML contentWidth={200} source={source} />
-            </View>
-          );
-        })
+        gistList.map((gist: TGist) => <Gist gist={gist} />)
       ) : (
         <View style={styles.gistContainer}>
           <Text style={{color: 'white', textAlign: 'center'}}>
@@ -122,7 +87,7 @@ export const StackDetail: FC<Props> = ({route}) => {
 };
 
 const styles = StyleSheet.create({
-  scrollView: {backgroundColor: '#171c25'},
+  scrollView: {backgroundColor: 'black'},
   text: {color: 'white', fontSize: 36, fontWeight: 'bold'},
   image: {
     width: 60,

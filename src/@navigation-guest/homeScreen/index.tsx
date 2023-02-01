@@ -26,7 +26,7 @@ export default function Screen() {
       />
       <Stack.Screen name="Login" component={Login} options={{title: 'Login'}} />
       <Stack.Screen
-        name="Gist Detail"
+        name="GistDetail"
         component={GistDetail}
         options={{title: 'Gist'}}
       />

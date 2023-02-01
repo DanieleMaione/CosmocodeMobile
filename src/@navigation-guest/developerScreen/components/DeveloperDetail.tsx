@@ -1,15 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
 import Axios from 'axios';
 import React, {FC, memo, useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
-import RenderHTML from 'react-native-render-html';
-import {utilityGetExtension} from '../../../../getExtention';
+import {View, Text, Image, StyleSheet, ScrollView} from 'react-native';
+import {Gist} from '../../../components-shared/Gist';
 import {TGist} from '../../../components-shared/types';
 
 export interface Props {
@@ -63,21 +56,18 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
     getUser();
   }, [params]);
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#171c25'}}>
-      <View
-        style={{
-          width: '100%',
-          padding: 25,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-        }}>
+    <ScrollView
+      style={{
+        flex: 1,
+        backgroundColor: 'black',
+      }}>
+      <View style={{flexDirection: 'row'}}>
         <Image
-          style={{height: 100, width: 100, borderRadius: 100}}
+          style={{height: 100, width: 100, margin: 10, borderRadius: 100}}
           source={{uri: user?.avatar_url}}
         />
-        <View style={{gap: 15}}>
-          <Text style={{color: 'white', fontSize: 17.5, fontWeight: 'bold'}}>
+        <View style={{justifyContent: 'center'}}>
+          <Text style={{color: 'white', fontSize: 17, fontWeight: 'bold'}}>
             {params}
           </Text>
           <View
@@ -114,34 +104,13 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
           Non ci sono post :c
         </Text>
       ) : (
-        <ScrollView style={{backgroundColor: '#171c25'}}>
+        <View style={{backgroundColor: 'black'}}>
           {gistList.map((gist: TGist) => {
-            const source = {
-              html: `
-            <pre style='color: #a0b3d7'}>
-              <code
-                className={language-${utilityGetExtension(gist.filename)}}
-                style={{fontSize: 15}}
-              >${gist.html}</code>
-            </pre>
-          `,
-            };
-
-            return (
-              <View style={styles.gistContainer} key={gist._id}>
-                <Text style={styles.title}>{gist.title}</Text>
-                <View style={styles.fileNameContainer}>
-                  <View style={styles.fileName}>
-                    <Text>{gist.filename}</Text>
-                  </View>
-                </View>
-                <RenderHTML contentWidth={200} source={source} />
-              </View>
-            );
+            return <Gist gist={gist} userInfo={false} />;
           })}
-        </ScrollView>
+        </View>
       )}
-    </SafeAreaView>
+    </ScrollView>
   );
 });
 

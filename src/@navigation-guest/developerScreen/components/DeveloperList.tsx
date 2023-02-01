@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {FC, memo} from 'react';
 import {
   Text,
@@ -5,6 +6,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import {FlatList} from 'react-native';
 import {Header} from '../../../components-shared/Header';
@@ -23,7 +25,7 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
         <FlatList
           contentContainerStyle={{paddingBottom: 100}}
           style={{
-            backgroundColor: '#171c25',
+            backgroundColor: 'black',
             height: '100%',
           }}
           data={developers}
@@ -38,12 +40,18 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
                     developer.item.username,
                   )
                 }>
-                <Image
-                  style={styles.userImg}
-                  source={{
-                    uri: developer.item.avatar_url,
-                  }}
-                />
+                <View
+                  style={{
+                    backgroundColor: 'rgb(17, 236, 229)',
+                    borderRadius: 100,
+                  }}>
+                  <Image
+                    style={styles.userImg}
+                    source={{
+                      uri: developer.item.avatar_url,
+                    }}
+                  />
+                </View>
                 <Text style={styles.subTitle}>
                   {developer.item.totalGists} Gist
                 </Text>
@@ -67,7 +75,7 @@ const styles = StyleSheet.create({
   userImg: {
     padding: 50,
     borderRadius: 100,
-    marginVertical: 10,
+    margin: 3,
     height: 125,
     width: 125,
   },

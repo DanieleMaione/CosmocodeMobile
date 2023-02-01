@@ -2,19 +2,11 @@
 import axios from 'axios';
 import React, {FC} from 'react';
 import {useEffect, useState} from 'react';
-import {
-  Text,
-  ScrollView,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import {utilityGetExtension} from '../../../../getExtention';
-import RenderHtml from 'react-native-render-html';
+import {Text, ScrollView, View, StyleSheet} from 'react-native';
 import {Header} from '../../../components-shared/Header';
 import {UIButton} from '../../../components-shared/UIButton';
 import {TGist} from '../../../components-shared/types';
+import {Gist} from '../../../components-shared/Gist';
 
 export interface Props {
   navigation: any;
@@ -57,110 +49,15 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
           </Text>
         </View>
         <UIButton label="Login" onPress={() => navigation.navigate('Login')} />
-        {gistList.map((gist: TGist) => {
-          const source = {
-            html: `
-            <pre style='color: #a0b3d7'}>
-              <code
-                className={language-${utilityGetExtension(gist.filename)}}
-                style={{fontSize: 15}}
-              >${gist.html}</code>
-            </pre>
-          `,
-          };
-
-          return (
-            <View style={styles.gistContainer} key={gist._id}>
-              <View style={styles.userContainer}>
-                <TouchableOpacity
-                  style={styles.userInfo}
-                  onPress={() =>
-                    navigation.navigate('DeveloperDetail', gist.username)
-                  }>
-                  <View style={styles.statusContainer}>
-                    <Image
-                      source={{uri: `${gist.avatar_url}`}}
-                      style={styles.image}
-                    />
-                    <Text style={styles.username}>{gist.username}</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.title}>{gist.title}</Text>
-              <View style={styles.fileNameContainer}>
-                <TouchableOpacity
-                  style={styles.fileName}
-                  onPress={() =>
-                    navigation.navigate('Gist Detail', {
-                      idGist: gist._id,
-                    })
-                  }>
-                  <Text style={styles.fileName}>{gist.filename}</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={{backgroundColor: 'rgb(0, 37, 54)'}}>
-                <RenderHtml contentWidth={200} source={source} />
-              </View>
-            </View>
-          );
-        })}
+        {gistList.map((gist: TGist) => (
+          <Gist gist={gist} />
+        ))}
       </ScrollView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  gistContainer: {
-    backgroundColor: 'rgb(15, 23, 36)',
-    paddingHorizontal: 15,
-    paddingVertical: 30,
-    position: 'relative',
-    borderRadius: 5,
-    boxShadow: '-1 6 10 1 #00000042',
-    marginBottom: 30,
-  },
-  userContainer: {
-    height: 60,
-  },
-  userInfo: {
-    fontSize: 8,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    marginBottom: 30,
-    width: '100%',
-  },
-  statusContainer: {
-    position: 'relative',
-    height: 50,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  image: {
-    width: 60,
-    height: 60,
-    borderRadius: 50,
-    overflow: 'hidden',
-  },
-  title: {
-    fontSize: 18,
-    marginTop: 10,
-    marginBottom: 15,
-    marginLeft: 3,
-    color: '#a0b3d7',
-  },
-  fileNameContainer: {
-    alignItems: 'flex-end',
-  },
-  fileName: {
-    opacity: 0.8,
-    color: '#a0b3d7',
-  },
-  username: {
-    fontSize: 20,
-    marginLeft: 20,
-    color: '#a0b3d7',
-  },
   outer: {
     textAlign: 'center',
     paddingTop: 70,
@@ -176,11 +73,5 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     color: '#a0b3d7',
     textAlign: 'center',
-  },
-  text: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: 'white',
   },
 });
