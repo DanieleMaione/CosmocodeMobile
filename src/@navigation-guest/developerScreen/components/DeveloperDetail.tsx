@@ -10,14 +10,15 @@ import {
 } from 'react-native';
 import RenderHTML from 'react-native-render-html';
 import {utilityGetExtension} from '../../../../getExtention';
-import {TGist} from '../../homeScreen/components/HomeScreen';
+import {TGist} from '../../../components-shared/types';
 
 export interface Props {
   route: any;
 }
 
 export const DeveloperDetail: FC<Props> = memo(({route}) => {
-  const {developer} = route.params;
+  const {params} = route;
+
   const [gistList, setGistList] = useState<Array<TGist>>([]);
   const [user, setUser] = useState<{
     username: string;
@@ -36,7 +37,7 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
   useEffect(() => {
     const getGist = async () => {
       const {data: gists} = await Axios.get(
-        `/users/${developer.item.username}/gists?page_size=5&page=1`,
+        `/users/${params}/gists?page_size=5&page=0`,
         {
           baseURL: 'https://cosmocode-test.herokuapp.com',
           headers: {
@@ -48,22 +49,19 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
       setGistList(gists);
     };
     const getUser = async () => {
-      const {data: user} = await Axios.get(
-        `/users/${developer.item.username}`,
-        {
-          baseURL: 'https://cosmocode-test.herokuapp.com',
-          headers: {
-            apiKey:
-              'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
-          },
+      const {data: user} = await Axios.get(`/users/${params}`, {
+        baseURL: 'https://cosmocode-test.herokuapp.com',
+        headers: {
+          apiKey:
+            'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
         },
-      );
+      });
       setUser(user);
     };
 
     getGist();
     getUser();
-  }, [developer.item.username]);
+  }, [params]);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#171c25'}}>
       <View
@@ -76,11 +74,11 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
         }}>
         <Image
           style={{height: 100, width: 100, borderRadius: 100}}
-          source={{uri: developer.item.avatar_url}}
+          source={{uri: user?.avatar_url}}
         />
         <View style={{gap: 15}}>
           <Text style={{color: 'white', fontSize: 17.5, fontWeight: 'bold'}}>
-            {developer.item.username}
+            {params}
           </Text>
           <View
             style={{
@@ -90,9 +88,7 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
             }}>
             <View style={styles.followers}>
               <Text style={styles.genericText}>Post</Text>
-              <Text style={styles.publicNumber}>
-                {developer.item.totalGists}
-              </Text>
+              <Text style={styles.publicNumber}>{user?.total_gists}</Text>
             </View>
             <View style={styles.followers}>
               <Text style={styles.genericText}>Follower</Text>
@@ -106,7 +102,7 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
         </View>
       </View>
 
-      {developer.item.totalGists <= 0 ? (
+      {user && user.total_gists <= 0 ? (
         <Text
           style={{
             width: '100%',

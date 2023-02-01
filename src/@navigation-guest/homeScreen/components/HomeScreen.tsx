@@ -14,28 +14,7 @@ import {utilityGetExtension} from '../../../../getExtention';
 import RenderHtml from 'react-native-render-html';
 import {Header} from '../../../components-shared/Header';
 import {UIButton} from '../../../components-shared/UIButton';
-
-export interface TGist {
-  _id?: string;
-  idGithub: string;
-  avatar_url: string;
-  username: string;
-  tags: Array<string>;
-  filename: string;
-  type: string;
-  language: string;
-  raw: string;
-  size: number;
-  title: string;
-  description: string;
-  private: boolean;
-  createdAt: string;
-  lastUpdate: Date;
-  nft: string | null;
-  verified: boolean;
-  html: string;
-  likes: Array<{avatar_url: string; username: string}>;
-}
+import {TGist} from '../../../components-shared/types';
 
 export interface Props {
   navigation: any;
@@ -67,7 +46,7 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
   return (
     <>
       <Header title="Home" firstPage={true} />
-      <ScrollView style={{backgroundColor: '#171c25'}}>
+      <ScrollView style={{backgroundColor: 'black'}}>
         <View style={styles.outer}>
           <Text style={styles.pageTitle}>
             Connettiti con sviluppatori e aziende tech di tutto il mondo.
@@ -93,7 +72,11 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
           return (
             <View style={styles.gistContainer} key={gist._id}>
               <View style={styles.userContainer}>
-                <View style={styles.userInfo}>
+                <TouchableOpacity
+                  style={styles.userInfo}
+                  onPress={() =>
+                    navigation.navigate('DeveloperDetail', gist.username)
+                  }>
                   <View style={styles.statusContainer}>
                     <Image
                       source={{uri: `${gist.avatar_url}`}}
@@ -101,7 +84,7 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
                     />
                     <Text style={styles.username}>{gist.username}</Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
               <Text style={styles.title}>{gist.title}</Text>
               <View style={styles.fileNameContainer}>
@@ -115,7 +98,9 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
                   <Text style={styles.fileName}>{gist.filename}</Text>
                 </TouchableOpacity>
               </View>
-              <RenderHtml contentWidth={200} source={source} />
+              <View style={{backgroundColor: 'rgb(0, 37, 54)'}}>
+                <RenderHtml contentWidth={200} source={source} />
+              </View>
             </View>
           );
         })}
@@ -126,7 +111,7 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
 
 const styles = StyleSheet.create({
   gistContainer: {
-    backgroundColor: '#1b212c',
+    backgroundColor: 'rgb(15, 23, 36)',
     paddingHorizontal: 15,
     paddingVertical: 30,
     position: 'relative',

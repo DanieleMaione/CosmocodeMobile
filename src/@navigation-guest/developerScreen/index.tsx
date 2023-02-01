@@ -1,13 +1,13 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {DeveloperDetail} from './components/DeveloperDetail';
-import {Developers} from './components/Developers';
+import {DeveloperList} from './components/DeveloperList';
 
 const Stack = createNativeStackNavigator();
 export const DeveloperScreen = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Developers"
+      initialRouteName="DeveloperList"
       screenOptions={() => ({
         gestureEnabled: true,
         headerTintColor: 'white',
@@ -18,8 +18,8 @@ export const DeveloperScreen = () => {
         },
       })}>
       <Stack.Screen
-        name="Developers"
-        component={Developers}
+        name="DeveloperList"
+        component={DeveloperList}
         options={{title: 'Developers', headerShown: false}}
       />
       <Stack.Screen

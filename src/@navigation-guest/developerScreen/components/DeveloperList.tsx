@@ -1,5 +1,4 @@
-import Axios from 'axios';
-import React, {FC, memo, useEffect, useState} from 'react';
+import React, {FC, memo} from 'react';
 import {
   Text,
   SafeAreaView,
@@ -9,32 +8,13 @@ import {
 } from 'react-native';
 import {FlatList} from 'react-native';
 import {Header} from '../../../components-shared/Header';
+import {useDevelopers} from '../../../components-shared/useDevelopers';
 
-export type TDeveloper = {
-  username: string;
-  totalGists: string;
-  avatar_url: string;
-};
 export interface Props {
   navigation: any;
 }
-export const Developers: FC<Props> = memo(({navigation}) => {
-  const [developers, setDevelopers] = useState<Array<TDeveloper>>([]);
-
-  useEffect(() => {
-    const getDevelopers = async () => {
-      const response = await Axios.get('/users', {
-        baseURL: 'https://cosmocode-test.herokuapp.com',
-        headers: {
-          apiKey:
-            'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
-        },
-      });
-      setDevelopers(response.data);
-    };
-
-    getDevelopers();
-  }, []);
+export const DeveloperList: FC<Props> = memo(({navigation}) => {
+  const developers = useDevelopers();
 
   return (
     <>
@@ -53,7 +33,10 @@ export const Developers: FC<Props> = memo(({navigation}) => {
               <TouchableOpacity
                 style={styles.wrapUser}
                 onPress={() =>
-                  navigation.navigate('DeveloperDetail', {developer})
+                  navigation.navigate(
+                    'DeveloperDetail',
+                    developer.item.username,
+                  )
                 }>
                 <Image
                   style={styles.userImg}

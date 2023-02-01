@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Login} from './components/Login';
 import {HomeScreen} from './components/HomeScreen';
 import {GistDetail} from './components/GistDetail';
+import {DeveloperDetail} from '../developerScreen/components/DeveloperDetail';
 
 const Stack = createNativeStackNavigator();
 export default function Screen() {
@@ -24,7 +25,16 @@ export default function Screen() {
         options={{title: 'HomePage', headerShown: false}}
       />
       <Stack.Screen name="Login" component={Login} options={{title: 'Login'}} />
-      <Stack.Screen name="Gist Detail" component={GistDetail} />
+      <Stack.Screen
+        name="Gist Detail"
+        component={GistDetail}
+        options={{title: 'Gist'}}
+      />
+      <Stack.Screen
+        name="DeveloperDetail"
+        component={DeveloperDetail}
+        options={{title: 'DeveloperDetail'}}
+      />
     </Stack.Navigator>
   );
 }
