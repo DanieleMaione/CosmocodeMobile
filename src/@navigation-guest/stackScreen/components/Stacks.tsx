@@ -13,6 +13,7 @@ import {StyleSheet} from 'react-native';
 import {Header} from '../../../components-shared/Header';
 import {useSelector} from 'react-redux';
 import {TLogin} from '../../../../slice/loginSlice';
+import {SvgUri} from 'react-native-svg';
 
 export type TStack = {
   name: string;
@@ -55,12 +56,17 @@ export const Stacks: FC<Props> = memo(({navigation}) => {
               <TouchableOpacity
                 style={styles.wrapStack}
                 onPress={() => navigation.navigate('StackDetail', {stack})}>
-                <Image
-                  style={styles.image}
-                  source={{
-                    uri: stack.item.url,
-                  }}
-                />
+                {stack.item.url.includes('.svg') ? (
+                  <SvgUri width="70" height="70" uri={stack.item.url} />
+                ) : (
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: stack.item.url,
+                    }}
+                  />
+                )}
+
                 <Text style={styles.text}>{stack.item.name}</Text>
               </TouchableOpacity>
             );
@@ -81,7 +87,7 @@ const styles = StyleSheet.create({
   image: {
     borderRadius: 100,
     marginVertical: 10,
-    height: 90,
-    width: 90,
+    height: 70,
+    width: 70,
   },
 });
