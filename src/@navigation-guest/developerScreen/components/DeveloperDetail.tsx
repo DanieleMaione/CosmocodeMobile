@@ -61,20 +61,35 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
         flex: 1,
         backgroundColor: 'black',
       }}>
-      <View style={{flexDirection: 'row'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+        }}>
         <Image
           style={{height: 100, width: 100, margin: 10, borderRadius: 100}}
           source={{uri: user?.avatar_url}}
         />
-        <View style={{justifyContent: 'center'}}>
-          <Text style={{color: 'white', fontSize: 17, fontWeight: 'bold'}}>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignSelf: 'flex-end',
+            minWidth: 250,
+          }}>
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 17,
+              fontWeight: 'bold',
+              textAlign: 'center',
+            }}>
             {params}
           </Text>
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'center',
               justifyContent: 'space-evenly',
+              paddingVertical: 15,
             }}>
             <View style={styles.followers}>
               <Text style={styles.genericText}>Post</Text>
@@ -100,11 +115,17 @@ export const DeveloperDetail: FC<Props> = memo(({route}) => {
             fontWeight: 'bold',
             color: 'white',
             textAlign: 'center',
+            marginTop: 25,
           }}>
           Non ci sono post :c
         </Text>
       ) : (
-        <View style={{backgroundColor: 'black'}}>
+        <View
+          style={{
+            backgroundColor: 'black',
+            marginTop: 40,
+            marginHorizontal: 5,
+          }}>
           {gistList.map((gist: TGist) => {
             return <Gist gist={gist} userInfo={false} />;
           })}

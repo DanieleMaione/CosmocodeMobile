@@ -21,12 +21,14 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
   return (
     <>
       <Header title="Developers" firstPage={true} />
-      <SafeAreaView>
+      <SafeAreaView
+        style={{
+          backgroundColor: 'black',
+        }}>
         <FlatList
           contentContainerStyle={{paddingBottom: 100}}
           style={{
-            backgroundColor: 'black',
-            height: '100%',
+            marginVertical: 50,
           }}
           data={developers}
           numColumns={2}
@@ -44,6 +46,7 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
                   style={{
                     backgroundColor: 'rgb(17, 236, 229)',
                     borderRadius: 100,
+                    marginVertical: 10,
                   }}>
                   <Image
                     style={styles.userImg}
@@ -83,5 +86,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 10,
   },
 });
