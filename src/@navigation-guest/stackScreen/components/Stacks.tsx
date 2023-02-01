@@ -57,7 +57,7 @@ export const Stacks: FC<Props> = memo(({navigation}) => {
                 style={styles.wrapStack}
                 onPress={() => navigation.navigate('StackDetail', {stack})}>
                 {stack.item.url.includes('.svg') ? (
-                  <SvgUri width="100" height="100" uri={stack.item.url} />
+                  <SvgUri width="70" height="70" uri={stack.item.url} />
                 ) : (
                   <Image
                     style={styles.image}
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   image: {
     borderRadius: 100,
     marginVertical: 10,
-    height: 90,
-    width: 90,
+    height: 70,
+    width: 70,
   },
 });
