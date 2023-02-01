@@ -143,8 +143,8 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
             marginTop: 40,
             marginHorizontal: 5,
           }}>
-          {gistList.map((gist: TGist) => {
-            return <Gist gist={gist} userInfo={false} />;
+          {gistList.map((gist: TGist, index) => {
+            return <Gist gist={gist} userInfo={false} key={index} />;
           })}
         </View>
       )}

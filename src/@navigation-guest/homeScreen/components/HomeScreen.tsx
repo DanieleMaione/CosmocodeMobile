@@ -49,8 +49,8 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
           </Text>
         </View>
         <UIButton label="Login" onPress={() => navigation.navigate('Login')} />
-        {gistList.map((gist: TGist) => (
-          <Gist gist={gist} />
+        {gistList.map((gist: TGist, index) => (
+          <Gist gist={gist} key={index} />
         ))}
       </ScrollView>
     </>

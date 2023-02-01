@@ -79,7 +79,7 @@ export const StackDetail: FC<Props> = ({route}) => {
           <ActivityIndicator size="large" />
         </View>
       ) : gistList.length > 0 ? (
-        gistList.map((gist: TGist) => <Gist gist={gist} />)
+        gistList.map((gist: TGist, index) => <Gist gist={gist} key={index} />)
       ) : (
         <View style={styles.gistContainer}>
           <Text style={{color: 'white', textAlign: 'center'}}>

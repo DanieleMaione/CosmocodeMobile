@@ -1,8 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {memo} from 'react';
+import React, {memo, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import RenderHTML from 'react-native-render-html';
 import {utilityGetExtension} from '../../getExtention';
+import IconHeart from 'react-native-vector-icons/FontAwesome';
 
 interface Props {
   gist: any;
@@ -11,6 +12,7 @@ interface Props {
 
 export const Gist = memo(({gist, userInfo = true}: Props) => {
   const navigation = useNavigation();
+  const [isClicked, setIsClicked] = useState<boolean>(false);
   const source = {
     html: `
         <pre style='color: #a0b3d7'}>
@@ -55,6 +57,38 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
       </View>
       <View style={{backgroundColor: 'rgb(0, 37, 54)', borderRadius: 10}}>
         <RenderHTML contentWidth={200} source={source} />
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 10,
+          justifyContent: 'space-between',
+        }}>
+        <IconHeart
+          onPress={() => setIsClicked(!isClicked)}
+          name={isClicked ? 'heart' : 'heart'}
+          size={30}
+          color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
+        />
+        <View style={{flexDirection: 'row'}}>
+          {gist.tags.map((tag: string, index: React.Key) => {
+            return (
+              <View
+                style={{
+                  borderColor: 'rgb(17, 236, 229)',
+                  backgroundColor: 'rgb(17, 236, 229)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 3,
+                  borderRadius: 5,
+                  marginHorizontal: 5,
+                }}
+                key={index}>
+                <Text>{tag}</Text>
+              </View>
+            );
+          })}
+        </View>
       </View>
     </View>
   );
