@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {Gist} from '../../../components-shared/Gist';
 import {TGist} from '../../../components-shared/types';
+import {SvgUri} from 'react-native-svg';
 
 export interface Props {
   route: any;
@@ -55,12 +56,16 @@ export const StackDetail: FC<Props> = ({route}) => {
           marginLeft: 10,
           marginBottom: -15,
         }}>
-        <Image
-          source={{
-            uri: stack.item.url,
-          }}
-          style={[styles.image, {marginRight: 10}]}
-        />
+        {stack.item.url.includes('.svg') ? (
+          <SvgUri width="70" height="70" uri={stack.item.url} />
+        ) : (
+          <Image
+            source={{
+              uri: stack.item.url,
+            }}
+            style={[styles.image, {marginRight: 10}]}
+          />
+        )}
 
         <Text style={styles.text}>{stack.item.name}</Text>
       </View>

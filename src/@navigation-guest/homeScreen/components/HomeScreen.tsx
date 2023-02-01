@@ -19,7 +19,7 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
     const fetchGists = async () => {
       try {
         const {data: gists} = await axios.get(
-          'https://cosmocode-test.herokuapp.com/gists/popular',
+          'https://cosmocode-test.herokuapp.com/gists/latest',
           {
             headers: {
               apiKey:
