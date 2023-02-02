@@ -2,19 +2,12 @@
 import React, {FC, memo, useEffect, useState} from 'react';
 
 import Axios from 'axios';
-import {
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  Image,
-  FlatList,
-} from 'react-native';
+import {SafeAreaView, FlatList, TextInput, View} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {Header} from '../../../components-shared/Header';
-import {useSelector} from 'react-redux';
 import {TLogin} from '../../../../slice/loginSlice';
-import {SvgUri} from 'react-native-svg';
 import {UIAvatar} from '../../../components-shared/Avatar';
+import {useSelector} from 'react-redux';
 
 export type TStack = {
   name: string;
@@ -26,7 +19,7 @@ export interface Props {
 
 export const Stacks: FC<Props> = memo(({navigation}) => {
   const [stacks, setStacks] = useState<Array<any>>([]);
-  // @ts-ignore
+  const [value, setValue] = useState('');
   const {login} = useSelector((state: TLogin) => state);
   useEffect(() => {
     const getStacks = async () => {
@@ -46,13 +39,32 @@ export const Stacks: FC<Props> = memo(({navigation}) => {
   return (
     <>
       <Header title="Stacks" firstPage={true} />
-      <SafeAreaView>
+      <SafeAreaView
+        style={{
+          backgroundColor: 'black',
+          height: '100%',
+        }}>
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholderTextColor="white"
+            placeholder="Cerca uno stack"
+            onChangeText={setValue}
+            value={value}
+          />
+        </View>
         <FlatList
           contentContainerStyle={{paddingBottom: 100}}
-          style={{backgroundColor: 'black', height: '100%'}}
           data={stacks}
           numColumns={1}
           renderItem={stack => {
+            const showStack = stack.item.name
+              .toLowerCase()
+              .includes(value.toLowerCase());
+
+            if (!showStack) {
+              return null;
+            }
             return (
               <>
                 <UIAvatar
@@ -79,10 +91,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {color: 'white', fontSize: 14},
-  image: {
-    borderRadius: 100,
-    marginVertical: 10,
-    height: 70,
-    width: 70,
+  input: {
+    height: 40,
+    margin: 12,
+    width: 250,
+    borderWidth: 1,
+    borderColor: 'rgb(17, 236, 229)',
+    padding: 10,
+    color: 'white',
+    background: 'none',
   },
 });

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {FC, memo} from 'react';
 import {View, Text} from 'react-native';
 

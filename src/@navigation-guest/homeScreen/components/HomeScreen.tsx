@@ -2,7 +2,14 @@
 import axios from 'axios';
 import React, {memo} from 'react';
 import {useEffect, useState} from 'react';
-import {Text, ScrollView, View, StyleSheet, Linking} from 'react-native';
+import {
+  Text,
+  ScrollView,
+  View,
+  StyleSheet,
+  Linking,
+  TextInput,
+} from 'react-native';
 import {Header} from '../../../components-shared/Header';
 import {TGist} from '../../../components-shared/types';
 import {Gist} from '../../../components-shared/Gist';
@@ -12,6 +19,7 @@ import {TLogin} from '../../../../slice/loginSlice';
 export const HomeScreen = memo(() => {
   const [gistList, setGistList] = useState<Array<TGist>>([]);
   const {login} = useSelector((state: TLogin) => state);
+  const [value, setValue] = useState('');
 
   useEffect(() => {
     const fetchGists = async () => {
@@ -55,9 +63,23 @@ export const HomeScreen = memo(() => {
             BITROCKET.DEV
           </Text>
         </View>
-        {gistList.map((gist: TGist, index) => (
-          <Gist gist={gist} key={index} />
-        ))}
+        <TextInput
+          style={styles.input}
+          placeholderTextColor="white"
+          placeholder="Cerca un post"
+          onChangeText={setValue}
+          value={value}
+        />
+        {gistList.map((gist: TGist, index) => {
+          const showStack = gist.title
+            .toLowerCase()
+            .includes(value.toLowerCase());
+
+          if (!showStack) {
+            return null;
+          }
+          return <Gist gist={gist} key={index} />;
+        })}
       </ScrollView>
     </>
   );
@@ -92,5 +114,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
     color: 'rgb(17, 236, 229)',
     textAlign: 'center',
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    width: 250,
+    borderWidth: 1,
+    borderColor: 'rgb(17, 236, 229)',
+    padding: 10,
+    color: 'white',
+    background: 'none',
+    alignSelf: 'center',
   },
 });

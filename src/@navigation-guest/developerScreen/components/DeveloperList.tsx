@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {FC, memo} from 'react';
+import React, {FC, memo, useState} from 'react';
 import {
   Text,
   SafeAreaView,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  TextInput,
 } from 'react-native';
 import {FlatList} from 'react-native';
 import {Header} from '../../../components-shared/Header';
@@ -16,6 +17,7 @@ export interface Props {
   navigation: any;
 }
 export const DeveloperList: FC<Props> = memo(({navigation}) => {
+  const [value, setValue] = useState('');
   const developers = useDevelopers();
 
   return (
@@ -24,12 +26,27 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
       <SafeAreaView
         style={{
           backgroundColor: 'black',
+          height: '100%',
         }}>
+        <TextInput
+          style={styles.input}
+          placeholderTextColor="white"
+          placeholder="Cerca uno sviluppatore"
+          onChangeText={setValue}
+          value={value}
+        />
         <FlatList
           contentContainerStyle={{paddingBottom: 100}}
           data={developers}
           numColumns={2}
           renderItem={developer => {
+            const showStack = developer.item.username
+              .toLowerCase()
+              .includes(value.toLowerCase());
+
+            if (!showStack) {
+              return null;
+            }
             return (
               <TouchableOpacity
                 style={styles.wrapUser}
@@ -84,5 +101,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 10,
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    width: 250,
+    borderWidth: 1,
+    borderColor: 'rgb(17, 236, 229)',
+    padding: 10,
+    color: 'white',
+    background: 'none',
+    alignSelf: 'center',
   },
 });
