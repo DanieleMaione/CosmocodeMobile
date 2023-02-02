@@ -6,22 +6,42 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SvgUri} from 'react-native-svg';
 
 interface Props {
-  onPress?: () => void;
+  alt: string;
   srcImage: string;
+  onPress?: () => void;
   title?: string;
   subtitle?: string;
-  alt: string;
+  width?: number;
+  height?: number;
+  isCapitalize?: boolean;
 }
 
 export const UIAvatar = memo(
-  ({onPress, srcImage, alt, title, subtitle}: Props) => (
+  ({
+    onPress,
+    srcImage,
+    alt,
+    title,
+    subtitle,
+    width,
+    height,
+    isCapitalize,
+  }: Props) => (
     <TouchableOpacity style={styles.outer} onPress={onPress}>
       {srcImage.includes('.svg') ? (
-        <SvgUri width="70" height="70" uri={srcImage} />
+        <SvgUri
+          width={!!width ? width : 70}
+          height={!!height ? height : 70}
+          uri={srcImage}
+        />
       ) : (
         <Image
           alt={alt}
-          style={styles.image}
+          style={{
+            width: !!width ? width : 70,
+            height: !!height ? height : 70,
+            borderRadius: 100,
+          }}
           source={{
             uri: srcImage,
           }}
@@ -29,7 +49,17 @@ export const UIAvatar = memo(
       )}
       {(title || subtitle) && (
         <View style={styles.container}>
-          {title && <Text style={styles.title}>{title}</Text>}
+          {title && (
+            <Text
+              style={{
+                textTransform: isCapitalize ? 'capitalize' : 'none',
+                color: 'white',
+                fontSize: 15,
+                fontWeight: '700',
+              }}>
+              {title}
+            </Text>
+          )}
           {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
         </View>
       )}
@@ -44,21 +74,10 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     marginHorizontal: 15,
   },
-  image: {
-    width: 75,
-    height: 75,
-    borderRadius: 100,
-  },
   container: {
     display: 'flex',
     flexDirection: 'column',
     marginLeft: 20,
-  },
-  title: {
-    textTransform: 'capitalize',
-    color: 'white',
-    fontSize: 15,
-    fontWeight: '700',
   },
   subtitle: {
     color: '#b5b7b8d3',

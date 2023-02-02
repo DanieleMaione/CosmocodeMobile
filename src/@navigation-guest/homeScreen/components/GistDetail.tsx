@@ -1,16 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
 import Axios from 'axios';
-import React, {FC, Fragment, memo, useEffect, useState} from 'react';
+import React, {FC, memo, useEffect, useState} from 'react';
 import {View, Text, ScrollView, Image} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {utilityGetExtension} from '../../../../getExtention';
 import RenderHtml from 'react-native-render-html';
 import {TGist} from '../../../components-shared/types';
-import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import IconHeart from 'react-native-vector-icons/AntDesign';
 import {TLogin} from '../../../../slice/loginSlice';
 import {useSelector} from 'react-redux';
+import {Gist} from '../../../components-shared/Gist';
+import {UIAvatar} from '../../../components-shared/Avatar';
+import {utilityFormatTimestampToDate} from '../../../../utils/formatTimestampToDate';
+import {TUser} from '../../../../slice/userSlice';
 
 export interface Props {
   route: any;
@@ -19,11 +22,13 @@ export interface Props {
 export const GistDetail: FC<Props> = memo(({route}) => {
   const navigation = useNavigation();
   const [userGist, setUserGist] = useState<TGist>();
+  const [similarGists, setSimilarGists] = useState<Array<TGist>>([]);
   const [source, setSource] = useState<any>();
   const {idGist} = route.params;
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const {login} = useSelector((state: TLogin) => state);
 
+  //#region ::: fetchGist
   useEffect(() => {
     const fetchGist = async () => {
       try {
@@ -51,8 +56,28 @@ export const GistDetail: FC<Props> = memo(({route}) => {
         console.log(error);
       }
     };
+
+    const fetchSimilarGist = async () => {
+      let queryParams = '';
+      userGist?.tags.forEach(
+        tag => (queryParams = `${queryParams}&tag=${tag}`),
+      );
+      const {data} = await Axios.get(
+        `https://cosmocode-test.herokuapp.com/search/gists?${queryParams}&page_size=5`,
+        {
+          headers: {
+            Authorization: `Bearer ${login.access_token}`,
+            apiKey:
+              'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+          },
+        },
+      );
+      const {results: gists} = data;
+      setSimilarGists(gists);
+    };
+
     fetchGist();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchSimilarGist();
   }, []);
 
   const onClickLike = async () => {
@@ -88,30 +113,34 @@ export const GistDetail: FC<Props> = memo(({route}) => {
     }
   };
 
+  //#endregion
+
+  if (!userGist) return null;
+
   return (
-    <Fragment key={userGist?._id}>
+    <>
       <ScrollView style={{backgroundColor: 'black'}}>
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-          }}
+        <UIAvatar
+          srcImage={userGist.avatar_url}
+          alt={userGist.username}
+          width={100}
+          height={100}
+          title={userGist.username}
+          subtitle={''}
           onPress={() =>
-            navigation.navigate('DeveloperDetail', userGist?.username)
-          }>
-          <Image
-            source={{uri: `${userGist?.avatar_url}`}}
-            style={{height: 100, width: 100, margin: 10, borderRadius: 100}}
-          />
-          <View style={{justifyContent: 'center'}}>
-            <Text style={styles.username}>{userGist?.username}</Text>
-            <Text style={styles.title}>{userGist?.title}</Text>
-          </View>
-        </TouchableOpacity>
+            navigation.navigate('DeveloperDetail', userGist.username)
+          }
+        />
+
+        <Text style={styles.title}>{userGist.title}</Text>
+        <Text style={styles.subtitle}>
+          {`creato il: ${utilityFormatTimestampToDate(userGist.createdAt)}`}
+        </Text>
         <View
           style={{
             backgroundColor: 'rgb(15, 23, 36)',
             padding: 10,
-            minHeight: 190,
+            minHeight: 170,
             justifyContent: 'space-between',
           }}>
           <View style={{backgroundColor: 'rgb(0, 37, 54)', borderRadius: 10}}>
@@ -120,17 +149,39 @@ export const GistDetail: FC<Props> = memo(({route}) => {
           <View
             style={{
               flexDirection: 'row',
-              marginTop: 10,
               justifyContent: 'space-between',
+              marginBottom: 10,
+              marginHorizontal: 5,
             }}>
-            <IconHeart
-              onPress={() => onClickLike()}
-              name={isClicked ? 'heart' : 'hearto'}
-              size={30}
-              color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <IconHeart
+                onPress={() => onClickLike()}
+                name={isClicked ? 'heart' : 'hearto'}
+                size={30}
+                color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
+              />
+              <Text style={{color: 'white', marginHorizontal: 5}}>Piace a</Text>
+              <Image
+                style={{width: 25, height: 25, borderRadius: 100}}
+                source={{uri: userGist.likes[0].avatar_url}}
+              />
+              <Text
+                numberOfLines={1}
+                style={{
+                  maxWidth: 140,
+                  color: 'white',
+                  marginHorizontal: 5,
+                }}>
+                {userGist.likes[0].username}
+              </Text>
+              <Text style={{color: 'white', marginHorizontal: 5}}>e altri</Text>
+            </View>
             <View style={{flexDirection: 'row'}}>
-              {userGist?.tags.map((tag: string, index: React.Key) => {
+              {userGist.tags.map((tag: string, index: React.Key) => {
                 return (
                   <View
                     style={{
@@ -149,37 +200,33 @@ export const GistDetail: FC<Props> = memo(({route}) => {
             </View>
           </View>
         </View>
+        <Text
+          style={{
+            color: 'rgb(17, 236, 229)',
+            fontSize: 18,
+            fontWeight: '900',
+            marginVertical: 50,
+          }}>
+          Post che potrebbero interessarti
+        </Text>
+        {similarGists.map(gist => (
+          <Gist key={gist._id} gist={gist} />
+        ))}
       </ScrollView>
-    </Fragment>
+    </>
   );
 });
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 18,
-    marginTop: 10,
-    marginBottom: 15,
-    color: '#a0b3d7',
-  },
-  userContainer: {
-    height: 60,
-  },
-  username: {
     fontSize: 20,
+    marginBottom: 25,
     color: '#a0b3d7',
   },
-  userInfo: {
-    fontSize: 8,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    marginBottom: 30,
-    width: '100%',
-  },
-  statusContainer: {
-    position: 'relative',
-    height: 50,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
+  subtitle: {
+    fontSize: 15,
+    marginVertical: 5,
+    color: '#a0b3d7',
+    textAlign: 'right',
   },
 });
