@@ -1,7 +1,8 @@
 import Axios from 'axios';
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {addUser} from '../../slice/userSlice';
+import {addDev} from '../../slice/developerSlice';
+
 import {TDeveloper} from './types';
 
 export const useDevelopers = () => {
@@ -23,7 +24,7 @@ export const useDevelopers = () => {
     getDevelopers();
   }, []);
 
-  dispatch(addUser(developers));
+  dispatch(addDev(developers));
 
   return developers;
 };
