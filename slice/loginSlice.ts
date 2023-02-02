@@ -1,11 +1,13 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export interface TLogin {
-  access_token: string;
-  expires_in: any;
-  refresh_token: string;
-  scope: string;
-  token_type: string;
+  login: {
+    access_token: string;
+    expires_in: any;
+    refresh_token: string;
+    scope: string;
+    token_type: string;
+  };
 }
 
 export const loginSlice = createSlice({
