@@ -14,6 +14,7 @@ import {Header} from '../../../components-shared/Header';
 import {useSelector} from 'react-redux';
 import {TLogin} from '../../../../slice/loginSlice';
 import {SvgUri} from 'react-native-svg';
+import {UIAvatar} from '../../../components-shared/Avatar';
 
 export type TStack = {
   name: string;
@@ -50,25 +51,19 @@ export const Stacks: FC<Props> = memo(({navigation}) => {
           contentContainerStyle={{paddingBottom: 100}}
           style={{backgroundColor: 'black', height: '100%'}}
           data={stacks}
-          numColumns={3}
+          numColumns={1}
           renderItem={stack => {
             return (
-              <TouchableOpacity
-                style={styles.wrapStack}
-                onPress={() => navigation.navigate('StackDetail', {stack})}>
-                {stack.item.url.includes('.svg') ? (
-                  <SvgUri width="70" height="70" uri={stack.item.url} />
-                ) : (
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: stack.item.url,
-                    }}
-                  />
-                )}
-
-                <Text style={styles.text}>{stack.item.name}</Text>
-              </TouchableOpacity>
+              <>
+                <UIAvatar
+                  onPress={() => navigation.navigate('StackDetail', {stack})}
+                  key={stack.item.url}
+                  srcImage={stack.item.url}
+                  alt={stack.item.name}
+                  title={stack.item.name}
+                  subtitle={`Gists: ${stack.item.totalGists} - Users: ${stack.item.totalUsers}`}
+                />
+              </>
             );
           }}
         />
