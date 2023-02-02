@@ -11,29 +11,31 @@ export interface TNotification {
 }
 
 export interface TUser {
-  _id: string;
-  about: string | null;
-  avatar_url: string;
-  createdAt: string;
-  email: string;
-  idGithub: string;
-  isAdmin: boolean;
-  isExternalUser: boolean;
-  isAmbassador: boolean;
-  lastUpdate: string;
-  notification: TNotification[];
-  popular: boolean;
-  registrationNumber: number;
-  sponsor: {
+  user: {
     _id: string;
+    about: string | null;
     avatar_url: string;
+    createdAt: string;
+    email: string;
+    idGithub: string;
+    isAdmin: boolean;
+    isExternalUser: boolean;
+    isAmbassador: boolean;
+    lastUpdate: string;
+    notification: TNotification[];
+    popular: boolean;
+    registrationNumber: number;
+    sponsor: {
+      _id: string;
+      avatar_url: string;
+      username: string;
+    };
+    tags: string[];
     username: string;
+    followers: any[];
+    following: any[];
+    likedGists: any[];
   };
-  tags: string[];
-  username: string;
-  followers: any[];
-  following: any[];
-  likedGists: any[];
 }
 
 export const userSlice = createSlice({

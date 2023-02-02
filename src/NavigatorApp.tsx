@@ -16,11 +16,15 @@ import {DeveloperInfo} from './@navigation-guest/developerScreen/components/Deve
 import {Stacks} from './@navigation-guest/stackScreen/components/Stacks';
 import {StackDetail} from './@navigation-guest/stackScreen/components/StackDetail';
 import {DeveloperList} from './@navigation-guest/developerScreen/components/DeveloperList';
+import {Image, StyleSheet} from 'react-native';
+import {TUser} from '../slice/userSlice';
+import {Profile} from './@navigation-guest/ProfileScreen/components/Profile';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 export const NavigatorApp = () => {
   const {login} = useSelector((state: TLogin) => state);
+  const {user} = useSelector((state: TUser) => state);
 
   return (
     <NavigationContainer>
@@ -140,6 +144,46 @@ export const NavigatorApp = () => {
               </Stack.Navigator>
             )}
           </Tab.Screen>
+          <Tab.Screen
+            name="Profile"
+            options={{
+              title: 'Profile',
+              headerTintColor: 'white',
+              tabBarIcon: () => (
+                <Image
+                  style={styles.userImg}
+                  source={{
+                    uri: user.avatar_url,
+                  }}
+                />
+              ),
+            }}>
+            {() => (
+              <Stack.Navigator
+                initialRouteName="Profile"
+                screenOptions={() => ({
+                  gestureEnabled: true,
+                  headerTintColor: 'white',
+                  headerTitleAlign: 'center',
+                  headerTitleStyle: {color: 'white'},
+                  headerStyle: {
+                    backgroundColor: 'rgb(15, 23, 36)',
+                  },
+                })}>
+                <Stack.Screen
+                  name="Profile"
+                  component={Profile}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="DeveloperDetail"
+                  component={DeveloperDetail}
+                />
+                <Stack.Screen name="GistDetail" component={GistDetail} />
+                <Stack.Screen name="DeveloperInfo" component={DeveloperInfo} />
+              </Stack.Navigator>
+            )}
+          </Tab.Screen>
         </Tab.Navigator>
       ) : (
         <Stack.Navigator
@@ -163,3 +207,11 @@ export const NavigatorApp = () => {
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  userImg: {
+    borderRadius: 100,
+    height: 30,
+    width: 30,
+  },
+});
