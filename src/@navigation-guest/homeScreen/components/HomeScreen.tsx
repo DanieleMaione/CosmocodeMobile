@@ -6,17 +6,21 @@ import {Text, ScrollView, View, StyleSheet, Linking} from 'react-native';
 import {Header} from '../../../components-shared/Header';
 import {TGist} from '../../../components-shared/types';
 import {Gist} from '../../../components-shared/Gist';
+import {useSelector} from 'react-redux';
+import {TLogin} from '../../../../slice/loginSlice';
 
 export const HomeScreen = memo(() => {
   const [gistList, setGistList] = useState<Array<TGist>>([]);
+  const {login} = useSelector((state: TLogin) => state);
 
   useEffect(() => {
     const fetchGists = async () => {
       try {
         const {data: gists} = await axios.get(
-          'https://cosmocode-test.herokuapp.com/gists/latest',
+          'https://cosmocode-test.herokuapp.com/gists/feed?page_size=6&page=0',
           {
             headers: {
+              Authorization: `Bearer ${login.access_token}`,
               apiKey:
                 'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
             },
@@ -28,7 +32,7 @@ export const HomeScreen = memo(() => {
       }
     };
     fetchGists();
-  }, []);
+  }, [login.access_token]);
 
   return (
     <>
