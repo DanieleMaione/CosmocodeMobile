@@ -1,16 +1,18 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export interface TLogin {
-  id: number;
-  userName: string;
-  password: string;
+  access_token: string;
+  expires_in: any;
+  refresh_token: string;
+  scope: string;
+  token_type: string;
 }
 
 export const loginSlice = createSlice({
   name: 'login',
   initialState: {},
   reducers: {
-    createLogin(state, action: PayloadAction<TLogin>) {
+    createLogin(state, action: PayloadAction<any>) {
       return (state = action.payload);
     },
   },

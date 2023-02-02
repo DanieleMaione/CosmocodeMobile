@@ -1,9 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/native';
 import React, {memo, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import RenderHTML from 'react-native-render-html';
 import {utilityGetExtension} from '../../getExtention';
-import IconHeart from 'react-native-vector-icons/FontAwesome';
+import IconHeart from 'react-native-vector-icons/AntDesign';
+import {useSelector} from 'react-redux';
+import Axios from 'axios';
+import {TLogin} from '../../slice/loginSlice';
 
 interface Props {
   gist: any;
@@ -13,6 +17,8 @@ interface Props {
 export const Gist = memo(({gist, userInfo = true}: Props) => {
   const navigation = useNavigation();
   const [isClicked, setIsClicked] = useState<boolean>(false);
+  const {login} = useSelector((state: TLogin) => state);
+
   const source = {
     html: `
         <pre style='color: #a0b3d7'}>
@@ -22,6 +28,39 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
           >${gist.html}</code>
         </pre>
       `,
+  };
+
+  const onClickLike = async () => {
+    try {
+      if (isClicked) {
+        await Axios.delete(
+          `https://cosmocode-test.herokuapp.com/gists/like/${gist._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${login.access_token}`,
+              apiKey:
+                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+            },
+          },
+        );
+        setIsClicked(false);
+      } else {
+        await Axios.post(
+          `https://cosmocode-test.herokuapp.com/gists/like/${gist._id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${login.access_token}`,
+              apiKey:
+                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+            },
+          },
+        );
+        setIsClicked(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -65,8 +104,8 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
           justifyContent: 'space-between',
         }}>
         <IconHeart
-          onPress={() => setIsClicked(!isClicked)}
-          name={isClicked ? 'heart' : 'heart'}
+          onPress={() => onClickLike()}
+          name={isClicked ? 'heart' : 'hearto'}
           size={30}
           color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
         />

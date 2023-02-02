@@ -8,6 +8,9 @@ import RenderHtml from 'react-native-render-html';
 import {TGist} from '../../../components-shared/types';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import IconHeart from 'react-native-vector-icons/AntDesign';
+import {TLogin} from '../../../../slice/loginSlice';
+import {useSelector} from 'react-redux';
 
 export interface Props {
   route: any;
@@ -18,6 +21,8 @@ export const GistDetail: FC<Props> = memo(({route}) => {
   const [userGist, setUserGist] = useState<TGist>();
   const [source, setSource] = useState<any>();
   const {idGist} = route.params;
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const {login} = useSelector((state: TLogin) => state);
 
   useEffect(() => {
     const fetchGist = async () => {
@@ -50,6 +55,39 @@ export const GistDetail: FC<Props> = memo(({route}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const onClickLike = async () => {
+    try {
+      if (isClicked) {
+        await Axios.delete(
+          `https://cosmocode-test.herokuapp.com/gists/like/${idGist}`,
+          {
+            headers: {
+              Authorization: `Bearer ${login.access_token}`,
+              apiKey:
+                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+            },
+          },
+        );
+        setIsClicked(false);
+      } else {
+        await Axios.post(
+          `https://cosmocode-test.herokuapp.com/gists/like/${idGist}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${login.access_token}`,
+              apiKey:
+                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+            },
+          },
+        );
+        setIsClicked(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Fragment key={userGist?._id}>
       <ScrollView style={{backgroundColor: 'black'}}>
@@ -69,8 +107,47 @@ export const GistDetail: FC<Props> = memo(({route}) => {
             <Text style={styles.title}>{userGist?.title}</Text>
           </View>
         </TouchableOpacity>
-        <View style={{backgroundColor: 'rgb(0, 37, 54)', borderRadius: 10}}>
-          {source && <RenderHtml contentWidth={200} source={source} />}
+        <View
+          style={{
+            backgroundColor: 'rgb(15, 23, 36)',
+            padding: 10,
+            minHeight: 190,
+            justifyContent: 'space-between',
+          }}>
+          <View style={{backgroundColor: 'rgb(0, 37, 54)', borderRadius: 10}}>
+            {source && <RenderHtml contentWidth={200} source={source} />}
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 10,
+              justifyContent: 'space-between',
+            }}>
+            <IconHeart
+              onPress={() => onClickLike()}
+              name={isClicked ? 'heart' : 'hearto'}
+              size={30}
+              color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
+            />
+            <View style={{flexDirection: 'row'}}>
+              {userGist?.tags.map((tag: string, index: React.Key) => {
+                return (
+                  <View
+                    style={{
+                      borderColor: 'rgb(17, 236, 229)',
+                      backgroundColor: 'rgb(17, 236, 229)',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 3,
+                      borderRadius: 5,
+                    }}
+                    key={index}>
+                    <Text>{tag}</Text>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
         </View>
       </ScrollView>
     </Fragment>

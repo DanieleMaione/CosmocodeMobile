@@ -83,7 +83,7 @@ export const StackDetail: FC<Props> = ({route}) => {
       ) : (
         <View style={styles.gistContainer}>
           <Text style={{color: 'white', textAlign: 'center'}}>
-            non ci sono gist per questo tags
+            non ci sono gist per questo tag
           </Text>
         </View>
       )}

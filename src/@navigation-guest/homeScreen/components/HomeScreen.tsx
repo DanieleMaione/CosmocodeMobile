@@ -1,18 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import axios from 'axios';
-import React, {FC} from 'react';
+import React, {memo} from 'react';
 import {useEffect, useState} from 'react';
-import {Text, ScrollView, View, StyleSheet} from 'react-native';
+import {Text, ScrollView, View, StyleSheet, Linking} from 'react-native';
 import {Header} from '../../../components-shared/Header';
-import {UIButton} from '../../../components-shared/UIButton';
 import {TGist} from '../../../components-shared/types';
 import {Gist} from '../../../components-shared/Gist';
 
-export interface Props {
-  navigation: any;
-}
-
-export const HomeScreen: FC<Props> = ({navigation}) => {
+export const HomeScreen = memo(() => {
   const [gistList, setGistList] = useState<Array<TGist>>([]);
 
   useEffect(() => {
@@ -48,14 +43,21 @@ export const HomeScreen: FC<Props> = ({navigation}) => {
             professionisti e realtà IT, ovunque nel mondo.
           </Text>
         </View>
-        <UIButton label="Login" onPress={() => navigation.navigate('Login')} />
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          <Text style={styles.subtitle}>MADE WITH ♥️ BY</Text>
+          <Text
+            onPress={() => Linking.openURL('https://www.bitrocket.dev')}
+            style={styles.link}>
+            BITROCKET.DEV
+          </Text>
+        </View>
         {gistList.map((gist: TGist, index) => (
           <Gist gist={gist} key={index} />
         ))}
       </ScrollView>
     </>
   );
-};
+});
 
 const styles = StyleSheet.create({
   outer: {
@@ -72,6 +74,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 20,
     color: '#a0b3d7',
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 10,
+    paddingVertical: 10,
+    color: '#a0b3d7',
+    textAlign: 'center',
+  },
+  link: {
+    fontSize: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 2,
+    color: 'rgb(17, 236, 229)',
     textAlign: 'center',
   },
 });
