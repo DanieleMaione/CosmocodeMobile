@@ -58,7 +58,7 @@ export const NavigatorApp = () => {
                 <Stack.Screen
                   name="Home Page"
                   component={HomeScreen}
-                  options={{title: 'Home Page'}}
+                  options={{title: 'Home Page', headerShown: false}}
                 />
                 <Stack.Screen
                   name="DeveloperDetail"
@@ -90,7 +90,11 @@ export const NavigatorApp = () => {
                     backgroundColor: 'rgb(15, 23, 36)',
                   },
                 })}>
-                <Stack.Screen name="Developers" component={DeveloperList} />
+                <Stack.Screen
+                  name="Developers"
+                  component={DeveloperList}
+                  options={{headerShown: false}}
+                />
                 <Stack.Screen
                   name="DeveloperDetail"
                   component={DeveloperDetail}
@@ -121,7 +125,11 @@ export const NavigatorApp = () => {
                     backgroundColor: 'rgb(15, 23, 36)',
                   },
                 })}>
-                <Stack.Screen name="Stack" component={Stacks} />
+                <Stack.Screen
+                  name="Stack"
+                  component={Stacks}
+                  options={{headerShown: false}}
+                />
                 <Stack.Screen name="StackDetail" component={StackDetail} />
                 <Stack.Screen
                   name="DeveloperDetail"
