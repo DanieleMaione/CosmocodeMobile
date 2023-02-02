@@ -1,31 +1,36 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
 import axios from 'axios';
 import React, {memo} from 'react';
 import {useEffect, useState} from 'react';
 import {
   Text,
-  ScrollView,
   View,
   StyleSheet,
   Linking,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import {Header} from '../../../components-shared/Header';
 import {TGist} from '../../../components-shared/types';
 import {Gist} from '../../../components-shared/Gist';
 import {useSelector} from 'react-redux';
 import {TLogin} from '../../../../slice/loginSlice';
+import {FlatList} from 'react-native';
 
 export const HomeScreen = memo(() => {
   const [gistList, setGistList] = useState<Array<TGist>>([]);
   const {login} = useSelector((state: TLogin) => state);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState<string>();
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isListEnd, setIsListEnd] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchGists = async () => {
-      try {
-        const {data: gists} = await axios.get(
-          'https://cosmocode-test.herokuapp.com/gists/feed?page_size=6&page=0',
+  const fetchGists = async () => {
+    try {
+      await axios
+        .get(
+          `https://cosmocode-test.herokuapp.com/gists/feed?page_size=2&page=${currentPage}`,
           {
             headers: {
               Authorization: `Bearer ${login.access_token}`,
@@ -33,54 +38,93 @@ export const HomeScreen = memo(() => {
                 'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
             },
           },
-        );
-        setGistList(gists);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+        )
+        .then(res => {
+          setGistList([...gistList, ...res.data]);
+          setIsListEnd(false);
+          setIsLoading(false);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const renderLoader = () => {
+    return isLoading ? (
+      <View style={{marginVertical: 16, alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#aaaaaa" />
+      </View>
+    ) : null;
+  };
+
+  const handleRefresh = () => {
+    setCurrentPage(1);
+    setIsLoading(true);
+  };
+
+  const loadMoreItem = () => {
+    !isLoading && !isListEnd && setCurrentPage(currentPage + 1);
+  };
+
+  useEffect(() => {
     fetchGists();
-  }, [login.access_token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   return (
     <>
       <Header title="Home" firstPage={true} />
-      <ScrollView style={{backgroundColor: 'black'}}>
-        <View style={styles.outer}>
-          <Text style={styles.pageTitle}>
-            Connettiti con sviluppatori e aziende tech di tutto il mondo.
-          </Text>
-          <Text style={styles.description}>
-            Condividi e scopri in tempo reale a quali attività stanno lavorando
-            professionisti e realtà IT, ovunque nel mondo.
-          </Text>
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Text style={styles.subtitle}>MADE WITH ♥️ BY</Text>
-          <Text
-            onPress={() => Linking.openURL('https://www.bitrocket.dev')}
-            style={styles.link}>
-            BITROCKET.DEV
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholderTextColor="white"
-          placeholder="Cerca un post"
-          onChangeText={setValue}
-          value={value}
-        />
-        {gistList.map((gist: TGist, index) => {
-          const showStack = gist.title
-            .toLowerCase()
-            .includes(value.toLowerCase());
-
-          if (!showStack) {
-            return null;
-          }
-          return <Gist gist={gist} key={index} />;
-        })}
-      </ScrollView>
+      <View style={{backgroundColor: 'black'}}>
+        {gistList.length > 0 && (
+          <FlatList
+            nestedScrollEnabled
+            data={gistList}
+            renderItem={gist => {
+              return <Gist gist={gist.item} />;
+            }}
+            ListHeaderComponent={() => {
+              return (
+                <>
+                  <View style={styles.outer}>
+                    <Text style={styles.pageTitle}>
+                      Connettiti con sviluppatori e aziende tech di tutto il
+                      mondo.
+                    </Text>
+                    <Text style={styles.description}>
+                      Condividi e scopri in tempo reale a quali attività stanno
+                      lavorando professionisti e realtà IT, ovunque nel mondo.
+                    </Text>
+                  </View>
+                  <View
+                    style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    <Text style={styles.subtitle}>MADE WITH ♥️ BY</Text>
+                    <Text
+                      onPress={() =>
+                        Linking.openURL('https://www.bitrocket.dev')
+                      }
+                      style={styles.link}>
+                      BITROCKET.DEV
+                    </Text>
+                  </View>
+                  <TextInput
+                    style={styles.input}
+                    placeholderTextColor="white"
+                    placeholder="Cerca un post"
+                    onChangeText={setValue}
+                    value={value}
+                  />
+                </>
+              );
+            }}
+            ListFooterComponent={renderLoader}
+            refreshing={isListEnd}
+            onRefresh={handleRefresh}
+            onEndReached={loadMoreItem}
+            onEndReachedThreshold={0.2}
+            keyExtractor={(gist: any) => gist.index}
+          />
+        )}
+      </View>
     </>
   );
 });
