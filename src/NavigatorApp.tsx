@@ -43,9 +43,14 @@ export const NavigatorApp = () => {
             options={{
               title: 'Home Page',
               headerTintColor: 'white',
-              tabBarIcon: () => (
-                <IconFontAwesome name="home" size={30} color="white" />
-              ),
+              tabBarIcon: ({focused}) => {
+                let color = focused ? 'rgb(17, 236, 229)' : 'white';
+
+                return <IconFontAwesome name="home" size={30} color={color} />;
+              },
+              tabBarLabel: () => {
+                return null;
+              },
             }}>
             {() => (
               <Stack.Navigator
@@ -78,9 +83,14 @@ export const NavigatorApp = () => {
             options={{
               title: 'Developers',
               headerTintColor: 'white',
-              tabBarIcon: () => (
-                <IconFontAwesome name="users" size={25} color="white" />
-              ),
+              tabBarIcon: ({focused}) => {
+                let color = focused ? 'rgb(17, 236, 229)' : 'white';
+
+                return <IconFontAwesome name="users" size={25} color={color} />;
+              },
+              tabBarLabel: () => {
+                return null;
+              },
             }}>
             {() => (
               <Stack.Navigator
@@ -111,11 +121,14 @@ export const NavigatorApp = () => {
           <Tab.Screen
             name="Stack"
             options={{
-              title: 'Stacks',
-              headerTintColor: 'white',
-              tabBarIcon: () => (
-                <IconOcticons name="stack" size={30} color="white" />
-              ),
+              tabBarIcon: ({focused}) => {
+                let color = focused ? 'rgb(17, 236, 229)' : 'white';
+
+                return <IconOcticons name="stack" size={28} color={color} />;
+              },
+              tabBarLabel: () => {
+                return null;
+              },
             }}>
             {() => (
               <Stack.Navigator
@@ -149,14 +162,17 @@ export const NavigatorApp = () => {
             options={{
               title: 'Profile',
               headerTintColor: 'white',
-              tabBarIcon: () => (
+              tabBarIcon: ({focused}) => (
                 <Image
-                  style={styles.userImg}
+                  style={styles(focused).userImg}
                   source={{
                     uri: user.avatar_url,
                   }}
                 />
               ),
+              tabBarLabel: () => {
+                return null;
+              },
             }}>
             {() => (
               <Stack.Navigator
@@ -208,10 +224,13 @@ export const NavigatorApp = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  userImg: {
-    borderRadius: 100,
-    height: 30,
-    width: 30,
-  },
-});
+const styles = (focused: boolean) =>
+  StyleSheet.create({
+    userImg: {
+      borderRadius: 100,
+      height: 35,
+      width: 35,
+      borderWidth: 2,
+      borderColor: focused ? 'rgb(17, 236, 229)' : 'black',
+    },
+  });

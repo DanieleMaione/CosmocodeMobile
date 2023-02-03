@@ -13,7 +13,6 @@ import {useSelector} from 'react-redux';
 import {Gist} from '../../../components-shared/Gist';
 import {UIAvatar} from '../../../components-shared/Avatar';
 import {utilityFormatTimestampToDate} from '../../../../utils/formatTimestampToDate';
-import {TUser} from '../../../../slice/userSlice';
 
 export interface Props {
   route: any;
@@ -115,7 +114,9 @@ export const GistDetail: FC<Props> = memo(({route}) => {
 
   //#endregion
 
-  if (!userGist) return null;
+  if (!userGist) {
+    return null;
+  }
 
   return (
     <>
