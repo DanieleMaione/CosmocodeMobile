@@ -1,14 +1,17 @@
+/* eslint-disable react-native/no-inline-styles */
 import Axios from 'axios';
-import React, {memo, useState} from 'react';
+import React, {memo, useRef, useState} from 'react';
 import {
   View,
-  ScrollView,
-  SafeAreaView,
   TextInput,
   Text,
   Linking,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
 } from 'react-native';
-import {StyleSheet} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {createLogin} from '../../../../slice/loginSlice';
 import {userInfo} from '../../../../slice/userSlice';
@@ -16,11 +19,12 @@ import {Header} from '../../../components-shared/Header';
 import {UIButton} from '../../../components-shared/UIButton';
 
 export const Login = memo(() => {
+  const ref_emailInput = useRef<any>();
   const dispatch = useDispatch();
-  const [username, setUsername] = useState();
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
 
-  const onClickLogin = async () => {
+  const onPressLogin = async () => {
     const {data: session} = await Axios.post(
       'https://cosmocode-test.herokuapp.com/auth/login',
       {username, email},
@@ -50,107 +54,108 @@ export const Login = memo(() => {
   return (
     <>
       <Header title="Cosmocode" />
-      <SafeAreaView>
-        <ScrollView style={styles.container}>
-          <View style={styles.outer}>
-            <Text style={styles.pageTitle}>
-              Connettiti con sviluppatori e aziende tech di tutto il mondo.
-            </Text>
-            <Text style={styles.description}>
-              Condividi e scopri in tempo reale a quali attività stanno
-              lavorando professionisti e realtà IT, ovunque nel mondo.
-            </Text>
-          </View>
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={styles.subtitle}>MADE WITH ♥️ BY</Text>
-            <Text
-              onPress={() => Linking.openURL('https://www.bitrocket.dev')}
-              style={styles.link}>
-              BITROCKET.DEV
-            </Text>
-          </View>
-          <View>
+      <View style={styles.outer}>
+        <Text style={styles.pageTitle}>
+          Connettiti con sviluppatori e aziende tech di tutto il mondo.
+        </Text>
+        <Text style={styles.description}>
+          Condividi e scopri in tempo reale a quali attività stanno lavorando
+          professionisti e realtà IT, ovunque nel mondo.
+        </Text>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          backgroundColor: 'black',
+        }}>
+        <Text style={styles.subtitle}>MADE WITH ♥️ BY</Text>
+        <Text
+          onPress={() => Linking.openURL('https://www.bitrocket.dev')}
+          style={styles.link}>
+          BITROCKET.DEV
+        </Text>
+      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.inner}>
             <TextInput
-              style={styles.input}
+              autoFocus={true}
+              onSubmitEditing={() =>
+                ref_emailInput.current && ref_emailInput.current.focus()
+              }
+              style={styles.textInput}
               placeholderTextColor="white"
               placeholder="inserisci username"
               onChangeText={setUsername}
+              blurOnSubmit={false}
               value={username}
             />
             <TextInput
-              style={styles.input}
+              ref={ref_emailInput}
+              blurOnSubmit={false}
+              style={styles.textInput}
               placeholderTextColor="white"
               placeholder="inserisci email"
               onChangeText={setEmail}
               value={email}
             />
+            <UIButton label="login" onPress={() => onPressLogin()} />
           </View>
-          <UIButton label="login" onPress={() => onClickLogin()} />
-        </ScrollView>
-      </SafeAreaView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </>
   );
 });
 
 const styles = StyleSheet.create({
-  outer: {
-    textAlign: 'center',
-    paddingTop: 70,
-  },
-  pageTitle: {
-    fontSize: 38,
-    marginBottom: 0,
-    color: 'white',
-    textAlign: 'center',
-  },
-  description: {
-    fontSize: 16,
-    paddingTop: 20,
-    color: '#a0b3d7',
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 10,
-    paddingVertical: 10,
-    color: '#a0b3d7',
-    textAlign: 'center',
-  },
-  link: {
-    fontSize: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 2,
-    color: 'rgb(17, 236, 229)',
-    textAlign: 'center',
-  },
   container: {
+    flex: 1,
     backgroundColor: 'black',
     height: '100%',
   },
-  input: {
-    height: 40,
+  inner: {
+    padding: 24,
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+
+  textInput: {
     margin: 12,
     borderWidth: 1,
     borderColor: 'rgb(17, 236, 229)',
     padding: 10,
     color: 'white',
+    height: 40,
   },
-  btn: {
-    borderColor: 'rgb(17, 236, 229)',
-    backgroundColor: 'rgb(17, 236, 229)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 3,
-    borderRadius: 10,
-    margin: 5,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginHorizontal: 5,
-    width: '40%',
+  outer: {
+    backgroundColor: 'black',
+    textAlign: 'center',
+    paddingTop: 20,
   },
-  text: {
-    paddingHorizontal: 10,
-    color: 'black',
-    textAlign: 'left',
-    fontWeight: 'bold',
+  pageTitle: {
+    paddingHorizontal: 5,
+    fontSize: 30,
+    color: 'white',
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: 14,
+    padding: 15,
+    color: '#a0b3d7',
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 12,
+    color: '#a0b3d7',
+    textAlign: 'center',
+  },
+  link: {
+    fontSize: 12,
+    paddingHorizontal: 2,
+    color: 'rgb(17, 236, 229)',
+    textAlign: 'center',
   },
 });
