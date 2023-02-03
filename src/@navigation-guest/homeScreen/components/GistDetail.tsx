@@ -4,7 +4,6 @@ import React, {FC, memo, useEffect, useState} from 'react';
 import {View, Text, ScrollView, Image} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {utilityGetExtension} from '../../../../getExtention';
-import RenderHtml from 'react-native-render-html';
 import {TGist} from '../../../components-shared/types';
 import {useNavigation} from '@react-navigation/native';
 import IconHeart from 'react-native-vector-icons/AntDesign';
@@ -13,7 +12,9 @@ import {useSelector} from 'react-redux';
 import {Gist} from '../../../components-shared/Gist';
 import {UIAvatar} from '../../../components-shared/Avatar';
 import {utilityFormatTimestampToDate} from '../../../../utils/formatTimestampToDate';
+// @ts-ignore
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
+// @ts-ignore
 import {tomorrow} from 'react-syntax-highlighter/styles/prism';
 
 export interface Props {
@@ -131,6 +132,7 @@ export const GistDetail: FC<Props> = memo(({route}) => {
           title={userGist.username}
           subtitle={''}
           onPress={() =>
+            // @ts-ignore
             navigation.navigate('DeveloperDetail', userGist.username)
           }
         />
@@ -156,6 +158,7 @@ export const GistDetail: FC<Props> = memo(({route}) => {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
+              alignItems: 'center',
               marginBottom: 10,
               marginHorizontal: 5,
               marginVertical: 5,
@@ -167,56 +170,53 @@ export const GistDetail: FC<Props> = memo(({route}) => {
                 size={30}
                 color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
               />
-              {userGist.likes.length > 0 && (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginVertical: 5,
-                  }}>
-                  <Text style={{color: 'white', marginHorizontal: 5}}>
-                    Piace a
-                  </Text>
-                  <Image
-                    style={{width: 25, height: 25, borderRadius: 100}}
-                    source={{uri: userGist.likes[0].avatar_url}}
-                  />
-                  <Text
-                    numberOfLines={1}
-                    style={{
-                      maxWidth: 140,
-                      color: 'white',
-                      marginHorizontal: 5,
-                    }}>
-                    {userGist.likes[0].username}
-                  </Text>
-                  <Text style={{color: 'white', marginHorizontal: 5}}>
-                    e altri
-                  </Text>
-                </View>
-              )}
             </View>
 
-            <View style={{flexDirection: 'row'}}>
-              {userGist.tags.map((tag: string, index: React.Key) => {
-                return (
-                  <View
-                    style={{
-                      height: 30,
-                      borderColor: 'rgb(17, 236, 229)',
-                      backgroundColor: 'rgb(17, 236, 229)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderWidth: 3,
-                      borderRadius: 5,
-                    }}
-                    key={index}>
-                    <Text>{tag}</Text>
-                  </View>
-                );
-              })}
+            <View style={{maxWidth: 140}}>
+              <ScrollView horizontal style={{flexDirection: 'row'}}>
+                {userGist.tags.map((tag: string, index: React.Key) => {
+                  return (
+                    <View
+                      style={{
+                        height: 30,
+                        borderColor: 'rgb(17, 236, 229)',
+                        backgroundColor: 'rgb(17, 236, 229)',
+                        borderWidth: 3,
+                        borderRadius: 5,
+                        marginHorizontal: 5,
+                      }}
+                      key={index}>
+                      <Text>{tag}</Text>
+                    </View>
+                  );
+                })}
+              </ScrollView>
             </View>
           </View>
+          {userGist.likes.length > 0 && (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginVertical: 5,
+              }}>
+              <Text style={{color: 'white', marginHorizontal: 5}}>Piace a</Text>
+              <Image
+                style={{width: 25, height: 25, borderRadius: 100}}
+                source={{uri: userGist.likes[0].avatar_url}}
+              />
+              <Text
+                numberOfLines={1}
+                style={{
+                  maxWidth: 140,
+                  color: 'white',
+                  marginHorizontal: 5,
+                }}>
+                {userGist.likes[0].username}
+              </Text>
+              <Text style={{color: 'white', marginHorizontal: 5}}>e altri</Text>
+            </View>
+          )}
         </View>
         <Text
           style={{

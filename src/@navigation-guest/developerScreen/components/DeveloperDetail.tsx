@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
+import {RouteProp} from '@react-navigation/native';
 import Axios from 'axios';
 import React, {FC, memo, useEffect, useState} from 'react';
 import {
@@ -41,7 +42,7 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const {login} = useSelector((state: TLogin) => state);
   const [totalFollowers, setTotalFollowers] = useState<number>(
-    userData?.followers.length || 0,
+    userData?.followers?.length || 0,
   );
   const [followerList, setFollowerList] = useState<Array<TFollow>>(
     userData?.followers || [],
@@ -126,8 +127,10 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
     );
     getGist();
     getUser();
+    handleFollower();
+    userData && setTotalFollowers(userData?.followers.length);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
+  }, [userData?.following.length]);
 
   const onPressNavigate = (tab: string) => {
     navigation.navigate('DeveloperInfo', {

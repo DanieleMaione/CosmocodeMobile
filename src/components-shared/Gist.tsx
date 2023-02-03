@@ -1,14 +1,22 @@
-/* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/native';
 import React, {memo, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from 'react-native';
 import IconHeart from 'react-native-vector-icons/AntDesign';
 import {useSelector} from 'react-redux';
 import Axios from 'axios';
 import {TLogin} from '../../slice/loginSlice';
 import {TGist} from './types';
 import {TUser} from '../../slice/userSlice';
+// @ts-ignore
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
+// @ts-ignore
 import {tomorrow} from 'react-syntax-highlighter/styles/prism';
 
 interface Props {
@@ -56,6 +64,11 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
     }
   };
 
+  const onPressNavigate = (route: string, parameters?: any) => {
+    // @ts-ignore
+    navigation.navigate(route, parameters);
+  };
+
   return (
     <>
       {gist ? (
@@ -66,8 +79,8 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
                 style={styles.userInfo}
                 onPress={() => {
                   isMyProfile
-                    ? navigation.navigate('Profile')
-                    : navigation.navigate('DeveloperDetail', gist.username);
+                    ? onPressNavigate('Profile')
+                    : onPressNavigate('DeveloperDetail', gist.username);
                 }}>
                 <View style={styles.statusContainer}>
                   <Image
@@ -84,7 +97,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
             <TouchableOpacity
               style={styles.fileName}
               onPress={() =>
-                navigation.navigate('GistDetail', {
+                onPressNavigate('GistDetail', {
                   idGist: gist?._id,
                 })
               }>
@@ -102,8 +115,9 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
           <View
             style={{
               flexDirection: 'row',
-              marginTop: 10,
               justifyContent: 'space-between',
+              marginHorizontal: 5,
+              marginVertical: 10,
             }}>
             <IconHeart
               onPress={() => onClickLike()}
@@ -111,26 +125,67 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
               size={30}
               color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
             />
-            <View style={{flexDirection: 'row'}}>
-              {gist?.tags.map((tag: string, index: React.Key) => {
-                return (
-                  <View
-                    style={{
-                      borderColor: 'rgb(17, 236, 229)',
-                      backgroundColor: 'rgb(17, 236, 229)',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderWidth: 3,
-                      borderRadius: 5,
-                      marginHorizontal: 5,
-                    }}
-                    key={index}>
-                    <Text>{tag}</Text>
-                  </View>
-                );
-              })}
+            <View style={{maxWidth: 140}}>
+              <ScrollView horizontal style={{flexDirection: 'row'}}>
+                {gist?.tags.map((tag: string, index: React.Key) => {
+                  return (
+                    <View
+                      style={{
+                        height: 30,
+                        borderColor: 'rgb(17, 236, 229)',
+                        backgroundColor: 'rgb(17, 236, 229)',
+                        borderWidth: 3,
+                        borderRadius: 5,
+                        marginHorizontal: 5,
+                      }}
+                      key={index}>
+                      <Text>{tag}</Text>
+                    </View>
+                  );
+                })}
+              </ScrollView>
             </View>
           </View>
+          {gist.likes.length > 0 && (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginVertical: 5,
+              }}>
+              <Text style={{color: 'white', marginHorizontal: 5}}>Piace a</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  onPressNavigate('DeveloperDetail', gist.likes[0].username)
+                }
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  style={{width: 25, height: 25, borderRadius: 100}}
+                  source={{uri: gist.likes[0].avatar_url}}
+                />
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    maxWidth: 140,
+                    color: 'white',
+                    marginHorizontal: 5,
+                  }}>
+                  {gist.likes[0].username}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  onPressNavigate('GistLikes', {likes: gist.likes})
+                }>
+                <Text style={{color: 'white', marginHorizontal: 5}}>
+                  e altri
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       ) : (
         <View>
