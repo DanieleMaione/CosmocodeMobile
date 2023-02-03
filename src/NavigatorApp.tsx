@@ -19,6 +19,7 @@ import {DeveloperList} from './@navigation-guest/developerScreen/components/Deve
 import {Image, StyleSheet} from 'react-native';
 import {TUser} from '../slice/userSlice';
 import {Profile} from './@navigation-guest/ProfileScreen/components/Profile';
+import {GistLikes} from './@navigation-main/GistScreen/GistLikes';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -75,6 +76,7 @@ export const NavigatorApp = () => {
                 />
                 <Stack.Screen name="GistDetail" component={GistDetail} />
                 <Stack.Screen name="DeveloperInfo" component={DeveloperInfo} />
+                <Stack.Screen name="GistLikes" component={GistLikes} />
               </Stack.Navigator>
             )}
           </Tab.Screen>
@@ -115,6 +117,7 @@ export const NavigatorApp = () => {
                 />
                 <Stack.Screen name="DeveloperInfo" component={DeveloperInfo} />
                 <Stack.Screen name="GistDetail" component={GistDetail} />
+                <Stack.Screen name="GistLikes" component={GistLikes} />
               </Stack.Navigator>
             )}
           </Tab.Screen>
@@ -154,6 +157,7 @@ export const NavigatorApp = () => {
                 />
                 <Stack.Screen name="GistDetail" component={GistDetail} />
                 <Stack.Screen name="DeveloperInfo" component={DeveloperInfo} />
+                <Stack.Screen name="GistLikes" component={GistLikes} />
               </Stack.Navigator>
             )}
           </Tab.Screen>
