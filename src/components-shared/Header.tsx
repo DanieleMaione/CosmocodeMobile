@@ -12,7 +12,7 @@ export const Header: FC<Props> = memo(({title}) => {
     <View
       style={{
         height: '12%',
-        backgroundColor: 'rgb(15, 23, 36)',
+        backgroundColor: '#1b212c',
         alignItems: 'center',
         justifyContent: 'flex-end',
       }}>

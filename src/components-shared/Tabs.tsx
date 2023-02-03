@@ -38,15 +38,14 @@ const stylesProps = (index: number, selected: string, option: {name: string}) =>
       borderRadius: 27,
       display: 'flex',
       borderBottomWidth: selected === option.name ? 1 : 0,
-      borderBottomColor:
-        selected === option.name ? 'rgb(17, 236, 229)' : '#b5b7b8c4',
+      borderBottomColor: selected === option.name ? '#4e57ef' : '#b5b7b8c4',
     },
     text: {
       height: 20,
       marginBottom: 10,
       fontSize: 15,
       fontWeight: '500',
-      color: selected === option.name ? 'rgb(17, 236, 229)' : '#b5b7b8c4',
+      color: selected === option.name ? '#4e57ef' : '#b5b7b8c4',
     },
   });
 

@@ -78,7 +78,7 @@ export const Profile: FC<Props> = memo(({navigation}) => {
       <ScrollView
         style={{
           flex: 1,
-          backgroundColor: 'black',
+          backgroundColor: '#171c25',
         }}>
         <View
           style={{
@@ -149,7 +149,7 @@ export const Profile: FC<Props> = memo(({navigation}) => {
         ) : (
           <View
             style={{
-              backgroundColor: 'black',
+              backgroundColor: '#171c25',
               marginTop: 40,
               marginHorizontal: 5,
             }}>

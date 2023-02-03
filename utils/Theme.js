@@ -31,6 +31,8 @@ export const Theme = {
     },
   },
   dark: {
+    tabBackground: '#1b212c',
+    header: '#1b212c',
     background: '#171c25',
     navbar: '#202226',
     text: 'white',

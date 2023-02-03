@@ -11,7 +11,6 @@ export interface Props {
 
 export const DeveloperInfo = memo(({route, navigation}: Props) => {
   const {tab, followerList, followingList} = route.params;
-  console.log(followingList);
 
   const [selected, setSelected] = useState<string>(tab);
 
@@ -31,7 +30,7 @@ export const DeveloperInfo = memo(({route, navigation}: Props) => {
       <ScrollView
         style={{
           height: '100%',
-          backgroundColor: 'black',
+          backgroundColor: '#171c25',
         }}>
         {selected === 'followers' &&
           followerList.map((follow: any) => (

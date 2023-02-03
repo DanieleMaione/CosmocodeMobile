@@ -109,15 +109,15 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
               onPress={() => onClickLike()}
               name={isClicked ? 'heart' : 'hearto'}
               size={30}
-              color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
+              color={isClicked ? '#4e57ef' : 'white'}
             />
             <View style={{flexDirection: 'row'}}>
               {gist?.tags.map((tag: string, index: React.Key) => {
                 return (
                   <View
                     style={{
-                      borderColor: 'rgb(17, 236, 229)',
-                      backgroundColor: 'rgb(17, 236, 229)',
+                      borderColor: '#4e57ef',
+                      backgroundColor: '#4e57ef',
                       alignItems: 'center',
                       justifyContent: 'center',
                       borderWidth: 3,
@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
   gistContainer: {
     backgroundColor: 'rgb(15, 23, 36)',
     paddingHorizontal: 15,
+    marginHorizontal: 5,
     paddingVertical: 30,
     position: 'relative',
     borderRadius: 5,

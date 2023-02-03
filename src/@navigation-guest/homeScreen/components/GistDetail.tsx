@@ -122,7 +122,7 @@ export const GistDetail: FC<Props> = memo(({route}) => {
 
   return (
     <>
-      <ScrollView style={{backgroundColor: 'black'}}>
+      <ScrollView style={{backgroundColor: '#171c25'}}>
         <UIAvatar
           srcImage={userGist.avatar_url}
           alt={userGist.username}
@@ -165,7 +165,7 @@ export const GistDetail: FC<Props> = memo(({route}) => {
                 onPress={() => onClickLike()}
                 name={isClicked ? 'heart' : 'hearto'}
                 size={30}
-                color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
+                color={isClicked ? '#4e57ef' : 'white'}
               />
               {userGist.likes.length > 0 && (
                 <View
@@ -203,8 +203,8 @@ export const GistDetail: FC<Props> = memo(({route}) => {
                   <View
                     style={{
                       height: 30,
-                      borderColor: 'rgb(17, 236, 229)',
-                      backgroundColor: 'rgb(17, 236, 229)',
+                      borderColor: '#4e57ef',
+                      backgroundColor: '#4e57ef',
                       alignItems: 'center',
                       justifyContent: 'center',
                       borderWidth: 3,
@@ -220,7 +220,7 @@ export const GistDetail: FC<Props> = memo(({route}) => {
         </View>
         <Text
           style={{
-            color: 'rgb(17, 236, 229)',
+            color: '#4e57ef',
             fontSize: 18,
             fontWeight: '900',
             marginVertical: 50,

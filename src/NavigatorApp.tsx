@@ -35,7 +35,7 @@ export const NavigatorApp = () => {
             tabBarInactiveTintColor: 'gray',
             headerShown: false,
             tabBarStyle: {
-              backgroundColor: 'rgb(15, 23, 36)',
+              backgroundColor: '#1b212c',
             },
           }}>
           <Tab.Screen
@@ -44,7 +44,7 @@ export const NavigatorApp = () => {
               title: 'Home Page',
               headerTintColor: 'white',
               tabBarIcon: ({focused}) => {
-                let color = focused ? 'rgb(17, 236, 229)' : 'white';
+                let color = focused ? '#4e57ef' : 'white';
 
                 return <IconFontAwesome name="home" size={30} color={color} />;
               },
@@ -61,7 +61,7 @@ export const NavigatorApp = () => {
                   headerTitleAlign: 'center',
                   headerTitleStyle: {color: 'white'},
                   headerStyle: {
-                    backgroundColor: 'rgb(15, 23, 36)',
+                    backgroundColor: '#1b212c',
                   },
                 })}>
                 <Stack.Screen
@@ -84,7 +84,7 @@ export const NavigatorApp = () => {
               title: 'Developers',
               headerTintColor: 'white',
               tabBarIcon: ({focused}) => {
-                let color = focused ? 'rgb(17, 236, 229)' : 'white';
+                let color = focused ? '#4e57ef' : 'white';
 
                 return <IconFontAwesome name="users" size={25} color={color} />;
               },
@@ -101,7 +101,7 @@ export const NavigatorApp = () => {
                   headerTitleAlign: 'center',
                   headerTitleStyle: {color: 'white'},
                   headerStyle: {
-                    backgroundColor: 'rgb(15, 23, 36)',
+                    backgroundColor: '#1b212c',
                   },
                 })}>
                 <Stack.Screen
@@ -122,7 +122,7 @@ export const NavigatorApp = () => {
             name="Stack"
             options={{
               tabBarIcon: ({focused}) => {
-                let color = focused ? 'rgb(17, 236, 229)' : 'white';
+                let color = focused ? '#4e57ef' : 'white';
 
                 return <IconOcticons name="stack" size={28} color={color} />;
               },
@@ -139,7 +139,7 @@ export const NavigatorApp = () => {
                   headerTitleAlign: 'center',
                   headerTitleStyle: {color: 'white'},
                   headerStyle: {
-                    backgroundColor: 'rgb(15, 23, 36)',
+                    backgroundColor: '#1b212c',
                   },
                 })}>
                 <Stack.Screen
@@ -183,7 +183,7 @@ export const NavigatorApp = () => {
                   headerTitleAlign: 'center',
                   headerTitleStyle: {color: 'white'},
                   headerStyle: {
-                    backgroundColor: 'rgb(15, 23, 36)',
+                    backgroundColor: '#1b212c',
                   },
                 })}>
                 <Stack.Screen
@@ -210,7 +210,7 @@ export const NavigatorApp = () => {
             headerTitleAlign: 'center',
             headerTitleStyle: {color: 'white'},
             headerStyle: {
-              backgroundColor: 'rgb(15, 23, 36)',
+              backgroundColor: '#1b212c',
             },
           })}>
           <Stack.Screen
@@ -231,6 +231,6 @@ const styles = (focused: boolean) =>
       height: 35,
       width: 35,
       borderWidth: 2,
-      borderColor: focused ? 'rgb(17, 236, 229)' : 'black',
+      borderColor: focused ? '#4e57ef' : '#171c25',
     },
   });

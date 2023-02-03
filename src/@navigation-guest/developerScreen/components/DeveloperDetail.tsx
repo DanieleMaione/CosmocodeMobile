@@ -47,7 +47,6 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
     userData?.followers || [],
   );
   const followingList = userData?.following || [];
-  console.log(isFollowing);
 
   const handleFollower = async () => {
     const response = await Axios.get(
@@ -145,7 +144,7 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
     <ScrollView
       style={{
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#171c25',
       }}>
       <View
         style={{
@@ -220,9 +219,8 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
       ) : (
         <View
           style={{
-            backgroundColor: 'black',
+            backgroundColor: '#171c25',
             marginTop: 40,
-            marginHorizontal: 5,
           }}>
           {gistList.map((gist: TGist, index) => {
             return <Gist gist={gist} userInfo={false} key={index} />;

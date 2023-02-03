@@ -74,7 +74,7 @@ export const HomeScreen = memo(() => {
   return (
     <>
       <Header title="Home" firstPage={true} />
-      <View style={{backgroundColor: 'black', paddingBottom: 100}}>
+      <View style={{backgroundColor: '#171c25', paddingBottom: 100}}>
         {gistList.length > 0 ? (
           <FlatList
             nestedScrollEnabled
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     paddingVertical: 10,
     paddingHorizontal: 2,
-    color: 'rgb(17, 236, 229)',
+    color: '#4e57ef',
     textAlign: 'center',
   },
   input: {
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     margin: 12,
     width: 250,
     borderWidth: 1,
-    borderColor: 'rgb(17, 236, 229)',
+    borderColor: '#4e57ef',
     padding: 10,
     color: 'white',
     background: 'none',
