@@ -74,7 +74,7 @@ export const HomeScreen = memo(() => {
   return (
     <>
       <Header title="Home" firstPage={true} />
-      <View style={{backgroundColor: 'black'}}>
+      <View style={{backgroundColor: 'black', paddingBottom: 100}}>
         {gistList.length > 0 ? (
           <FlatList
             nestedScrollEnabled
