@@ -11,7 +11,6 @@ export interface Props {
 
 export const DeveloperInfo = memo(({route, navigation}: Props) => {
   const {tab, followerList, followingList} = route.params;
-  console.log(followingList);
 
   const [selected, setSelected] = useState<string>(tab);
 

@@ -47,7 +47,6 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
     userData?.followers || [],
   );
   const followingList = userData?.following || [];
-  console.log(isFollowing);
 
   const handleFollower = async () => {
     const response = await Axios.get(
