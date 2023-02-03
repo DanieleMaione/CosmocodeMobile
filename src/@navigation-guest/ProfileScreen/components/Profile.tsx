@@ -36,6 +36,8 @@ export const Profile: FC<Props> = memo(({navigation}) => {
     registrationNumber: number | null;
     sponsor?: {avatar_url: string; username: string};
   }>();
+  const followingList = userData?.following || [];
+  const followerList = userData?.followers || [];
 
   useEffect(() => {
     const getGist = async () => {
@@ -66,8 +68,8 @@ export const Profile: FC<Props> = memo(({navigation}) => {
     getUser();
   }, [username]);
 
-  const onPressNavigate = (tab: string, user: any) => {
-    navigation.navigate('DeveloperInfo', {tab, user});
+  const onPressNavigate = (tab: string) => {
+    navigation.navigate('DeveloperInfo', {tab, followerList, followingList});
   };
 
   return (
@@ -113,7 +115,7 @@ export const Profile: FC<Props> = memo(({navigation}) => {
                 <Text style={styles.publicNumber}>{userData?.total_gists}</Text>
               </View>
               <TouchableOpacity
-                onPress={() => onPressNavigate('followers', user)}
+                onPress={() => onPressNavigate('followers')}
                 style={styles.followers}>
                 <Text style={styles.genericText}>Followers</Text>
                 <Text style={styles.publicNumber}>
@@ -121,7 +123,7 @@ export const Profile: FC<Props> = memo(({navigation}) => {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => onPressNavigate('followings', user)}
+                onPress={() => onPressNavigate('followings')}
                 style={styles.followers}>
                 <Text style={styles.genericText}>Seguiti</Text>
                 <Text style={styles.publicNumber}>

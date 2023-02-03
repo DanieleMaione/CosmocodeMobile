@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {memo, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {UIAvatar} from '../../../components-shared/Avatar';
@@ -9,11 +10,12 @@ export interface Props {
 }
 
 export const DeveloperInfo = memo(({route, navigation}: Props) => {
-  const {tab, user} = route.params;
+  const {tab, followerList, followingList} = route.params;
+  console.log(followingList);
 
   const [selected, setSelected] = useState<string>(tab);
 
-  const onPressSelect = (selected: string) => setSelected(selected);
+  const onPressSelect = (newSelected: string) => setSelected(newSelected);
 
   const onPressNavigate = (username: string) => {
     navigation.navigate('DeveloperDetail', username);
@@ -32,7 +34,7 @@ export const DeveloperInfo = memo(({route, navigation}: Props) => {
           backgroundColor: 'black',
         }}>
         {selected === 'followers' &&
-          user.followers.map((follow: any) => (
+          followerList.map((follow: any) => (
             <UIAvatar
               key={follow.username}
               srcImage={follow.avatar_url}
@@ -42,7 +44,7 @@ export const DeveloperInfo = memo(({route, navigation}: Props) => {
             />
           ))}
         {selected === 'followings' &&
-          user.following.map((follow: any) => (
+          followingList.map((follow: any) => (
             <UIAvatar
               key={follow.username}
               srcImage={follow.avatar_url}

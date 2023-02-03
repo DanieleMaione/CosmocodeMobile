@@ -28,3 +28,8 @@ export interface TGist {
   html: string;
   likes: Array<{avatar_url: string; username: string}>;
 }
+
+export interface TFollow {
+  username: string;
+  avatar_url: string;
+}

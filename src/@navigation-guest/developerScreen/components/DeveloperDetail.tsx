@@ -9,8 +9,12 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import {useSelector} from 'react-redux';
+import {TLogin} from '../../../../slice/loginSlice';
+import {TUser} from '../../../../slice/userSlice';
 import {Gist} from '../../../components-shared/Gist';
-import {TGist} from '../../../components-shared/types';
+import {TFollow, TGist} from '../../../components-shared/types';
+import {UIButton} from '../../../components-shared/UIButton';
 
 export interface Props {
   route: any;
@@ -19,9 +23,9 @@ export interface Props {
 
 export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
   const {params} = route;
-
+  const {user} = useSelector((state: TUser) => state);
   const [gistList, setGistList] = useState<Array<TGist>>([]);
-  const [user, setUser] = useState<{
+  const [userData, setUserData] = useState<{
     username: string;
     avatar_url: string;
     about: string;
@@ -34,6 +38,63 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
     registrationNumber: number | null;
     sponsor?: {avatar_url: string; username: string};
   }>();
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const {login} = useSelector((state: TLogin) => state);
+  const [totalFollowers, setTotalFollowers] = useState<number>(
+    userData?.followers.length || 0,
+  );
+  const [followerList, setFollowerList] = useState<Array<TFollow>>(
+    userData?.followers || [],
+  );
+  const followingList = userData?.following || [];
+  console.log(isFollowing);
+
+  const handleFollower = async () => {
+    const response = await Axios.get(
+      `https://cosmocode-test.herokuapp.com/users/${params}/followers`,
+      {
+        headers: {
+          apiKey:
+            'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+        },
+      },
+    );
+    if (response.status === 200) {
+      setFollowerList(response.data);
+    }
+  };
+
+  const onClickFollow = async () => {
+    if (!isFollowing) {
+      await Axios.post(
+        `https://cosmocode-test.herokuapp.com/users/${params}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${login.access_token}`,
+            apiKey:
+              'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+          },
+        },
+      );
+      setIsFollowing(true);
+      setTotalFollowers(totalFollowers + 1);
+    } else {
+      await Axios.delete(
+        `https://cosmocode-test.herokuapp.com/users/${params}`,
+        {
+          headers: {
+            Authorization: `Bearer ${login.access_token}`,
+            apiKey:
+              'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+          },
+        },
+      );
+      setIsFollowing(false);
+      setTotalFollowers(totalFollowers - 1);
+    }
+    handleFollower();
+  };
 
   useEffect(() => {
     const getGist = async () => {
@@ -50,24 +111,36 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
       setGistList(gists);
     };
     const getUser = async () => {
-      const {data: user} = await Axios.get(`/users/${params}`, {
+      const {data: actualUser} = await Axios.get(`/users/${params}`, {
         baseURL: 'https://cosmocode-test.herokuapp.com',
         headers: {
           apiKey:
             'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
         },
       });
-      setUser(user);
+      setUserData(actualUser);
     };
-
+    setIsFollowing(
+      !!userData?.followers.find(
+        (follower: TFollow) => follower.username === user.username,
+      ),
+    );
     getGist();
     getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
-  const onPressNavigate = (tab: string, user: any) => {
-    navigation.navigate('DeveloperInfo', {tab, user});
+  const onPressNavigate = (tab: string) => {
+    navigation.navigate('DeveloperInfo', {
+      tab,
+      followerList,
+      followingList,
+    });
   };
 
+  if (!userData) {
+    return null;
+  }
   return (
     <ScrollView
       style={{
@@ -81,7 +154,7 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
         }}>
         <Image
           style={{height: 100, width: 100, margin: 10, borderRadius: 100}}
-          source={{uri: user?.avatar_url}}
+          source={{uri: userData?.avatar_url}}
         />
         <View
           style={{
@@ -106,25 +179,33 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
             }}>
             <View style={styles.followers}>
               <Text style={styles.genericText}>Post</Text>
-              <Text style={styles.publicNumber}>{user?.total_gists}</Text>
+              <Text style={styles.publicNumber}>{userData.total_gists}</Text>
             </View>
             <TouchableOpacity
-              onPress={() => onPressNavigate('followers', user)}
+              onPress={() => onPressNavigate('followers')}
               style={styles.followers}>
               <Text style={styles.genericText}>Followers</Text>
-              <Text style={styles.publicNumber}>{user?.followers.length}</Text>
+              <Text style={styles.publicNumber}>{totalFollowers}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => onPressNavigate('followings', user)}
+              onPress={() => onPressNavigate('followings')}
               style={styles.followers}>
               <Text style={styles.genericText}>Seguiti</Text>
-              <Text style={styles.publicNumber}>{user?.following.length}</Text>
+              <Text style={styles.publicNumber}>
+                {userData?.following.length}
+              </Text>
             </TouchableOpacity>
+          </View>
+          <View style={{alignItems: 'flex-start'}}>
+            <UIButton
+              label={isFollowing ? 'Segui già' : 'Segui'}
+              onPress={onClickFollow}
+            />
           </View>
         </View>
       </View>
 
-      {user && user.total_gists <= 0 ? (
+      {userData && userData.total_gists <= 0 ? (
         <Text
           style={{
             width: '100%',
