@@ -2,14 +2,14 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {memo, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import RenderHTML from 'react-native-render-html';
-import {utilityGetExtension} from '../../getExtention';
 import IconHeart from 'react-native-vector-icons/AntDesign';
 import {useSelector} from 'react-redux';
 import Axios from 'axios';
 import {TLogin} from '../../slice/loginSlice';
 import {TGist} from './types';
 import {TUser} from '../../slice/userSlice';
+import SyntaxHighlighter from 'react-native-syntax-highlighter';
+import {tomorrow} from 'react-syntax-highlighter/styles/prism';
 
 interface Props {
   gist?: TGist;
@@ -22,17 +22,6 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
   const {login} = useSelector((state: TLogin) => state);
   const {user} = useSelector((state: TUser) => state);
   const isMyProfile = gist?.username === user.username;
-
-  const source = gist && {
-    html: `
-        <pre style='color: #a0b3d7'}>
-          <code
-            className={language-${utilityGetExtension(gist.filename)}}
-            style={{fontSize: 15}}
-          >${gist.html}</code>
-        </pre>
-      `,
-  };
 
   const onClickLike = async () => {
     try {
@@ -102,8 +91,13 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
               <Text style={styles.fileName}>{gist?.filename}</Text>
             </TouchableOpacity>
           </View>
-          <View style={{backgroundColor: 'rgb(0, 37, 54)', borderRadius: 10}}>
-            <RenderHTML contentWidth={200} source={source!} />
+          <View style={{maxHeight: 450}}>
+            <SyntaxHighlighter
+              language={gist.language}
+              style={tomorrow}
+              highlighter={'prism'}>
+              {gist.raw}
+            </SyntaxHighlighter>
           </View>
           <View
             style={{

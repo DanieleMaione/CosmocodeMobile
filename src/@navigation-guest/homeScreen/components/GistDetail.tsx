@@ -13,6 +13,8 @@ import {useSelector} from 'react-redux';
 import {Gist} from '../../../components-shared/Gist';
 import {UIAvatar} from '../../../components-shared/Avatar';
 import {utilityFormatTimestampToDate} from '../../../../utils/formatTimestampToDate';
+import SyntaxHighlighter from 'react-native-syntax-highlighter';
+import {tomorrow} from 'react-syntax-highlighter/styles/prism';
 
 export interface Props {
   route: any;
@@ -144,48 +146,63 @@ export const GistDetail: FC<Props> = memo(({route}) => {
             minHeight: 170,
             justifyContent: 'space-between',
           }}>
-          <View style={{backgroundColor: 'rgb(0, 37, 54)', borderRadius: 10}}>
-            {source && <RenderHtml contentWidth={200} source={source} />}
-          </View>
+          <SyntaxHighlighter
+            language={userGist.language}
+            style={tomorrow}
+            highlighter={'prism'}>
+            {userGist.raw}
+          </SyntaxHighlighter>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               marginBottom: 10,
               marginHorizontal: 5,
+              marginVertical: 5,
             }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
+            <View>
               <IconHeart
                 onPress={() => onClickLike()}
                 name={isClicked ? 'heart' : 'hearto'}
                 size={30}
                 color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
               />
-              <Text style={{color: 'white', marginHorizontal: 5}}>Piace a</Text>
-              <Image
-                style={{width: 25, height: 25, borderRadius: 100}}
-                source={{uri: userGist.likes[0].avatar_url}}
-              />
-              <Text
-                numberOfLines={1}
-                style={{
-                  maxWidth: 140,
-                  color: 'white',
-                  marginHorizontal: 5,
-                }}>
-                {userGist.likes[0].username}
-              </Text>
-              <Text style={{color: 'white', marginHorizontal: 5}}>e altri</Text>
+              {userGist.likes.length > 0 && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginVertical: 5,
+                  }}>
+                  <Text style={{color: 'white', marginHorizontal: 5}}>
+                    Piace a
+                  </Text>
+                  <Image
+                    style={{width: 25, height: 25, borderRadius: 100}}
+                    source={{uri: userGist.likes[0].avatar_url}}
+                  />
+                  <Text
+                    numberOfLines={1}
+                    style={{
+                      maxWidth: 140,
+                      color: 'white',
+                      marginHorizontal: 5,
+                    }}>
+                    {userGist.likes[0].username}
+                  </Text>
+                  <Text style={{color: 'white', marginHorizontal: 5}}>
+                    e altri
+                  </Text>
+                </View>
+              )}
             </View>
+
             <View style={{flexDirection: 'row'}}>
               {userGist.tags.map((tag: string, index: React.Key) => {
                 return (
                   <View
                     style={{
+                      height: 30,
                       borderColor: 'rgb(17, 236, 229)',
                       backgroundColor: 'rgb(17, 236, 229)',
                       alignItems: 'center',
