@@ -69,7 +69,7 @@ export const StackDetail: FC<Props> = ({route}) => {
 
         <Text style={styles.text}>{stack.item.name}</Text>
       </View>
-      <Text style={styles.subTitle}>Trovati {stack.item.total} gist</Text>
+      <Text style={styles.subTitle}>Trovati {stack.item.totalGist} gist</Text>
       {loading ? (
         <View
           style={{

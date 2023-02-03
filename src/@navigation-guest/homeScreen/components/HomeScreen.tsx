@@ -75,7 +75,7 @@ export const HomeScreen = memo(() => {
     <>
       <Header title="Home" firstPage={true} />
       <View style={{backgroundColor: 'black'}}>
-        {gistList.length > 0 && (
+        {gistList.length > 0 ? (
           <FlatList
             nestedScrollEnabled
             data={gistList}
@@ -123,6 +123,27 @@ export const HomeScreen = memo(() => {
             onEndReachedThreshold={0.2}
             keyExtractor={(gist: any) => gist.index}
           />
+        ) : (
+          <View style={{height: '100%'}}>
+            <View style={styles.outer}>
+              <Text style={styles.pageTitle}>
+                Connettiti con sviluppatori e aziende tech di tutto il mondo.
+              </Text>
+              <Text style={styles.description}>
+                Condividi e scopri in tempo reale a quali attività stanno
+                lavorando professionisti e realtà IT, ovunque nel mondo.
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+              <Text style={styles.subtitle}>MADE WITH ♥️ BY</Text>
+              <Text
+                onPress={() => Linking.openURL('https://www.bitrocket.dev')}
+                style={styles.link}>
+                BITROCKET.DEV
+              </Text>
+            </View>
+            <Gist />
+          </View>
         )}
       </View>
     </>

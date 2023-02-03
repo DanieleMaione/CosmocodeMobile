@@ -8,9 +8,10 @@ import IconHeart from 'react-native-vector-icons/AntDesign';
 import {useSelector} from 'react-redux';
 import Axios from 'axios';
 import {TLogin} from '../../slice/loginSlice';
+import {TGist} from './types';
 
 interface Props {
-  gist: any;
+  gist?: TGist;
   userInfo?: boolean;
 }
 
@@ -19,7 +20,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const {login} = useSelector((state: TLogin) => state);
 
-  const source = {
+  const source = gist && {
     html: `
         <pre style='color: #a0b3d7'}>
           <code
@@ -34,7 +35,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
     try {
       if (isClicked) {
         await Axios.delete(
-          `https://cosmocode-test.herokuapp.com/gists/like/${gist._id}`,
+          `https://cosmocode-test.herokuapp.com/gists/like/${gist?._id}`,
           {
             headers: {
               Authorization: `Bearer ${login.access_token}`,
@@ -46,7 +47,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
         setIsClicked(false);
       } else {
         await Axios.post(
-          `https://cosmocode-test.herokuapp.com/gists/like/${gist._id}`,
+          `https://cosmocode-test.herokuapp.com/gists/like/${gist?._id}`,
           {},
           {
             headers: {
@@ -64,72 +65,83 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
   };
 
   return (
-    <View style={styles.gistContainer} key={gist._id}>
-      {userInfo && (
-        <View style={styles.userContainer}>
-          <TouchableOpacity
-            style={styles.userInfo}
-            onPress={() =>
-              navigation.navigate('DeveloperDetail', gist.username)
-            }>
-            <View style={styles.statusContainer}>
-              <Image
-                source={{uri: `${gist.avatar_url}`}}
-                style={styles.image}
-              />
-              <Text style={styles.username}>{gist.username}</Text>
+    <>
+      {gist ? (
+        <View style={styles.gistContainer} key={gist?._id}>
+          {userInfo && (
+            <View style={styles.userContainer}>
+              <TouchableOpacity
+                style={styles.userInfo}
+                onPress={() =>
+                  navigation.navigate('DeveloperDetail', gist?.username)
+                }>
+                <View style={styles.statusContainer}>
+                  <Image
+                    source={{uri: `${gist?.avatar_url}`}}
+                    style={styles.image}
+                  />
+                  <Text style={styles.username}>{gist?.username}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          )}
+          <Text style={styles.title}>{gist?.title}</Text>
+          <View style={styles.fileNameContainer}>
+            <TouchableOpacity
+              style={styles.fileName}
+              onPress={() =>
+                navigation.navigate('GistDetail', {
+                  idGist: gist?._id,
+                })
+              }>
+              <Text style={styles.fileName}>{gist?.filename}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{backgroundColor: 'rgb(0, 37, 54)', borderRadius: 10}}>
+            <RenderHTML contentWidth={200} source={source!} />
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 10,
+              justifyContent: 'space-between',
+            }}>
+            <IconHeart
+              onPress={() => onClickLike()}
+              name={isClicked ? 'heart' : 'hearto'}
+              size={30}
+              color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
+            />
+            <View style={{flexDirection: 'row'}}>
+              {gist?.tags.map((tag: string, index: React.Key) => {
+                return (
+                  <View
+                    style={{
+                      borderColor: 'rgb(17, 236, 229)',
+                      backgroundColor: 'rgb(17, 236, 229)',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 3,
+                      borderRadius: 5,
+                      marginHorizontal: 5,
+                    }}
+                    key={index}>
+                    <Text>{tag}</Text>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        </View>
+      ) : (
+        <View>
+          <Text style={styles.title}>E' il tuo primo gist?</Text>
+          <View style={{backgroundColor: 'rgb(0, 37, 54)', borderRadius: 10}}>
+            <Text style={styles.title}>Comincia a seguire qualcuno </Text>
+          </View>
         </View>
       )}
-      <Text style={styles.title}>{gist.title}</Text>
-      <View style={styles.fileNameContainer}>
-        <TouchableOpacity
-          style={styles.fileName}
-          onPress={() =>
-            navigation.navigate('GistDetail', {
-              idGist: gist._id,
-            })
-          }>
-          <Text style={styles.fileName}>{gist.filename}</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={{backgroundColor: 'rgb(0, 37, 54)', borderRadius: 10}}>
-        <RenderHTML contentWidth={200} source={source} />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          marginTop: 10,
-          justifyContent: 'space-between',
-        }}>
-        <IconHeart
-          onPress={() => onClickLike()}
-          name={isClicked ? 'heart' : 'hearto'}
-          size={30}
-          color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
-        />
-        <View style={{flexDirection: 'row'}}>
-          {gist.tags.map((tag: string, index: React.Key) => {
-            return (
-              <View
-                style={{
-                  borderColor: 'rgb(17, 236, 229)',
-                  backgroundColor: 'rgb(17, 236, 229)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderWidth: 3,
-                  borderRadius: 5,
-                  marginHorizontal: 5,
-                }}
-                key={index}>
-                <Text>{tag}</Text>
-              </View>
-            );
-          })}
-        </View>
-      </View>
-    </View>
+    </>
   );
 });
 
