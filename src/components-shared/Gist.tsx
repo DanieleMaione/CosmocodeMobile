@@ -9,6 +9,7 @@ import {useSelector} from 'react-redux';
 import Axios from 'axios';
 import {TLogin} from '../../slice/loginSlice';
 import {TGist} from './types';
+import {TUser} from '../../slice/userSlice';
 
 interface Props {
   gist?: TGist;
@@ -19,6 +20,8 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
   const navigation = useNavigation();
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const {login} = useSelector((state: TLogin) => state);
+  const {user} = useSelector((state: TUser) => state);
+  const isMyProfile = gist?.username === user.username;
 
   const source = gist && {
     html: `
@@ -72,9 +75,11 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
             <View style={styles.userContainer}>
               <TouchableOpacity
                 style={styles.userInfo}
-                onPress={() =>
-                  navigation.navigate('DeveloperDetail', gist?.username)
-                }>
+                onPress={() => {
+                  isMyProfile
+                    ? navigation.navigate('Profile')
+                    : navigation.navigate('DeveloperDetail', gist.username);
+                }}>
                 <View style={styles.statusContainer}>
                   <Image
                     source={{uri: `${gist?.avatar_url}`}}

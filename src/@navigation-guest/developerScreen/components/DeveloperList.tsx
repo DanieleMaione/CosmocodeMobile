@@ -10,6 +10,8 @@ import {
   TextInput,
 } from 'react-native';
 import {FlatList} from 'react-native';
+import {useSelector} from 'react-redux';
+import {TUser} from '../../../../slice/userSlice';
 import {Header} from '../../../components-shared/Header';
 import {useDevelopers} from '../../../components-shared/useDevelopers';
 
@@ -19,6 +21,7 @@ export interface Props {
 export const DeveloperList: FC<Props> = memo(({navigation}) => {
   const [value, setValue] = useState('');
   const developers = useDevelopers();
+  const {user} = useSelector((state: TUser) => state);
 
   return (
     <>
@@ -40,6 +43,7 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
           data={developers}
           numColumns={2}
           renderItem={developer => {
+            const isMyProfile = developer.item.username === user.username;
             const showStack = developer.item.username
               .toLowerCase()
               .includes(value.toLowerCase());
@@ -50,12 +54,14 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
             return (
               <TouchableOpacity
                 style={styles.wrapUser}
-                onPress={() =>
-                  navigation.navigate(
-                    'DeveloperDetail',
-                    developer.item.username,
-                  )
-                }>
+                onPress={() => {
+                  isMyProfile
+                    ? navigation.navigate('Profile')
+                    : navigation.navigate(
+                        'DeveloperDetail',
+                        developer.item.username,
+                      );
+                }}>
                 <View
                   style={{
                     backgroundColor: 'rgb(17, 236, 229)',
