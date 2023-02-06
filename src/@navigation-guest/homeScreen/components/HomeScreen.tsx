@@ -1,27 +1,20 @@
-/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
 import axios from 'axios';
-import React, {memo} from 'react';
-import {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Linking,
-  TextInput,
-  ActivityIndicator,
-} from 'react-native';
+import React, {memo, useCallback, useState} from 'react';
+import {Text, View, StyleSheet, Linking, ActivityIndicator} from 'react-native';
 import {Header} from '../../../components-shared/Header';
 import {TGist} from '../../../components-shared/types';
 import {Gist} from '../../../components-shared/Gist';
 import {useSelector} from 'react-redux';
 import {TLogin} from '../../../../slice/loginSlice';
 import {FlatList} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
+import {TUser} from '../../../../slice/userSlice';
 
 export const HomeScreen = memo(() => {
   const [gistList, setGistList] = useState<Array<TGist>>([]);
   const {login} = useSelector((state: TLogin) => state);
-  const [value, setValue] = useState<string>();
+  const {user} = useSelector((state: TUser) => state);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isListEnd, setIsListEnd] = useState<boolean>(false);
@@ -49,6 +42,30 @@ export const HomeScreen = memo(() => {
     }
   };
 
+  const renderHeader = useCallback(() => {
+    return (
+      <>
+        <View style={styles.outer}>
+          <Text style={styles.pageTitle}>
+            Connettiti con sviluppatori e aziende tech di tutto il mondo.
+          </Text>
+          <Text style={styles.description}>
+            Condividi e scopri in tempo reale a quali attività stanno lavorando
+            professionisti e realtà IT, ovunque nel mondo.
+          </Text>
+        </View>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          <Text style={styles.subtitle}>MADE WITH ♥️ BY</Text>
+          <Text
+            onPress={() => Linking.openURL('https://www.bitrocket.dev')}
+            style={styles.link}>
+            BITROCKET.DEV
+          </Text>
+        </View>
+      </>
+    );
+  }, []);
+
   const renderLoader = () => {
     return isLoading ? (
       <View style={{marginVertical: 16, alignItems: 'center'}}>
@@ -66,10 +83,14 @@ export const HomeScreen = memo(() => {
     !isLoading && !isListEnd && setCurrentPage(currentPage + 1);
   };
 
-  useEffect(() => {
-    fetchGists();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  useFocusEffect(
+    useCallback(() => {
+      if (JSON.stringify(user) !== '{}') {
+        fetchGists();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
 
   return (
     <>
@@ -82,40 +103,7 @@ export const HomeScreen = memo(() => {
             renderItem={gist => {
               return <Gist gist={gist.item} key={gist.index} />;
             }}
-            ListHeaderComponent={() => {
-              return (
-                <>
-                  <View style={styles.outer}>
-                    <Text style={styles.pageTitle}>
-                      Connettiti con sviluppatori e aziende tech di tutto il
-                      mondo.
-                    </Text>
-                    <Text style={styles.description}>
-                      Condividi e scopri in tempo reale a quali attività stanno
-                      lavorando professionisti e realtà IT, ovunque nel mondo.
-                    </Text>
-                  </View>
-                  <View
-                    style={{flexDirection: 'row', justifyContent: 'center'}}>
-                    <Text style={styles.subtitle}>MADE WITH ♥️ BY</Text>
-                    <Text
-                      onPress={() =>
-                        Linking.openURL('https://www.bitrocket.dev')
-                      }
-                      style={styles.link}>
-                      BITROCKET.DEV
-                    </Text>
-                  </View>
-                  <TextInput
-                    style={styles.input}
-                    placeholderTextColor="white"
-                    placeholder="Cerca un post"
-                    onChangeText={setValue}
-                    value={value}
-                  />
-                </>
-              );
-            }}
+            ListHeaderComponent={renderHeader}
             ListFooterComponent={renderLoader}
             refreshing={isListEnd}
             onRefresh={handleRefresh}
@@ -142,17 +130,13 @@ export const HomeScreen = memo(() => {
                 BITROCKET.DEV
               </Text>
             </View>
-            {isLoading ? (
-              <View
-                style={{
-                  marginVertical: 16,
-                  alignItems: 'center',
-                }}>
-                <ActivityIndicator size="large" color="#aaaaaa" />
-              </View>
-            ) : (
-              <Gist />
-            )}
+            <View
+              style={{
+                marginVertical: 16,
+                alignItems: 'center',
+              }}>
+              <ActivityIndicator size="large" color="#aaaaaa" />
+            </View>
           </View>
         )}
       </View>
