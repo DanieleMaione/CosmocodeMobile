@@ -87,6 +87,18 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
     navigation.navigate(route, parameters);
   };
 
+  const onClickTopic = async (tag: string) => {
+    const {data} = await Axios.get(`/stacks/${tag}`, {
+      baseURL: 'https://cosmocode-test.herokuapp.com',
+      headers: {
+        apiKey:
+          'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+      },
+    });
+
+    onPressNavigate('StackDetail', data);
+  };
+
   return (
     <>
       {gist ? (
@@ -147,7 +159,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
               <ScrollView horizontal style={{flexDirection: 'row'}}>
                 {gist?.tags.map((tag: string, index: React.Key) => {
                   return (
-                    <View
+                    <TouchableOpacity
                       style={{
                         height: 30,
                         borderColor: '#4e57ef',
@@ -156,9 +168,10 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
                         borderRadius: 5,
                         marginHorizontal: 5,
                       }}
-                      key={index}>
+                      key={index}
+                      onPress={() => onClickTopic(tag)}>
                       <Text style={{color: 'white'}}>{tag}</Text>
-                    </View>
+                    </TouchableOpacity>
                   );
                 })}
               </ScrollView>

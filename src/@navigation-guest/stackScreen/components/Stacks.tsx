@@ -68,7 +68,7 @@ export const Stacks: FC<Props> = memo(({navigation}) => {
             return (
               <>
                 <UIAvatar
-                  onPress={() => navigation.navigate('StackDetail', {stack})}
+                  onPress={() => navigation.navigate('StackDetail', stack.item)}
                   key={stack.item.url}
                   srcImage={stack.item.url}
                   alt={stack.item.name}

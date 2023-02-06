@@ -77,6 +77,7 @@ export const NavigatorApp = () => {
                 <Stack.Screen name="GistDetail" component={GistDetail} />
                 <Stack.Screen name="DeveloperInfo" component={DeveloperInfo} />
                 <Stack.Screen name="GistLikes" component={GistLikes} />
+                <Stack.Screen name="StackDetail" component={StackDetail} />
               </Stack.Navigator>
             )}
           </Tab.Screen>

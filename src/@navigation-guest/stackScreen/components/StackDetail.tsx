@@ -18,7 +18,7 @@ export interface Props {
 }
 
 export const StackDetail: FC<Props> = ({route}) => {
-  const {stack} = route.params;
+  const stack = route.params;
   const [gistList, setGistList] = useState<Array<TGist>>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -27,7 +27,7 @@ export const StackDetail: FC<Props> = ({route}) => {
       try {
         const {data: gists} = await axios
           .get(
-            `https://cosmocode-test.herokuapp.com/search/gists?page=0&tag=${stack.item.name}&page_size=5`,
+            `https://cosmocode-test.herokuapp.com/search/gists?page=0&tag=${stack.name}&page_size=5`,
             {
               headers: {
                 apiKey:
@@ -43,7 +43,7 @@ export const StackDetail: FC<Props> = ({route}) => {
     };
 
     fetchGists();
-  }, [gistList.length, loading, stack.item.name]);
+  }, [gistList.length, loading, stack.name]);
 
   if (!stack) {
     return (
@@ -61,21 +61,21 @@ export const StackDetail: FC<Props> = ({route}) => {
           marginLeft: 10,
           marginBottom: -15,
         }}>
-        {stack.item.url.includes('.svg') ? (
-          <SvgUri width="70" height="70" uri={stack.item.url} />
+        {stack.url.includes('.svg') ? (
+          <SvgUri width="70" height="70" uri={stack.url} />
         ) : (
           <Image
             source={{
-              uri: stack.item.url,
+              uri: stack.url,
             }}
             style={[styles.image, {marginRight: 10}]}
           />
         )}
 
-        <Text style={styles.text}>{stack.item.name}</Text>
+        <Text style={styles.text}>{stack.name}</Text>
       </View>
       <Text style={styles.subTitle}>
-        Trovati {stack.item.totalGists} gist da {stack.item.totalUsers} utenti
+        Trovati {stack.totalGists} gist da {stack.totalUsers} utenti
       </Text>
       {loading ? (
         <View
