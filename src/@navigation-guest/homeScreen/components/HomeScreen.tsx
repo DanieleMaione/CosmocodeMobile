@@ -89,7 +89,7 @@ export const HomeScreen = memo(() => {
         fetchGists();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []),
+    }, [currentPage, user]),
   );
 
   return (
