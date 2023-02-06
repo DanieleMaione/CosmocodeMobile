@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
+import {useFocusEffect} from '@react-navigation/native';
 import Axios from 'axios';
-import React, {FC, memo, useEffect, useState} from 'react';
+import React, {FC, memo, useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -36,8 +37,36 @@ export const Profile: FC<Props> = memo(({navigation}) => {
     registrationNumber: number | null;
     sponsor?: {avatar_url: string; username: string};
   }>();
-  const followingList = userData?.following || [];
-  const followerList = userData?.followers || [];
+  const [followingList, setFollowingList] = useState(userData?.following || []);
+  const [followerList, setFollowerList] = useState(userData?.followers || []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const handleFollow = async () => {
+        const follower = await Axios.get(
+          `https://cosmocode-test.herokuapp.com/users/${username}/followers`,
+          {
+            headers: {
+              apiKey:
+                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+            },
+          },
+        );
+        const following = await Axios.get(
+          `https://cosmocode-test.herokuapp.com/users/${username}/following`,
+          {
+            headers: {
+              apiKey:
+                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+            },
+          },
+        );
+        setFollowingList(following.data);
+        setFollowerList(follower.data);
+      };
+      handleFollow();
+    }, [username]),
+  );
 
   useEffect(() => {
     const getGist = async () => {
@@ -118,17 +147,13 @@ export const Profile: FC<Props> = memo(({navigation}) => {
                 onPress={() => onPressNavigate('followers')}
                 style={styles.followers}>
                 <Text style={styles.genericText}>Followers</Text>
-                <Text style={styles.publicNumber}>
-                  {userData?.followers.length}
-                </Text>
+                <Text style={styles.publicNumber}>{followerList.length}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => onPressNavigate('followings')}
                 style={styles.followers}>
                 <Text style={styles.genericText}>Seguiti</Text>
-                <Text style={styles.publicNumber}>
-                  {userData?.following.length}
-                </Text>
+                <Text style={styles.publicNumber}>{followingList.length}</Text>
               </TouchableOpacity>
             </View>
           </View>
