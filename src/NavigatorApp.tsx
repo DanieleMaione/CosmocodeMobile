@@ -163,7 +163,7 @@ export const NavigatorApp = () => {
             )}
           </Tab.Screen>
           <Tab.Screen
-            name="Profile"
+            name="Profile Screen"
             options={{
               title: 'Profile',
               headerTintColor: 'white',
@@ -181,7 +181,7 @@ export const NavigatorApp = () => {
             }}>
             {() => (
               <Stack.Navigator
-                initialRouteName="Profile Screen"
+                initialRouteName="Profile"
                 screenOptions={() => ({
                   gestureEnabled: true,
                   headerTintColor: 'white',
