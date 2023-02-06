@@ -43,8 +43,6 @@ export const StackDetail: FC<Props> = ({route}) => {
     };
 
     fetchGists();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gistList.length, loading, stack.item.name]);
 
   if (!stack) {
@@ -76,7 +74,9 @@ export const StackDetail: FC<Props> = ({route}) => {
 
         <Text style={styles.text}>{stack.item.name}</Text>
       </View>
-      <Text style={styles.subTitle}>Trovati {stack.item.totalGist} gist</Text>
+      <Text style={styles.subTitle}>
+        Trovati {stack.item.totalGists} gist da {stack.item.totalUsers} utenti
+      </Text>
       {loading ? (
         <View
           style={{

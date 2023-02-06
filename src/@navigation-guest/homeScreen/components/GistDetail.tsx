@@ -25,7 +25,6 @@ export const GistDetail: FC<Props> = memo(({route}) => {
   const navigation = useNavigation();
   const [userGist, setUserGist] = useState<TGist>();
   const [similarGists, setSimilarGists] = useState<Array<TGist>>([]);
-  const [source, setSource] = useState<any>();
   const {idGist} = route.params;
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const {login} = useSelector((state: TLogin) => state);
@@ -80,6 +79,7 @@ export const GistDetail: FC<Props> = memo(({route}) => {
 
     fetchGist();
     fetchSimilarGist();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onClickLike = async () => {
@@ -144,8 +144,11 @@ export const GistDetail: FC<Props> = memo(({route}) => {
         <View
           style={{
             backgroundColor: 'rgb(15, 23, 36)',
-            padding: 10,
-            minHeight: 170,
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+            marginHorizontal: 5,
+            position: 'relative',
+            borderRadius: 5,
             justifyContent: 'space-between',
           }}>
           <SyntaxHighlighter

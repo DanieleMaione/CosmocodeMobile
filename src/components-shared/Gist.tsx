@@ -225,8 +225,9 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
 const styles = StyleSheet.create({
   gistContainer: {
     backgroundColor: 'rgb(15, 23, 36)',
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
     paddingVertical: 30,
+    marginHorizontal: 5,
     position: 'relative',
     borderRadius: 5,
     boxShadow: '-1 6 10 1 #00000042',
