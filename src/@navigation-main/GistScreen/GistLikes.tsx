@@ -1,6 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {memo} from 'react';
+import Axios from 'axios';
+import React, {memo, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useSelector} from 'react-redux';
+import {TLogin} from '../../../slice/loginSlice';
 import {UIAvatar} from '../../components-shared/Avatar';
 
 export interface Props {
@@ -9,11 +12,31 @@ export interface Props {
 }
 
 export const GistLikes = memo(({route, navigation}: Props) => {
-  const {likes} = route.params;
+  const {likes, idPost} = route.params;
+  const [userList, setUserList] = useState(likes);
+  const {login} = useSelector((state: TLogin) => state);
 
   const onPressNavigate = (username: string) => {
     navigation.navigate('DeveloperDetail', username);
   };
+
+  useEffect(() => {
+    const fetchPostLikes = async () => {
+      const {data: newLikes} = await Axios.get(
+        `https://cosmocode-test.herokuapp.com/gists/like/detail/${idPost}`,
+        {
+          headers: {
+            Authorization: `Bearer ${login.access_token}`,
+            apiKey:
+              'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+          },
+        },
+      );
+      setUserList(newLikes);
+    };
+    fetchPostLikes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idPost]);
 
   return (
     <>
@@ -22,13 +45,13 @@ export const GistLikes = memo(({route, navigation}: Props) => {
           height: '100%',
           backgroundColor: 'black',
         }}>
-        {likes.map((like: any) => (
+        {userList.map((user: any) => (
           <UIAvatar
-            key={like.username}
-            srcImage={like.avatar_url}
-            alt={like.username}
-            title={like.username}
-            onPress={() => onPressNavigate(like.username as string)}
+            key={user.username}
+            srcImage={user.avatar_url}
+            alt={user.username}
+            title={user.username}
+            onPress={() => onPressNavigate(user.username)}
           />
         ))}
       </ScrollView>

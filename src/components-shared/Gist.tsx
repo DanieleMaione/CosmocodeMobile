@@ -36,6 +36,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
     ),
   );
   const isMyProfile = gist?.username === user.username;
+  const [userList, setUserList] = useState(gist?.likes);
 
   const onClickLike = async () => {
     try {
@@ -65,6 +66,17 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
         );
         setIsClicked(true);
       }
+      const {data: newLikes} = await Axios.get(
+        `https://cosmocode-test.herokuapp.com/gists/like/detail/${gist?._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${login.access_token}`,
+            apiKey:
+              'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+          },
+        },
+      );
+      setUserList(newLikes);
     } catch (error) {
       console.log(error);
     }
@@ -152,7 +164,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
               </ScrollView>
             </View>
           </View>
-          {gist.likes.length > 0 && (
+          {userList && userList?.length > 0 && (
             <View
               style={{
                 flexDirection: 'row',
@@ -162,7 +174,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
               <Text style={{color: 'white', marginHorizontal: 5}}>Piace a</Text>
               <TouchableOpacity
                 onPress={() =>
-                  onPressNavigate('DeveloperDetail', gist.likes[0].username)
+                  onPressNavigate('DeveloperDetail', userList[0]?.username)
                 }
                 style={{
                   flexDirection: 'row',
@@ -170,26 +182,31 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
                 }}>
                 <Image
                   style={{width: 25, height: 25, borderRadius: 100}}
-                  source={{uri: gist.likes[0].avatar_url}}
+                  source={{uri: userList[0]?.avatar_url}}
                 />
                 <Text
                   numberOfLines={1}
                   style={{
-                    maxWidth: 140,
+                    maxWidth: userList.length > 1 ? 140 : '100%',
                     color: 'white',
                     marginHorizontal: 5,
                   }}>
-                  {gist.likes[0].username}
+                  {userList[0]?.username}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  onPressNavigate('GistLikes', {likes: gist.likes})
-                }>
-                <Text style={{color: 'white', marginHorizontal: 5}}>
-                  e altri
-                </Text>
-              </TouchableOpacity>
+              {userList.length > 1 && (
+                <TouchableOpacity
+                  onPress={() =>
+                    onPressNavigate('GistLikes', {
+                      likes: userList,
+                      idPost: gist._id,
+                    })
+                  }>
+                  <Text style={{color: 'white', marginHorizontal: 5}}>
+                    e altri
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           )}
         </View>
