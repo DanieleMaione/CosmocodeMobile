@@ -1,6 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
 /** @format */
 
 import {memo} from 'react';
+import React from 'react';
 
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SvgUri} from 'react-native-svg';
@@ -14,6 +16,7 @@ interface Props {
   width?: number;
   height?: number;
   isCapitalize?: boolean;
+  isBordered?: boolean;
 }
 
 export const UIAvatar = memo(
@@ -26,21 +29,24 @@ export const UIAvatar = memo(
     width,
     height,
     isCapitalize,
+    isBordered,
   }: Props) => (
     <TouchableOpacity style={styles.outer} onPress={onPress}>
       {srcImage.includes('.svg') ? (
         <SvgUri
-          width={!!width ? width : 70}
-          height={!!height ? height : 70}
+          width={width ? width : 70}
+          height={height ? height : 70}
           uri={srcImage}
         />
       ) : (
         <Image
           alt={alt}
           style={{
-            width: !!width ? width : 70,
-            height: !!height ? height : 70,
+            width: width ? width : 70,
+            height: height ? height : 70,
             borderRadius: 100,
+            borderWidth: isBordered ? 2 : 0,
+            borderColor: isBordered ? 'rgb(17, 236, 229)' : 'transparent',
           }}
           source={{
             uri: srcImage,
@@ -83,8 +89,6 @@ const styles = StyleSheet.create({
     color: '#b5b7b8d3',
     fontSize: 15,
     paddingTop: 5,
-    textOverflow: 'ellipsis',
     overflow: 'hidden',
-    whiteSpace: 'nowrap',
   },
 });

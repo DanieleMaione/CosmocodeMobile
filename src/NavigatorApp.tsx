@@ -81,7 +81,7 @@ export const NavigatorApp = () => {
             )}
           </Tab.Screen>
           <Tab.Screen
-            name="Developers"
+            name="Developers Screen"
             options={{
               title: 'Developers',
               headerTintColor: 'white',
@@ -122,7 +122,7 @@ export const NavigatorApp = () => {
             )}
           </Tab.Screen>
           <Tab.Screen
-            name="Stack"
+            name="Stack Screen"
             options={{
               tabBarIcon: ({focused}) => {
                 let color = focused ? 'rgb(17, 236, 229)' : 'white';
@@ -180,7 +180,7 @@ export const NavigatorApp = () => {
             }}>
             {() => (
               <Stack.Navigator
-                initialRouteName="Profile"
+                initialRouteName="Profile Screen"
                 screenOptions={() => ({
                   gestureEnabled: true,
                   headerTintColor: 'white',

@@ -1,17 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {FC, memo, useState} from 'react';
-import {
-  Text,
-  SafeAreaView,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  TextInput,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, TextInput} from 'react-native';
 import {FlatList} from 'react-native';
 import {useSelector} from 'react-redux';
 import {TUser} from '../../../../slice/userSlice';
+import {UIAvatar} from '../../../components-shared/Avatar';
 import {Header} from '../../../components-shared/Header';
 import {useDevelopers} from '../../../components-shared/useDevelopers';
 
@@ -22,6 +15,11 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
   const [value, setValue] = useState('');
   const developers = useDevelopers();
   const {user} = useSelector((state: TUser) => state);
+
+  const onPressNavigate = (route: string, parameters?: any) => {
+    // @ts-ignore
+    navigation.navigate(route, parameters);
+  };
 
   return (
     <>
@@ -41,7 +39,7 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
         <FlatList
           contentContainerStyle={{paddingBottom: 100}}
           data={developers}
-          numColumns={2}
+          numColumns={1}
           renderItem={developer => {
             const isMyProfile = developer.item.username === user.username;
             const showStack = developer.item.username
@@ -52,34 +50,24 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
               return null;
             }
             return (
-              <TouchableOpacity
-                style={styles.wrapUser}
-                onPress={() => {
-                  isMyProfile
-                    ? navigation.navigate('Profile')
-                    : navigation.navigate(
-                        'DeveloperDetail',
-                        developer.item.username,
-                      );
-                }}>
-                <View
-                  style={{
-                    backgroundColor: 'rgb(17, 236, 229)',
-                    borderRadius: 100,
-                    marginVertical: 10,
-                  }}>
-                  <Image
-                    style={styles.userImg}
-                    source={{
-                      uri: developer.item.avatar_url,
-                    }}
-                  />
-                </View>
-                <Text style={styles.subTitle}>
-                  {developer.item.totalGists} Gist
-                </Text>
-                <Text style={styles.text}>{developer.item.username}</Text>
-              </TouchableOpacity>
+              <>
+                <UIAvatar
+                  onPress={() => {
+                    isMyProfile
+                      ? onPressNavigate('Profile')
+                      : onPressNavigate(
+                          'DeveloperDetail',
+                          developer.item.username,
+                        );
+                  }}
+                  key={developer.item.username}
+                  srcImage={developer.item.avatar_url}
+                  alt={developer.item.username}
+                  title={developer.item.username}
+                  subtitle={`Post: ${developer.item.totalGists} - Followers: ${developer.item.totalFollowers}`}
+                  isBordered
+                />
+              </>
             );
           }}
         />
@@ -116,7 +104,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(17, 236, 229)',
     padding: 10,
     color: 'white',
-    background: 'none',
     alignSelf: 'center',
   },
 });

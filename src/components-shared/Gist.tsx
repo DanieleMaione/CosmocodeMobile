@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/native';
 import React, {memo, useState} from 'react';
 import {

@@ -99,6 +99,5 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(17, 236, 229)',
     padding: 10,
     color: 'white',
-    background: 'none',
   },
 });
