@@ -27,9 +27,14 @@ interface Props {
 
 export const Gist = memo(({gist, userInfo = true}: Props) => {
   const navigation = useNavigation();
-  const [isClicked, setIsClicked] = useState<boolean>(false);
   const {login} = useSelector((state: TLogin) => state);
   const {user} = useSelector((state: TUser) => state);
+  const [isClicked, setIsClicked] = useState<boolean>(
+    !!gist?.likes.find(
+      (like: {avatar_url: string; username: string}) =>
+        user.username === like.username,
+    ),
+  );
   const isMyProfile = gist?.username === user.username;
 
   const onClickLike = async () => {
