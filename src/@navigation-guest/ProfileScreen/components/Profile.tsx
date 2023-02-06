@@ -83,14 +83,14 @@ export const Profile: FC<Props> = memo(({navigation}) => {
       setGistList(gists);
     };
     const getUser = async () => {
-      const {data: user} = await Axios.get(`/users/${username}`, {
+      const {data: actualUser} = await Axios.get(`/users/${username}`, {
         baseURL: 'https://cosmocode-test.herokuapp.com',
         headers: {
           apiKey:
             'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
         },
       });
-      setUserData(user);
+      setUserData(actualUser);
     };
 
     getGist();
