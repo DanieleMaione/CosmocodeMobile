@@ -115,6 +115,7 @@ export const NavigatorApp = () => {
                   name="DeveloperDetail"
                   component={DeveloperDetail}
                 />
+                <Stack.Screen name="StackDetail" component={StackDetail} />
                 <Stack.Screen name="DeveloperInfo" component={DeveloperInfo} />
                 <Stack.Screen name="GistDetail" component={GistDetail} />
                 <Stack.Screen name="GistLikes" component={GistLikes} />

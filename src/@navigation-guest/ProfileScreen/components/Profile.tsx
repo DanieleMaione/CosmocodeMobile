@@ -95,7 +95,8 @@ export const Profile: FC<Props> = memo(({navigation}) => {
 
     getGist();
     getUser();
-  }, [username]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onPressNavigate = (tab: string) => {
     navigation.navigate('DeveloperInfo', {tab, followerList, followingList});

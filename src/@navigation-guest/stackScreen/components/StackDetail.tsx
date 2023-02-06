@@ -47,6 +47,13 @@ export const StackDetail: FC<Props> = ({route}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gistList.length, loading, stack.item.name]);
 
+  if (!stack) {
+    return (
+      <ScrollView style={styles.scrollView}>
+        <Text style={styles.text}>Questo stack non esiste</Text>
+      </ScrollView>
+    );
+  }
   return (
     <ScrollView style={styles.scrollView}>
       <View
