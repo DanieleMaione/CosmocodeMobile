@@ -80,7 +80,7 @@ export const HomeScreen = memo(() => {
             nestedScrollEnabled
             data={gistList}
             renderItem={gist => {
-              return <Gist gist={gist.item} />;
+              return <Gist gist={gist.item} key={gist.index} />;
             }}
             ListHeaderComponent={() => {
               return (
@@ -120,8 +120,8 @@ export const HomeScreen = memo(() => {
             refreshing={isListEnd}
             onRefresh={handleRefresh}
             onEndReached={loadMoreItem}
-            onEndReachedThreshold={0.2}
-            keyExtractor={(gist: any) => gist.index}
+            onEndReachedThreshold={0}
+            keyExtractor={(item, index) => index.toString()}
           />
         ) : (
           <View style={{height: '100%'}}>
@@ -142,7 +142,17 @@ export const HomeScreen = memo(() => {
                 BITROCKET.DEV
               </Text>
             </View>
-            <Gist />
+            {isLoading ? (
+              <View
+                style={{
+                  marginVertical: 16,
+                  alignItems: 'center',
+                }}>
+                <ActivityIndicator size="large" color="#aaaaaa" />
+              </View>
+            ) : (
+              <Gist />
+            )}
           </View>
         )}
       </View>
@@ -188,7 +198,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(17, 236, 229)',
     padding: 10,
     color: 'white',
-    background: 'none',
     alignSelf: 'center',
   },
 });
