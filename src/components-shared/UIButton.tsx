@@ -20,8 +20,8 @@ export const UIButton = memo(({label, onPress, disabled = false}: Props) => {
 const styles = StyleSheet.create({
   container: {alignItems: 'center'},
   btn: {
-    borderColor: 'rgb(17, 236, 229)',
-    backgroundColor: 'rgb(17, 236, 229)',
+    borderColor: '#4e57ef',
+    backgroundColor: '#4e57ef',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   text: {
     paddingHorizontal: 10,
-    color: 'black',
+    color: 'white',
     textAlign: 'left',
     fontWeight: 'bold',
   },

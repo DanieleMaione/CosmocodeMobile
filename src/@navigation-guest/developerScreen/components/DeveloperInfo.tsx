@@ -30,7 +30,7 @@ export const DeveloperInfo = memo(({route, navigation}: Props) => {
       <ScrollView
         style={{
           height: '100%',
-          backgroundColor: 'black',
+          backgroundColor: '#171c25',
         }}>
         {selected === 'followers' &&
           followerList.map((follow: any) => (

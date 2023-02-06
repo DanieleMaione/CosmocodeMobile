@@ -43,7 +43,7 @@ export const GistLikes = memo(({route, navigation}: Props) => {
       <ScrollView
         style={{
           height: '100%',
-          backgroundColor: 'black',
+          backgroundColor: '#171c25',
         }}>
         {userList.map((user: any) => (
           <UIAvatar

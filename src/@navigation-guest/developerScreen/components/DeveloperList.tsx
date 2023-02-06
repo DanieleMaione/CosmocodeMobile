@@ -26,7 +26,7 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
       <Header title="Developers" firstPage={true} />
       <SafeAreaView
         style={{
-          backgroundColor: 'black',
+          backgroundColor: '#171c25',
           height: '100%',
         }}>
         <TextInput
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     margin: 12,
     width: 250,
     borderWidth: 1,
-    borderColor: 'rgb(17, 236, 229)',
+    borderColor: '#4e57ef',
     padding: 10,
     color: 'white',
     alignSelf: 'center',

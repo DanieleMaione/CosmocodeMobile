@@ -67,7 +67,7 @@ export const Login = memo(() => {
         style={{
           flexDirection: 'row',
           justifyContent: 'center',
-          backgroundColor: 'black',
+          backgroundColor: '#171c25',
         }}>
         <Text style={styles.subtitle}>MADE WITH ♥️ BY</Text>
         <Text
@@ -113,7 +113,7 @@ export const Login = memo(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: '#171c25',
     height: '100%',
   },
   inner: {
@@ -125,13 +125,13 @@ const styles = StyleSheet.create({
   textInput: {
     margin: 12,
     borderWidth: 1,
-    borderColor: 'rgb(17, 236, 229)',
+    borderColor: '#4e57ef',
     padding: 10,
     color: 'white',
     height: 40,
   },
   outer: {
-    backgroundColor: 'black',
+    backgroundColor: '#171c25',
     textAlign: 'center',
     paddingTop: 20,
   },
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   link: {
     fontSize: 12,
     paddingHorizontal: 2,
-    color: 'rgb(17, 236, 229)',
+    color: '#4e57ef',
     textAlign: 'center',
   },
 });

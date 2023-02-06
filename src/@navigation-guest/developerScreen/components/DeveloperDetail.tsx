@@ -146,7 +146,7 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
     <ScrollView
       style={{
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#171c25',
       }}>
       <View
         style={{
@@ -221,7 +221,7 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
       ) : (
         <View
           style={{
-            backgroundColor: 'black',
+            backgroundColor: '#171c25',
             marginTop: 40,
             marginHorizontal: 5,
           }}>

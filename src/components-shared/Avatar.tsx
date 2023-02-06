@@ -46,7 +46,7 @@ export const UIAvatar = memo(
             height: height ? height : 70,
             borderRadius: 100,
             borderWidth: isBordered ? 2 : 0,
-            borderColor: isBordered ? 'rgb(17, 236, 229)' : 'transparent',
+            borderColor: isBordered ? '#4e57ef' : 'transparent',
           }}
           source={{
             uri: srcImage,

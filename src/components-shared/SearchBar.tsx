@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     margin: 12,
     width: 250,
     borderWidth: 1,
-    borderColor: 'rgb(17, 236, 229)',
+    borderColor: '#4e57ef',
     padding: 10,
     color: 'white',
     alignSelf: 'center',

@@ -141,7 +141,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
               onPress={() => onClickLike()}
               name={isClicked ? 'heart' : 'hearto'}
               size={30}
-              color={isClicked ? 'rgb(17, 236, 229)' : 'white'}
+              color={isClicked ? '#4e57ef' : 'white'}
             />
             <View style={{maxWidth: 140}}>
               <ScrollView horizontal style={{flexDirection: 'row'}}>
@@ -150,14 +150,14 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
                     <View
                       style={{
                         height: 30,
-                        borderColor: 'rgb(17, 236, 229)',
-                        backgroundColor: 'rgb(17, 236, 229)',
+                        borderColor: '#4e57ef',
+                        backgroundColor: '#4e57ef',
                         borderWidth: 3,
                         borderRadius: 5,
                         marginHorizontal: 5,
                       }}
                       key={index}>
-                      <Text>{tag}</Text>
+                      <Text style={{color: 'white'}}>{tag}</Text>
                     </View>
                   );
                 })}

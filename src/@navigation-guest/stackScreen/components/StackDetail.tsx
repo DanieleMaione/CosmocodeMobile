@@ -99,7 +99,7 @@ export const StackDetail: FC<Props> = ({route}) => {
 };
 
 const styles = StyleSheet.create({
-  scrollView: {backgroundColor: 'black'},
+  scrollView: {backgroundColor: '#171c25'},
   text: {color: 'white', fontSize: 36, fontWeight: 'bold'},
   image: {
     width: 60,
