@@ -1,5 +1,4 @@
 /* eslint-disable react-native/no-inline-styles */
-import {RouteProp} from '@react-navigation/native';
 import Axios from 'axios';
 import React, {FC, memo, useEffect, useState} from 'react';
 import {
