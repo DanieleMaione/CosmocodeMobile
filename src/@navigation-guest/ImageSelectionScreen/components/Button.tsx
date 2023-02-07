@@ -36,6 +36,7 @@ const styles = StyleSheet.create<Styles>({
     marginHorizontal: 8,
     marginVertical: 4,
     borderRadius: 8,
+    backgroundColor: '#4e57ef',
   },
   text: {
     textAlign: 'center',

@@ -20,13 +20,12 @@ interface Styles {
 
 const styles = StyleSheet.create<Styles>({
   container: {
-    backgroundColor: '#dcecfb',
+    backgroundColor: '#171c25',
     marginVertical: 8,
     padding: 8,
-    borderRadius: 8,
     maxHeight: 200,
   },
   text: {
-    color: 'black',
+    color: 'white',
   },
 });

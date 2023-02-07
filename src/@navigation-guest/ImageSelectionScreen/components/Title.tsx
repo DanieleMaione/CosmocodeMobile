@@ -24,7 +24,7 @@ const styles = StyleSheet.create<Styles>({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 16,
-    backgroundColor: 'steelblue',
+    backgroundColor: '#4e57ef',
   },
   text: {
     fontSize: 24,

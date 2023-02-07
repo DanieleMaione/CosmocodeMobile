@@ -27,7 +27,7 @@ export const ImageSelection = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title>🌄 React Native Image Picker</Title>
+      <Title>Image Picker</Title>
       <ScrollView>
         <View style={styles.buttonContainer}>
           {actions.map(({title, type, options}) => {
@@ -59,7 +59,7 @@ export const ImageSelection = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'aliceblue',
+    backgroundColor: 'rgb(15, 23, 36)',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -84,7 +84,7 @@ interface Action {
 
 const actions: Action[] = [
   {
-    title: 'Take Image',
+    title: 'Fai una foto',
     type: 'capture',
     options: {
       saveToPhotos: true,
@@ -94,7 +94,7 @@ const actions: Action[] = [
     },
   },
   {
-    title: 'Select Image',
+    title: 'Seleziona un immagine',
     type: 'library',
     options: {
       selectionLimit: 0,
@@ -104,7 +104,7 @@ const actions: Action[] = [
     },
   },
   {
-    title: 'Take Video',
+    title: 'Fai un video',
     type: 'capture',
     options: {
       saveToPhotos: true,
@@ -113,7 +113,7 @@ const actions: Action[] = [
     },
   },
   {
-    title: 'Select Video',
+    title: 'Seleziona un video',
     type: 'library',
     options: {
       selectionLimit: 0,
@@ -122,7 +122,7 @@ const actions: Action[] = [
     },
   },
   {
-    title: 'Select Image or Video\n(mixed)',
+    title: 'Seleziona un immagine o un video',
     type: 'library',
     options: {
       selectionLimit: 0,
