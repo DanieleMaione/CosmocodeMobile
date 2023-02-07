@@ -50,7 +50,7 @@ export const GistLikes = memo(({route, navigation}: Props) => {
           height: '100%',
           backgroundColor: '#171c25',
         }}>
-        {userList.map((user: any) => (
+        {userList.map((user: TUser) => (
           <UIAvatar
             key={user.username}
             srcImage={user.avatar_url}

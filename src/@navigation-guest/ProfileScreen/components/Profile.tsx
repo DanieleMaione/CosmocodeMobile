@@ -40,7 +40,6 @@ export const Profile: FC<Props> = memo(({navigation}) => {
   }>();
   const [followingList, setFollowingList] = useState(userData?.following || []);
   const [followerList, setFollowerList] = useState(userData?.followers || []);
-  const [contatti, setContatti] = useState<any>();
 
   useFocusEffect(
     useCallback(() => {
@@ -98,7 +97,8 @@ export const Profile: FC<Props> = memo(({navigation}) => {
     getGist();
     getUser();
     Contacts.getAll().then(contacts => {
-      setContatti(contacts);
+      //funzione fatta solo per esercizi sui contatti
+      return contacts;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
