@@ -236,7 +236,7 @@ const styles = (focused: boolean) =>
       borderRadius: 100,
       height: 35,
       width: 35,
-      borderWidth: 2,
+      borderWidth: 4,
       borderColor: focused ? '#4e57ef' : 'black',
     },
   });

@@ -15,6 +15,7 @@ import {TUser} from '../../../../slice/userSlice';
 import {Gist} from '../../../components-shared/Gist';
 import {Header} from '../../../components-shared/Header';
 import {TGist} from '../../../components-shared/types';
+import Contacts from 'react-native-contacts';
 
 export interface Props {
   navigation: any;
@@ -39,6 +40,7 @@ export const Profile: FC<Props> = memo(({navigation}) => {
   }>();
   const [followingList, setFollowingList] = useState(userData?.following || []);
   const [followerList, setFollowerList] = useState(userData?.followers || []);
+  const [contatti, setContatti] = useState<any>();
 
   useFocusEffect(
     useCallback(() => {
@@ -95,8 +97,12 @@ export const Profile: FC<Props> = memo(({navigation}) => {
 
     getGist();
     getUser();
+    Contacts.getAll().then(contacts => {
+      setContatti(contacts);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  console.log(contatti);
 
   const onPressNavigate = (tab: string) => {
     navigation.navigate('DeveloperInfo', {tab, followerList, followingList});

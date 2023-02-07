@@ -186,9 +186,11 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
               }}>
               <Text style={{color: 'white', marginHorizontal: 5}}>Piace a</Text>
               <TouchableOpacity
-                onPress={() =>
-                  onPressNavigate('DeveloperDetail', userList[0]?.username)
-                }
+                onPress={() => {
+                  isMyProfile
+                    ? onPressNavigate('Profile')
+                    : onPressNavigate('DeveloperDetail', userList[0]?.username);
+                }}
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
