@@ -20,6 +20,7 @@ import {Image, StyleSheet} from 'react-native';
 import {TUser} from '../slice/userSlice';
 import {Profile} from './@navigation-guest/ProfileScreen/components/Profile';
 import {GistLikes} from './@navigation-main/GistScreen/GistLikes';
+import {ImageSelection} from './@navigation-guest/ImageSelectionScreen/ImageSelection';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -203,6 +204,38 @@ export const NavigatorApp = () => {
                 />
                 <Stack.Screen name="GistDetail" component={GistDetail} />
                 <Stack.Screen name="DeveloperInfo" component={DeveloperInfo} />
+              </Stack.Navigator>
+            )}
+          </Tab.Screen>
+          <Tab.Screen
+            name="Image screen"
+            options={{
+              tabBarIcon: ({focused}) => {
+                let color = focused ? '#4e57ef' : 'white';
+
+                return <IconOcticons name="image" size={28} color={color} />;
+              },
+              tabBarLabel: () => {
+                return null;
+              },
+            }}>
+            {() => (
+              <Stack.Navigator
+                initialRouteName="Image"
+                screenOptions={() => ({
+                  gestureEnabled: true,
+                  headerTintColor: 'white',
+                  headerTitleAlign: 'center',
+                  headerTitleStyle: {color: 'white'},
+                  headerStyle: {
+                    backgroundColor: 'rgb(15, 23, 36)',
+                  },
+                })}>
+                <Stack.Screen
+                  name="Image Picker"
+                  component={ImageSelection}
+                  options={{headerShown: false}}
+                />
               </Stack.Navigator>
             )}
           </Tab.Screen>
