@@ -4,6 +4,7 @@ import React, {memo, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {TLogin} from '../../../slice/loginSlice';
+import {TUser} from '../../../slice/userSlice';
 import {UIAvatar} from '../../components-shared/Avatar';
 
 export interface Props {
@@ -13,13 +14,17 @@ export interface Props {
 
 export const GistLikes = memo(({route, navigation}: Props) => {
   const {likes, idPost} = route.params;
+  const {user} = useSelector((state: TUser) => state);
   const [userList, setUserList] = useState(likes);
   const {login} = useSelector((state: TLogin) => state);
 
   const onPressNavigate = (username: string) => {
-    navigation.navigate('DeveloperDetail', username);
+    if (username === user.username) {
+      navigation.navigate('Profile');
+    } else {
+      navigation.navigate('DeveloperDetail', username);
+    }
   };
-
   useEffect(() => {
     const fetchPostLikes = async () => {
       const {data: newLikes} = await Axios.get(

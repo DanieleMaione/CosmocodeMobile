@@ -68,10 +68,7 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
                   subtitle={`Post: ${developer.item.totalGists} - Followers: ${developer.item.totalFollowers}`}
                   isBordered
                 />
-                <UIDivider
-                  style={styles.linearGradient}
-                  colors={['rgb(17, 236, 229)', '#4e57ef', 'rgb(17, 236, 229)']}
-                />
+                <UIDivider style={styles.linearGradient} />
               </>
             );
           }}

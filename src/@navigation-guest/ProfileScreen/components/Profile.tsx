@@ -102,7 +102,6 @@ export const Profile: FC<Props> = memo(({navigation}) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(contatti);
 
   const onPressNavigate = (tab: string) => {
     navigation.navigate('DeveloperInfo', {tab, followerList, followingList});

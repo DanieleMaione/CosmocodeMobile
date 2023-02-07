@@ -18,6 +18,7 @@ export const UITabs = memo(({onPress, selected, options}: Props) => (
     style={styles.scrollView}>
     {options.map((option, index) => (
       <TouchableOpacity
+        key={index}
         style={stylesProps(index, selected, option).touchableOpacity}
         onPress={() => onPress(option.name)}>
         <Text style={stylesProps(index, selected, option).text}>
