@@ -129,7 +129,7 @@ export const DeveloperDetail: FC<Props> = memo(({route, navigation}) => {
     handleFollower();
     userData && setTotalFollowers(userData?.followers.length);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userData?.following.length]);
+  }, [userData?.following.length, params]);
 
   const onPressNavigate = (tab: string) => {
     navigation.navigate('DeveloperInfo', {

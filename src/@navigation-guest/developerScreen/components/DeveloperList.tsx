@@ -5,6 +5,7 @@ import {FlatList} from 'react-native';
 import {useSelector} from 'react-redux';
 import {TUser} from '../../../../slice/userSlice';
 import {UIAvatar} from '../../../components-shared/Avatar';
+import {UIDivider} from '../../../components-shared/Divider';
 import {Header} from '../../../components-shared/Header';
 import {useDevelopers} from '../../../components-shared/useDevelopers';
 
@@ -67,6 +68,10 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
                   subtitle={`Post: ${developer.item.totalGists} - Followers: ${developer.item.totalFollowers}`}
                   isBordered
                 />
+                <UIDivider
+                  style={styles.linearGradient}
+                  colors={['rgb(17, 236, 229)', '#4e57ef', 'rgb(17, 236, 229)']}
+                />
               </>
             );
           }}
@@ -77,6 +82,12 @@ export const DeveloperList: FC<Props> = memo(({navigation}) => {
 });
 
 const styles = StyleSheet.create({
+  linearGradient: {
+    marginHorizontal: 25,
+    marginVertical: 2,
+    height: 1.25,
+    opacity: 0.7,
+  },
   container: {
     flex: 1,
     alignItems: 'center',

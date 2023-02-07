@@ -8,6 +8,7 @@ import {Header} from '../../../components-shared/Header';
 import {TLogin} from '../../../../slice/loginSlice';
 import {UIAvatar} from '../../../components-shared/Avatar';
 import {useSelector} from 'react-redux';
+import {UIDivider} from '../../../components-shared/Divider';
 
 export type TStack = {
   name: string;
@@ -75,6 +76,7 @@ export const Stacks: FC<Props> = memo(({navigation}) => {
                   title={stack.item.name}
                   subtitle={`Gists: ${stack.item.totalGists} - Users: ${stack.item.totalUsers}`}
                 />
+                <UIDivider />
               </>
             );
           }}
