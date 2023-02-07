@@ -19,6 +19,7 @@ import {TUser} from '../../slice/userSlice';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 // @ts-ignore
 import {tomorrow} from 'react-syntax-highlighter/styles/prism';
+import {utilityFormatTimestampToDate} from '../../utils/formatTimestampToDate';
 
 interface Props {
   gist?: TGist;
@@ -124,6 +125,9 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
           )}
           <Text style={styles.title}>{gist?.title}</Text>
           <View style={styles.fileNameContainer}>
+            <Text style={styles.date}>
+              {`${utilityFormatTimestampToDate(gist.createdAt)}`}
+            </Text>
             <TouchableOpacity
               style={styles.fileName}
               onPress={() =>
@@ -160,14 +164,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
                 {gist?.tags.map((tag: string, index: React.Key) => {
                   return (
                     <TouchableOpacity
-                      style={{
-                        height: 30,
-                        borderColor: '#4e57ef',
-                        backgroundColor: '#4e57ef',
-                        borderWidth: 3,
-                        borderRadius: 5,
-                        marginHorizontal: 5,
-                      }}
+                      style={styles.tagsContainer}
                       key={index}
                       onPress={() => onClickTopic(tag)}>
                       <Text style={{color: 'white'}}>{tag}</Text>
@@ -278,8 +275,24 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     color: '#a0b3d7',
   },
+  tagsContainer: {
+    height: 30,
+    borderColor: '#4e57ef',
+    backgroundColor: '#4e57ef',
+    borderWidth: 3,
+    borderRadius: 5,
+    marginHorizontal: 5,
+    justifyContent: 'center',
+  },
   fileNameContainer: {
-    alignItems: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 5,
+  },
+  date: {
+    color: '#a0b3d7',
+    opacity: 0.8,
+    fontSize: 10,
   },
   fileName: {
     opacity: 0.8,

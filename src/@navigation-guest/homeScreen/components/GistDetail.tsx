@@ -1,21 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import Axios from 'axios';
 import React, {FC, memo, useEffect, useState} from 'react';
-import {View, Text, ScrollView, Image} from 'react-native';
-import {StyleSheet} from 'react-native';
-import {utilityGetExtension} from '../../../../getExtention';
+import {Text, ScrollView} from 'react-native';
 import {TGist} from '../../../components-shared/types';
 import {useNavigation} from '@react-navigation/native';
-import IconHeart from 'react-native-vector-icons/AntDesign';
 import {TLogin} from '../../../../slice/loginSlice';
 import {useSelector} from 'react-redux';
 import {Gist} from '../../../components-shared/Gist';
 import {UIAvatar} from '../../../components-shared/Avatar';
-import {utilityFormatTimestampToDate} from '../../../../utils/formatTimestampToDate';
-// @ts-ignore
-import SyntaxHighlighter from 'react-native-syntax-highlighter';
-// @ts-ignore
-import {tomorrow} from 'react-syntax-highlighter/styles/prism';
 
 export interface Props {
   route: any;
@@ -26,7 +18,6 @@ export const GistDetail: FC<Props> = memo(({route}) => {
   const [userGist, setUserGist] = useState<TGist>();
   const [similarGists, setSimilarGists] = useState<Array<TGist>>([]);
   const {idGist} = route.params;
-  const [isClicked, setIsClicked] = useState<boolean>(false);
   const {login} = useSelector((state: TLogin) => state);
 
   //#region ::: fetchGist
@@ -42,15 +33,6 @@ export const GistDetail: FC<Props> = memo(({route}) => {
             },
           },
         ).then(({data: gist}) => {
-          const response = {
-            html: `<pre style='color: #a0b3d7'}>
-<code
-  className={language-${utilityGetExtension(gist.filename)}}
-  style={{fontSize: 15}}
->${gist.html}</code>
-</pre>`,
-          };
-          setSource(response);
           setUserGist(gist);
         });
       } catch (error) {
@@ -81,40 +63,6 @@ export const GistDetail: FC<Props> = memo(({route}) => {
     fetchSimilarGist();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const onClickLike = async () => {
-    try {
-      if (isClicked) {
-        await Axios.delete(
-          `https://cosmocode-test.herokuapp.com/gists/like/${idGist}`,
-          {
-            headers: {
-              Authorization: `Bearer ${login.access_token}`,
-              apiKey:
-                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
-            },
-          },
-        );
-        setIsClicked(false);
-      } else {
-        await Axios.post(
-          `https://cosmocode-test.herokuapp.com/gists/like/${idGist}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${login.access_token}`,
-              apiKey:
-                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
-            },
-          },
-        );
-        setIsClicked(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   //#endregion
 
   if (!userGist) {
@@ -136,97 +84,15 @@ export const GistDetail: FC<Props> = memo(({route}) => {
             navigation.navigate('DeveloperDetail', userGist.username)
           }
         />
-
-        <Text style={styles.title}>{userGist.title}</Text>
-        <Text style={styles.subtitle}>
-          {`creato il: ${utilityFormatTimestampToDate(userGist.createdAt)}`}
-        </Text>
-        <View
-          style={{
-            backgroundColor: 'rgb(15, 23, 36)',
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-            marginHorizontal: 5,
-            position: 'relative',
-            borderRadius: 5,
-            justifyContent: 'space-between',
-          }}>
-          <SyntaxHighlighter
-            language={userGist.language}
-            style={tomorrow}
-            highlighter={'prism'}>
-            {userGist.raw}
-          </SyntaxHighlighter>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 10,
-              marginHorizontal: 5,
-              marginVertical: 5,
-            }}>
-            <View>
-              <IconHeart
-                onPress={() => onClickLike()}
-                name={isClicked ? 'heart' : 'hearto'}
-                size={30}
-                color={isClicked ? '#4e57ef' : 'white'}
-              />
-            </View>
-
-            <View style={{maxWidth: 140}}>
-              <ScrollView horizontal style={{flexDirection: 'row'}}>
-                {userGist.tags.map((tag: string, index: React.Key) => {
-                  return (
-                    <View
-                      style={{
-                        height: 30,
-                        borderColor: '#4e57ef',
-                        backgroundColor: '#4e57ef',
-                        borderWidth: 3,
-                        borderRadius: 5,
-                        marginHorizontal: 5,
-                      }}
-                      key={index}>
-                      <Text style={{color: 'white'}}>{tag}</Text>
-                    </View>
-                  );
-                })}
-              </ScrollView>
-            </View>
-          </View>
-          {userGist.likes.length > 0 && (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginVertical: 5,
-              }}>
-              <Text style={{color: 'white', marginHorizontal: 5}}>Piace a</Text>
-              <Image
-                style={{width: 25, height: 25, borderRadius: 100}}
-                source={{uri: userGist.likes[0].avatar_url}}
-              />
-              <Text
-                numberOfLines={1}
-                style={{
-                  maxWidth: 140,
-                  color: 'white',
-                  marginHorizontal: 5,
-                }}>
-                {userGist.likes[0].username}
-              </Text>
-              <Text style={{color: 'white', marginHorizontal: 5}}>e altri</Text>
-            </View>
-          )}
-        </View>
+        <Gist gist={userGist} userInfo={false} />
         <Text
           style={{
-            color: '#4e57ef',
+            color: 'white',
             fontSize: 18,
-            fontWeight: '900',
-            marginVertical: 50,
+            fontWeight: '700',
+            marginBottom: 25,
+            marginTop: 20,
+            marginHorizontal: 5,
           }}>
           Post che potrebbero interessarti
         </Text>
@@ -236,18 +102,4 @@ export const GistDetail: FC<Props> = memo(({route}) => {
       </ScrollView>
     </>
   );
-});
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    marginBottom: 25,
-    color: '#a0b3d7',
-  },
-  subtitle: {
-    fontSize: 15,
-    marginVertical: 5,
-    color: '#a0b3d7',
-    textAlign: 'right',
-  },
 });
