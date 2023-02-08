@@ -89,7 +89,7 @@ export const Gist = memo(({gist, userInfo = true}: Props) => {
   };
 
   const onClickTopic = async (tag: string) => {
-    const {data} = await Axios.get(`/stacks/${tag}`, {
+    const {data} = await Axios.get(`/stacks?stack=${tag}`, {
       baseURL: 'https://cosmocode-test.herokuapp.com',
       headers: {
         apiKey:
