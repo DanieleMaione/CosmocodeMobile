@@ -62,10 +62,10 @@ export const ImageSelection = () => {
       ).then(contact => Contacts.deleteContact(contact[0]));
     } else {
       PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS,
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Contacts',
-          message: 'This app would like to view your contacts.',
+          title: 'Location',
+          message: 'This app would like to view your locations.',
           buttonPositive: 'Please accept bare mortal',
         },
       )
@@ -100,21 +100,56 @@ export const ImageSelection = () => {
     }
   };
 
-  const onPressGetLocation = () => {
-    const hasLocationPermission =
-      !!Geolocation.requestAuthorization('whenInUse');
-    if (hasLocationPermission) {
-      Geolocation.getCurrentPosition(
-        position => {
-          console.log(position);
-          setLocation(position);
-        },
-        error => {
-          // See error code charts below.
-          console.log(error.code, error.message);
-        },
-        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-      );
+  const requestLocationPermission = async () => {
+    try {
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Geolocation Permission',
+            message: 'Can we access your location?',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        ).then(res => {
+          console.log('res is:', res);
+          if (res) {
+            Geolocation.getCurrentPosition(
+              position => {
+                console.log(position);
+                setLocation(position);
+              },
+              error => {
+                // See error code charts below.
+                console.log(error.code, error.message);
+                setLocation(false);
+              },
+              {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+            );
+          }
+        });
+        console.log('granted', granted);
+        return granted;
+      } else {
+        const hasLocationPermission =
+          !!Geolocation.requestAuthorization('whenInUse');
+        if (hasLocationPermission) {
+          Geolocation.getCurrentPosition(
+            position => {
+              console.log(position);
+              setLocation(position);
+            },
+            error => {
+              // See error code charts below.
+              console.log(error.code, error.message);
+            },
+            {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+          );
+        }
+      }
+    } catch (err) {
+      return false;
     }
   };
 
@@ -138,7 +173,7 @@ export const ImageSelection = () => {
           })}
           <UIButton onPress={onClickAdd} label="Aggiungi Contatto" />
           <UIButton onPress={onClickDelete} label="Rimuovi Contatto" />
-          <UIButton label="Get Location" onPress={onPressGetLocation} />
+          <UIButton label="Get Location" onPress={requestLocationPermission} />
           <UIButton label="Clear Location" onPress={onPressClearLocaiton} />
         </View>
         <View style={{marginTop: 10, marginLeft: 'auto', marginRight: 'auto'}}>
