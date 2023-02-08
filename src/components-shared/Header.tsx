@@ -11,18 +11,16 @@ export const Header: FC<Props> = memo(({title}) => {
   return (
     <View
       style={{
-        height: '12%',
+        paddingVertical: '5%',
         backgroundColor: 'rgb(15, 23, 36)',
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
       }}>
       <Text
         style={{
           fontWeight: '700',
           fontSize: 17,
           color: 'white',
-          paddingBottom: 5,
-          marginBottom: 8,
           textTransform: 'capitalize',
         }}
         accessibilityRole="header">
