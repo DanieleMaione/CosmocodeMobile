@@ -1,5 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {StyleSheet, SafeAreaView, View, Image, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  View,
+  Image,
+  ScrollView,
+  Text,
+} from 'react-native';
 
 import * as ImagePicker from 'react-native-image-picker';
 import {Response} from './components/Response';
@@ -8,6 +16,8 @@ import Contacts from 'react-native-contacts';
 import {PermissionsAndroid} from 'react-native';
 import {Platform} from 'react-native';
 import {UIButton} from '../../components-shared/UIButton';
+import Geolocation from 'react-native-geolocation-service';
+import {useState} from 'react';
 
 export const includeExtra = true;
 
@@ -28,7 +38,8 @@ export const ImageSelection = () => {
     familyName: 'Palermo',
     givenName: 'Cristian',
   };
-  const [response, setResponse] = React.useState<any>(null);
+  const [response, setResponse] = useState<any>(null);
+  const [location, setLocation] = useState<any>();
 
   const onButtonPress = React.useCallback(
     (
@@ -89,6 +100,28 @@ export const ImageSelection = () => {
     }
   };
 
+  const onPressGetLocation = () => {
+    const hasLocationPermission =
+      !!Geolocation.requestAuthorization('whenInUse');
+    if (hasLocationPermission) {
+      Geolocation.getCurrentPosition(
+        position => {
+          console.log(position);
+          setLocation(position);
+        },
+        error => {
+          // See error code charts below.
+          console.log(error.code, error.message);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    }
+  };
+
+  const onPressClearLocaiton = () => {
+    setLocation('');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Title>Image Picker</Title>
@@ -105,6 +138,16 @@ export const ImageSelection = () => {
           })}
           <UIButton onPress={onClickAdd} label="Aggiungi Contatto" />
           <UIButton onPress={onClickDelete} label="Rimuovi Contatto" />
+          <UIButton label="Get Location" onPress={onPressGetLocation} />
+          <UIButton label="Clear Location" onPress={onPressClearLocaiton} />
+        </View>
+        <View style={{marginTop: 10, marginLeft: 'auto', marginRight: 'auto'}}>
+          <Text style={{color: 'white'}}>
+            Latitude: {location ? location.coords.latitude : null}
+          </Text>
+          <Text style={{color: 'white'}}>
+            Longitude: {location ? location.coords.longitude : null}
+          </Text>
         </View>
         <Response>{response}</Response>
 
