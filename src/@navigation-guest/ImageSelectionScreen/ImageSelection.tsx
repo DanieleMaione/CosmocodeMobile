@@ -50,13 +50,15 @@ export const ImageSelection = () => {
         newPerson.emailAddresses[0].email,
       ).then(contact => Contacts.deleteContact(contact[0]));
     } else {
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-        title: 'Contacts',
-        message: 'This app would like to view your contacts.',
-        buttonPositive: 'Please accept bare mortal',
-      })
-        .then(res => {
-          console.log('Permission: ', res);
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS,
+        {
+          title: 'Contacts',
+          message: 'This app would like to view your contacts.',
+          buttonPositive: 'Please accept bare mortal',
+        },
+      )
+        .then(() => {
           Contacts.getContactsByEmailAddress(
             newPerson.emailAddresses[0].email,
           ).then(contact => Contacts.deleteContact(contact[0]));
@@ -70,16 +72,16 @@ export const ImageSelection = () => {
     if (Platform.OS === 'ios') {
       Contacts.openContactForm(newPerson);
     } else {
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-        title: 'Contacts',
-        message: 'This app would like to view your contacts.',
-        buttonPositive: 'Please accept bare mortal',
-      })
-        .then(res => {
-          console.log('Permission: ', res);
-          Contacts.getContactsByEmailAddress(
-            newPerson.emailAddresses[0].email,
-          ).then(contact => Contacts.deleteContact(contact[0]));
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS,
+        {
+          title: 'Contacts',
+          message: 'This app would like to view your contacts.',
+          buttonPositive: 'Please accept bare mortal',
+        },
+      )
+        .then(() => {
+          Contacts.openContactForm(newPerson);
         })
         .catch(error => {
           console.error('Permission error: ', error);
