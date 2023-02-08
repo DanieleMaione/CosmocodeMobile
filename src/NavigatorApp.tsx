@@ -169,14 +169,18 @@ export const NavigatorApp = () => {
             options={{
               title: 'Profile',
               headerTintColor: 'white',
-              tabBarIcon: ({focused}) => (
-                <Image
-                  style={styles(focused).userImg}
-                  source={{
-                    uri: user.avatar_url,
-                  }}
-                />
-              ),
+              tabBarIcon: ({focused}) => {
+                return (
+                  user.avatar_url && (
+                    <Image
+                      style={styles(focused).userImg}
+                      source={{
+                        uri: user.avatar_url,
+                      }}
+                    />
+                  )
+                );
+              },
               tabBarLabel: () => {
                 return null;
               },
