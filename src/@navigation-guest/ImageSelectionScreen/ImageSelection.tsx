@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -22,7 +22,7 @@ import * as ImagePicker from 'react-native-image-picker';
 export const includeExtra = true;
 
 export const ImageSelection = () => {
-  var newPerson = {
+  const newPerson = {
     emailAddresses: [
       {
         label: 'work',
@@ -37,9 +37,16 @@ export const ImageSelection = () => {
     ],
     familyName: 'Palermo',
     givenName: 'Cristian',
+    //per android usare displayName
+    displayName: 'Cristian Palermo',
   };
   const [response, setResponse] = useState<any>(null);
   const [location, setLocation] = useState<any>();
+  const [contactList, setContactList] = useState<any>();
+
+  useEffect(() => {
+    Contacts.getAll().then(res => setContactList(res));
+  });
 
   const onButtonPress = async (
     type: string,
@@ -86,13 +93,20 @@ export const ImageSelection = () => {
   };
 
   const onClickDelete = () => {
+    const isContactFound = contactList.find((contact: any) => {
+      return (
+        contact.emailAddresses[0].email === newPerson.emailAddresses[0].email
+      );
+    });
     if (Platform.OS === 'ios') {
-      Contacts.getContactsByEmailAddress(
-        newPerson.emailAddresses[0].email,
-      ).then(contact => Contacts.deleteContact(contact[0]));
+      isContactFound
+        ? Contacts.getContactsByEmailAddress(
+            newPerson.emailAddresses[0].email,
+          ).then(contact => Contacts.deleteContact(contact[0]))
+        : null;
     } else {
       PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.WRITE_CONTACTS,
         {
           title: 'Location',
           message: 'This app would like to view your locations.',
@@ -100,15 +114,19 @@ export const ImageSelection = () => {
         },
       )
         .then(() => {
-          Contacts.getContactsByEmailAddress(
-            newPerson.emailAddresses[0].email,
-          ).then(contact => Contacts.deleteContact(contact[0]));
+          isContactFound
+            ? newPerson.emailAddresses[0].email &&
+              Contacts.getContactsByEmailAddress(
+                newPerson.emailAddresses[0].email,
+              ).then(contact => Contacts.deleteContact(contact[0]))
+            : null;
         })
         .catch(error => {
           console.error('Permission error: ', error);
         });
     }
   };
+
   const onClickAdd = () => {
     if (Platform.OS === 'ios') {
       Contacts.openContactForm(newPerson);
