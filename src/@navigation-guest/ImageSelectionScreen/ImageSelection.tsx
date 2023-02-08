@@ -2,10 +2,12 @@ import * as React from 'react';
 import {StyleSheet, SafeAreaView, View, Image, ScrollView} from 'react-native';
 
 import * as ImagePicker from 'react-native-image-picker';
-import {Button} from './components/Button';
 import {Response} from './components/Response';
 import {Title} from './components/Title';
 import Contacts from 'react-native-contacts';
+import {PermissionsAndroid} from 'react-native';
+import {Platform} from 'react-native';
+import {UIButton} from '../../components-shared/UIButton';
 
 export const includeExtra = true;
 
@@ -43,12 +45,46 @@ export const ImageSelection = () => {
   );
 
   const onClickDelete = () => {
-    Contacts.getContactsByEmailAddress(newPerson.emailAddresses[0].email).then(
-      contact => Contacts.deleteContact(contact[0]),
-    );
+    if (Platform.OS === 'ios') {
+      Contacts.getContactsByEmailAddress(
+        newPerson.emailAddresses[0].email,
+      ).then(contact => Contacts.deleteContact(contact[0]));
+    } else {
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+        title: 'Contacts',
+        message: 'This app would like to view your contacts.',
+        buttonPositive: 'Please accept bare mortal',
+      })
+        .then(res => {
+          console.log('Permission: ', res);
+          Contacts.getContactsByEmailAddress(
+            newPerson.emailAddresses[0].email,
+          ).then(contact => Contacts.deleteContact(contact[0]));
+        })
+        .catch(error => {
+          console.error('Permission error: ', error);
+        });
+    }
   };
   const onClickAdd = () => {
-    Contacts.openContactForm(newPerson);
+    if (Platform.OS === 'ios') {
+      Contacts.openContactForm(newPerson);
+    } else {
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
+        title: 'Contacts',
+        message: 'This app would like to view your contacts.',
+        buttonPositive: 'Please accept bare mortal',
+      })
+        .then(res => {
+          console.log('Permission: ', res);
+          Contacts.getContactsByEmailAddress(
+            newPerson.emailAddresses[0].email,
+          ).then(contact => Contacts.deleteContact(contact[0]));
+        })
+        .catch(error => {
+          console.error('Permission error: ', error);
+        });
+    }
   };
 
   return (
@@ -56,21 +92,17 @@ export const ImageSelection = () => {
       <Title>Image Picker</Title>
       <ScrollView>
         <View style={styles.buttonContainer}>
-          {actions.map(({title, type, options}) => {
+          {actions.map(({title, type, options}, index) => {
             return (
-              <Button key={title} onPress={() => onButtonPress(type, options)}>
-                {title}
-              </Button>
+              <UIButton
+                label={title}
+                key={index}
+                onPress={() => onButtonPress(type, options)}
+              />
             );
           })}
-          <Button key={newPerson.emailAddresses[0].email} onPress={onClickAdd}>
-            Aggiungi Contatto
-          </Button>
-          <Button
-            key={newPerson.emailAddresses[0].email}
-            onPress={onClickDelete}>
-            Rimuovi Contatto
-          </Button>
+          <UIButton onPress={onClickAdd} label="Aggiungi Contatto" />
+          <UIButton onPress={onClickDelete} label="Rimuovi Contatto" />
         </View>
         <Response>{response}</Response>
 

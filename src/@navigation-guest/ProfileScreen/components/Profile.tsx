@@ -15,7 +15,6 @@ import {TUser} from '../../../../slice/userSlice';
 import {Gist} from '../../../components-shared/Gist';
 import {Header} from '../../../components-shared/Header';
 import {TGist} from '../../../components-shared/types';
-import Contacts from 'react-native-contacts';
 
 export interface Props {
   navigation: any;
@@ -96,10 +95,7 @@ export const Profile: FC<Props> = memo(({navigation}) => {
 
     getGist();
     getUser();
-    Contacts.getAll().then(contacts => {
-      //funzione fatta solo per esercizi sui contatti
-      return contacts;
-    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
