@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import * as React from 'react';
+import React from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -9,7 +9,6 @@ import {
   Text,
 } from 'react-native';
 
-import * as ImagePicker from 'react-native-image-picker';
 import {Response} from './components/Response';
 import {Title} from './components/Title';
 import Contacts from 'react-native-contacts';
@@ -18,6 +17,7 @@ import {Platform} from 'react-native';
 import {UIButton} from '../../components-shared/UIButton';
 import Geolocation from 'react-native-geolocation-service';
 import {useState} from 'react';
+import * as ImagePicker from 'react-native-image-picker';
 
 export const includeExtra = true;
 
@@ -41,19 +41,49 @@ export const ImageSelection = () => {
   const [response, setResponse] = useState<any>(null);
   const [location, setLocation] = useState<any>();
 
-  const onButtonPress = React.useCallback(
-    (
-      type: string,
-      options: ImagePicker.CameraOptions | ImagePicker.ImageLibraryOptions,
-    ) => {
+  const onButtonPress = async (
+    type: string,
+    options: ImagePicker.CameraOptions | ImagePicker.ImageLibraryOptions,
+  ) => {
+    if (Platform.OS === 'ios') {
       if (type === 'capture') {
         ImagePicker.launchCamera(options, setResponse);
       } else {
         ImagePicker.launchImageLibrary(options, setResponse);
       }
-    },
-    [],
-  );
+    } else {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'App Camera Permission',
+            message: 'App needs access to your camera ',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          ImagePicker.launchCamera(
+            {
+              mediaType: 'photo',
+              includeBase64: false,
+              maxHeight: 200,
+              maxWidth: 200,
+            },
+            res => {
+              console.log(res);
+              setResponse(res);
+            },
+          );
+        } else {
+          console.log('Camera permission denied');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+  };
 
   const onClickDelete = () => {
     if (Platform.OS === 'ios') {
@@ -246,24 +276,6 @@ const actions: Action[] = [
       selectionLimit: 0,
       mediaType: 'photo',
       includeBase64: false,
-      includeExtra,
-    },
-  },
-  {
-    title: 'Fai un video',
-    type: 'capture',
-    options: {
-      saveToPhotos: true,
-      mediaType: 'video',
-      includeExtra,
-    },
-  },
-  {
-    title: 'Seleziona un video',
-    type: 'library',
-    options: {
-      selectionLimit: 0,
-      mediaType: 'video',
       includeExtra,
     },
   },
