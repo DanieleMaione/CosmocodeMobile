@@ -66,17 +66,25 @@ export const Stacks: FC<Props> = memo(({navigation}) => {
             if (!showStack) {
               return null;
             }
+
             return (
               <>
-                <UIAvatar
-                  onPress={() => navigation.navigate('StackDetail', stack.item)}
-                  key={stack.item.url}
-                  srcImage={stack.item.url}
-                  alt={stack.item.name}
-                  title={stack.item.name}
-                  subtitle={`Gists: ${stack.item.totalGists} - Users: ${stack.item.totalUsers}`}
-                />
-                <UIDivider />
+                {/* fix provvisorio fino a quando non si risolve il problema icone topic */}
+                {stack.item.url && (
+                  <UIAvatar
+                    onPress={() =>
+                      navigation.navigate('StackDetail', stack.item)
+                    }
+                    key={stack.item.url}
+                    srcImage={stack.item.url !== null ? stack.item.url : null}
+                    alt={stack.item.name}
+                    title={stack.item.name}
+                    subtitle={`Gists: ${stack.item.totalGists} - Users: ${stack.item.totalUsers}`}
+                  />
+                )}
+                {stack.item.url && stacks.length - 1 !== stack.index && (
+                  <UIDivider />
+                )}
               </>
             );
           }}
