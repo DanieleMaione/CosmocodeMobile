@@ -15,7 +15,8 @@ import {TUser} from '../../../../slice/userSlice';
 import {Gist} from '../../../components-shared/Gist';
 import {Header} from '../../../components-shared/Header';
 import {TGist} from '../../../components-shared/types';
-
+import {initStripe, StripeProvider} from '@stripe/stripe-react-native';
+import {PaymentScreen} from './PaymentScreen';
 export interface Props {
   navigation: any;
 }
@@ -39,6 +40,13 @@ export const Profile: FC<Props> = memo(({navigation}) => {
   }>();
   const [followingList, setFollowingList] = useState(userData?.following || []);
   const [followerList, setFollowerList] = useState(userData?.followers || []);
+
+  useEffect(() => {
+    initStripe({
+      publishableKey:
+        'pk_test_51MZGVVGVqBE14xrHOs8PeJ645CnhHjlbvnfNyFAuQIS7kWhIgpvcWWunhKgIRxLQrXkDLW74NIjrADMkwGrPCfme004PmOuzR2',
+    });
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -111,6 +119,15 @@ export const Profile: FC<Props> = memo(({navigation}) => {
           flex: 1,
           backgroundColor: '#171c25',
         }}>
+        <StripeProvider
+          publishableKey={
+            'pk_test_51MZGVVGVqBE14xrHOs8PeJ645CnhHjlbvnfNyFAuQIS7kWhIgpvcWWunhKgIRxLQrXkDLW74NIjrADMkwGrPCfme004PmOuzR2'
+          }
+          merchantIdentifier="merchant.identifier" // required for Apple Pay
+          urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+        >
+          <PaymentScreen />
+        </StripeProvider>
         <View
           style={{
             flexDirection: 'row',
