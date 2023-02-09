@@ -1,81 +1,53 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {UIButton} from '../../../components-shared/UIButton';
-import PaymentMethodCreateParams, {
+import {
   CardField,
   CardFieldInput,
-  useConfirmPayment,
+  useStripe,
 } from '@stripe/stripe-react-native';
-import {API_URL} from '../Config';
 
-import {TextInput} from 'react-native';
-import axios from 'axios';
+import {View, Alert} from 'react-native';
 
 export const PaymentScreen = () => {
-  const [name, setName] = useState('');
-  const {confirmPayment, loading} = useConfirmPayment();
+  const {confirmPayment} = useStripe();
 
-  const fetchPaymentIntentClientSecret = async () => {
-    const response = await axios.post(
-      `${API_URL}/create-payment-intent`,
-      {
-        paymentMethodType: 'card',
-        currency: 'usd',
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
+  const [key, setKey] = useState('');
+
+  useEffect(() => {
+    fetch('http://localhost:3000/create-payment-intent', {
+      method: 'POST',
+    })
+      .then(res => res.json())
+      .then(res => {
+        setKey((res as {clientSecret: string}).clientSecret);
+      })
+      .catch(e => Alert.alert(e.message));
+  }, []);
+
+  const handleConfirmation = async () => {
+    if (key) {
+      const {paymentIntent, error} = await confirmPayment(key, {
+        paymentMethodType: 'Card',
+        paymentMethodData: {
+          billingDetails: {
+            email: 'John@email.com',
+          },
         },
-      },
-    );
-    // const response = await fetch(`${API_URL}/create-payment-intent`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     paymentMethodType: 'card',
-    //     currency: 'usd',
-    //   }),
-    // });
-    console.log(response.data);
+      });
 
-    const {clientSecret} = await response.data;
-
-    return clientSecret;
-  };
-
-  const handlePayPress = async () => {
-    // 1. fetch Intent Client Secret from backend
-    const clientSecret = await fetchPaymentIntentClientSecret();
-
-    // 2. Gather customer billing information (ex. email)
-    const billingDetails: PaymentMethodCreateParams.BillingDetails = {
-      name,
-    };
-
-    const {error, paymentIntent} = await confirmPayment(clientSecret, {
-      type: 'Card',
-      billingDetails,
-    });
-
-    if (error) {
-      console.log('Payment confirmation error', error.message);
-    } else if (paymentIntent) {
-      console.log('Success from promise', paymentIntent);
+      if (!error) {
+        Alert.alert('Received payment', `Billed for ${paymentIntent?.amount}`);
+      } else {
+        console.log('errori');
+        Alert.alert('Error', error.message);
+      }
     }
   };
-
   return (
-    <>
-      <TextInput
-        autoCapitalize="none"
-        placeholder="Name"
-        keyboardType="name-phone-pad"
-        onChange={(value: any) => setName(value.nativeEvent.text)}
-      />
+    <View>
       <CardField
-        postalCodeEnabled={true}
+        postalCodeEnabled={false}
         placeholders={{
           number: '4242 4242 4242 4242',
         }}
@@ -92,12 +64,8 @@ export const PaymentScreen = () => {
           console.log('focusField', focusedField);
         }}
       />
-      <UIButton
-        label="conferma"
-        onPress={() => handlePayPress()}
-        disabled={loading}
-      />
-    </>
+      <UIButton label="Confirm payment" onPress={handleConfirmation} />
+    </View>
   );
 };
 
