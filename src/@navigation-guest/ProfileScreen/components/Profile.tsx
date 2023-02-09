@@ -15,6 +15,7 @@ import {TUser} from '../../../../slice/userSlice';
 import {Gist} from '../../../components-shared/Gist';
 import {Header} from '../../../components-shared/Header';
 import {TGist} from '../../../components-shared/types';
+import {Context} from '../../../Context';
 import {PaymentScreen} from './PaymentScreen';
 
 export interface Props {
@@ -40,6 +41,7 @@ export const Profile: FC<Props> = memo(({navigation}) => {
   }>();
   const [followingList, setFollowingList] = useState(userData?.following || []);
   const [followerList, setFollowerList] = useState(userData?.followers || []);
+  const [isPaid, setIsPaid] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -156,7 +158,9 @@ export const Profile: FC<Props> = memo(({navigation}) => {
               </TouchableOpacity>
             </View>
             <View style={{alignItems: 'flex-end'}}>
-              <PaymentScreen />
+              <Context.Provider value={{isPaid, setIsPaid}}>
+                <PaymentScreen />
+              </Context.Provider>
             </View>
           </View>
         </View>
@@ -180,9 +184,10 @@ export const Profile: FC<Props> = memo(({navigation}) => {
               marginTop: 40,
               marginHorizontal: 5,
             }}>
-            {gistList.map((gist: TGist, index) => {
-              return <Gist gist={gist} userInfo={false} key={index} />;
-            })}
+            {isPaid &&
+              gistList.map((gist: TGist, index) => {
+                return <Gist gist={gist} userInfo={false} key={index} />;
+              })}
           </View>
         )}
       </ScrollView>

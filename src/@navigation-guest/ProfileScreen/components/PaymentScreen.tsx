@@ -1,13 +1,14 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {UIButton} from '../../../components-shared/UIButton';
 import {useStripe} from '@stripe/stripe-react-native';
 
 import {View, Alert} from 'react-native';
+import {Context} from '../../../Context';
 
 export const PaymentScreen = () => {
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [key, setKey] = useState('');
+  const {isPaid, setIsPaid} = useContext(Context);
 
   const handleSheet = () => {
     fetch('http://localhost:3000/create-payment-intent', {
@@ -23,7 +24,7 @@ export const PaymentScreen = () => {
       })
       .catch(e => Alert.alert(e.message));
 
-    presentPaymentSheet();
+    presentPaymentSheet().finally(() => setIsPaid(true));
   };
   return (
     <View>
