@@ -1,79 +1,43 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {UIButton} from '../../../components-shared/UIButton';
-import {
-  CardField,
-  CardFieldInput,
-  useStripe,
-} from '@stripe/stripe-react-native';
+import {useStripe} from '@stripe/stripe-react-native';
 
 import {View, Alert} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const PaymentScreen = () => {
-  const {confirmPayment} = useStripe();
-
+  const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [key, setKey] = useState('');
+  const [loading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    fetch('http://localhost:3000/create-payment-intent', {
-      method: 'POST',
-    })
-      .then(res => res.json())
-      .then(res => {
-        setKey((res as {clientSecret: string}).clientSecret);
-      })
-      .catch(e => Alert.alert(e.message));
-  }, []);
-
-  const handleConfirmation = async () => {
-    if (key) {
-      const {paymentIntent, error} = await confirmPayment(key, {
-        paymentMethodType: 'Card',
-        paymentMethodData: {
-          billingDetails: {
-            email: 'John@email.com',
-          },
-        },
-      });
-
-      if (!error) {
-        Alert.alert('Received payment', `Billed for ${paymentIntent?.amount}`);
-      } else {
-        console.log('errori');
-        Alert.alert('Error', error.message);
+  useFocusEffect(
+    useCallback(() => {
+      if (loading) {
+        fetch('http://localhost:3000/create-payment-intent', {
+          method: 'POST',
+        })
+          .then(res => res.json())
+          .then(res => {
+            setKey((res as {clientSecret: string}).clientSecret);
+            initPaymentSheet({
+              paymentIntentClientSecret: key,
+              merchantDisplayName: 'COSMOCODE',
+            });
+          })
+          .catch(e => Alert.alert(e.message));
       }
-    }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loading]),
+  );
+
+  const handleSheet = () => {
+    setIsLoading(true);
+    presentPaymentSheet();
   };
   return (
     <View>
-      <CardField
-        postalCodeEnabled={false}
-        placeholders={{
-          number: '4242 4242 4242 4242',
-        }}
-        cardStyle={inputStyles}
-        style={{
-          width: '100%',
-          height: 50,
-          marginVertical: 30,
-        }}
-        onCardChange={cardDetails => {
-          console.log('cardDetails', cardDetails);
-        }}
-        onFocus={focusedField => {
-          console.log('focusField', focusedField);
-        }}
-      />
-      <UIButton label="Confirm payment" onPress={handleConfirmation} />
+      <UIButton label="supporta" onPress={handleSheet} />
     </View>
   );
-};
-
-const inputStyles: CardFieldInput.Styles = {
-  borderWidth: 1,
-  backgroundColor: '#FFFFFF',
-  borderColor: '#000000',
-  borderRadius: 8,
-  fontSize: 14,
-  placeholderColor: '#999999',
 };

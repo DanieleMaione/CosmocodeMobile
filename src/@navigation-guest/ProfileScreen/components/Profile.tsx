@@ -115,18 +115,14 @@ export const Profile: FC<Props> = memo(({navigation}) => {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
           <Image
-            style={{height: 100, width: 100, margin: 10, borderRadius: 100}}
+            style={{height: 120, width: 120, margin: 5, borderRadius: 100}}
             source={{uri: user?.avatar_url}}
           />
-          <View
-            style={{
-              justifyContent: 'center',
-              alignSelf: 'flex-end',
-              minWidth: 250,
-            }}>
+          <View>
             <Text
               style={{
                 color: 'white',
@@ -159,13 +155,24 @@ export const Profile: FC<Props> = memo(({navigation}) => {
                 <Text style={styles.publicNumber}>{followingList.length}</Text>
               </TouchableOpacity>
             </View>
+            <View style={{alignItems: 'flex-end'}}>
+              <PaymentScreen />
+            </View>
           </View>
         </View>
 
         {userData && userData.total_gists <= 0 ? (
-          <View>
-            <PaymentScreen />
-          </View>
+          <Text
+            style={{
+              width: '100%',
+              fontSize: 15,
+              fontWeight: 'bold',
+              color: 'white',
+              textAlign: 'center',
+              marginTop: 25,
+            }}>
+            Non ci sono post :c
+          </Text>
         ) : (
           <View
             style={{

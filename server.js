@@ -5,7 +5,7 @@ const {Stripe} = require('stripe');
 const stripe = new Stripe(
   'sk_test_51MZGVVGVqBE14xrHR87JN5sHEDPcpgJ7h8GzVhZX3RGxuQ7MLNcpVVgXBnfoyxchV2BfjTb8GcZok6hrTWhsOBdo00BdGvLfb6',
   {
-    apiVersion: '2023-08-27',
+    apiVersion: '2020-08-27',
     typescript: true,
   },
 );
