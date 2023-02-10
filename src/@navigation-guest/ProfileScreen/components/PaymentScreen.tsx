@@ -8,7 +8,7 @@ import {Context} from '../../../Context';
 export const PaymentScreen = () => {
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
   const [key, setKey] = useState('');
-  const {isPaid, setIsPaid} = useContext(Context);
+  const {setIsPaid} = useContext(Context);
 
   const handleSheet = () => {
     fetch('http://localhost:3000/create-payment-intent', {
