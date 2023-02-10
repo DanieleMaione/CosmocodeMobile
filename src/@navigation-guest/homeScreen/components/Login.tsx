@@ -17,12 +17,14 @@ import {createLogin} from '../../../../slice/loginSlice';
 import {userInfo} from '../../../../slice/userSlice';
 import {Header} from '../../../components-shared/Header';
 import {UIButton} from '../../../components-shared/UIButton';
+import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 
 export const Login = memo(() => {
   const ref_emailInput = useRef<any>();
   const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const rnBiometrics = new ReactNativeBiometrics();
 
   const onPressLogin = async () => {
     const {data: session} = await Axios.post(
@@ -49,6 +51,67 @@ export const Login = memo(() => {
       },
     );
     dispatch(userInfo(me));
+  };
+
+  const onSignInByometrics = async () => {
+    const {data: session} = await Axios.post(
+      'https://cosmocode-test.herokuapp.com/auth/login',
+      {
+        username: 'cristianpalermo-bitrocketdev',
+        email: 'c.palermo@bitrocket.dev',
+      },
+      {
+        headers: {
+          apiKey:
+            'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+        },
+      },
+    );
+
+    dispatch(createLogin(session));
+
+    const {data: me} = await Axios.get(
+      'https://cosmocode-test.herokuapp.com/auth/me',
+      {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          apiKey:
+            'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
+        },
+      },
+    );
+    dispatch(userInfo(me));
+  };
+
+  const onAuthenticate = () => {
+    rnBiometrics.isSensorAvailable().then(async resultObject => {
+      const {available, biometryType} = resultObject;
+
+      if (available && biometryType === BiometryTypes.TouchID) {
+        console.log('TouchID is supported');
+      } else if (available && biometryType === BiometryTypes.FaceID) {
+        console.log('FaceID is supported');
+        rnBiometrics
+          .simplePrompt({promptMessage: 'Confirm fingerprint'})
+          .then(res => {
+            const {success} = res;
+
+            if (success) {
+              console.log('successful biometrics provided');
+              onSignInByometrics();
+            } else {
+              console.log('user cancelled biometric prompt');
+            }
+          })
+          .catch(() => {
+            console.log('biometrics failed');
+          });
+      } else if (available && biometryType === BiometryTypes.Biometrics) {
+        console.log('Biometrics is supported');
+      } else {
+        console.log('Biometrics not supported');
+      }
+    });
   };
 
   return (
@@ -103,6 +166,10 @@ export const Login = memo(() => {
               value={email}
             />
             <UIButton label="login" onPress={() => onPressLogin()} />
+            <UIButton
+              label="Byometrics Login"
+              onPress={() => onAuthenticate()}
+            />
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
