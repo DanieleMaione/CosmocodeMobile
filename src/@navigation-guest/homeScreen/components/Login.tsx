@@ -17,7 +17,6 @@ import {createLogin} from '../../../../slice/loginSlice';
 import {userInfo} from '../../../../slice/userSlice';
 import {Header} from '../../../components-shared/Header';
 import {UIButton} from '../../../components-shared/UIButton';
-import FaceID from 'react-native-touch-id';
 
 export const Login = memo(() => {
   const ref_emailInput = useRef<any>();
@@ -52,49 +51,6 @@ export const Login = memo(() => {
     dispatch(userInfo(me));
   };
 
-  const onAuthenticate = () => {
-    FaceID.authenticate()
-      .then(async () => {
-        const {data: session} = await Axios.post(
-          'https://cosmocode-test.herokuapp.com/auth/login',
-          {
-            username: 'cristianpalermo-bitrocketdev',
-            email: 'c.palermo@bitrocket.dev',
-          },
-          {
-            headers: {
-              apiKey:
-                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
-            },
-          },
-        );
-
-        dispatch(createLogin(session));
-
-        const {data: me} = await Axios.get(
-          'https://cosmocode-test.herokuapp.com/auth/me',
-          {
-            headers: {
-              Authorization: `Bearer ${session.access_token}`,
-              apiKey:
-                'vfpfqjcrk1TJD6tdzbcg_JHT1mnq9rdv4pdzzrf4qmt8QFR-vtc_muhwke8qep-ymt5cuw.ARX',
-            },
-          },
-        );
-        dispatch(userInfo(me));
-      })
-      .catch((error: any) => {
-        console.log('Authentication Failed', error);
-      });
-  };
-
-  const onPressFaceId = () => {
-    FaceID.isSupported()
-      .then(onAuthenticate)
-      .catch((error: any) => {
-        console.log('TouchID not supported', error);
-      });
-  };
   return (
     <>
       <Header title="Cosmocode" />
@@ -147,10 +103,6 @@ export const Login = memo(() => {
               value={email}
             />
             <UIButton label="login" onPress={() => onPressLogin()} />
-            <UIButton
-              label="Byometric access"
-              onPress={() => onPressFaceId()}
-            />
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

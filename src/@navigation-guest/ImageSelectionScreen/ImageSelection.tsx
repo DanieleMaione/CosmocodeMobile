@@ -9,8 +9,6 @@ import {
   Text,
 } from 'react-native';
 
-import {Response} from './components/Response';
-import {Title} from './components/Title';
 import Contacts from 'react-native-contacts';
 import {PermissionsAndroid} from 'react-native';
 import {Platform} from 'react-native';
@@ -18,6 +16,7 @@ import {UIButton} from '../../components-shared/UIButton';
 import Geolocation from 'react-native-geolocation-service';
 import {useState} from 'react';
 import * as ImagePicker from 'react-native-image-picker';
+import {Header} from '../../components-shared/Header';
 
 export const includeExtra = true;
 
@@ -46,7 +45,7 @@ export const ImageSelection = () => {
 
   useEffect(() => {
     Contacts.getAll().then(res => setContactList(res));
-  });
+  }, []);
 
   const onButtonPress = async (
     type: string,
@@ -71,7 +70,7 @@ export const ImageSelection = () => {
           },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          ImagePicker.launchCamera(
+          ImagePicker.launchImageLibrary(
             {
               mediaType: 'photo',
               includeBase64: false,
@@ -207,7 +206,7 @@ export const ImageSelection = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title>Image Picker</Title>
+      <Header title="PROVA" />
       <ScrollView>
         <View style={styles.buttonContainer}>
           {actions.map(({title, type, options}, index) => {
@@ -232,16 +231,16 @@ export const ImageSelection = () => {
             Longitude: {location ? location.coords.longitude : null}
           </Text>
         </View>
-        <Response>{response}</Response>
 
-        {response?.assets &&
+        {response &&
+          response?.assets &&
           response?.assets.map(({uri}: {uri: string}) => (
             <View key={uri} style={styles.imageContainer}>
               <Image
                 resizeMode="cover"
                 resizeMethod="scale"
                 style={styles.image}
-                source={{uri: uri}}
+                source={{uri}}
               />
             </View>
           ))}
@@ -253,7 +252,7 @@ export const ImageSelection = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgb(15, 23, 36)',
+    backgroundColor: '#171c25',
   },
   buttonContainer: {
     flexDirection: 'row',
