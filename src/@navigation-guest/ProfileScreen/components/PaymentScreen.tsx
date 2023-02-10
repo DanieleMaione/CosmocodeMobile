@@ -24,7 +24,9 @@ export const PaymentScreen = () => {
       })
       .catch(e => Alert.alert(e.message));
 
-    presentPaymentSheet().finally(() => setIsPaid(true));
+    presentPaymentSheet().then(res =>
+      res.error ? console.log(res.error) : setIsPaid(true),
+    );
   };
   return (
     <View>
