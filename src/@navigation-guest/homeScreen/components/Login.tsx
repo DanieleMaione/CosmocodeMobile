@@ -83,31 +83,37 @@ export const Login = memo(() => {
     dispatch(userInfo(me));
   };
 
+  const onBiometrycsSupported = () => {
+    rnBiometrics
+      .simplePrompt({promptMessage: 'Confirm TouchID'})
+      .then(res => {
+        const {success} = res;
+
+        if (success) {
+          console.log('successful biometrics provided');
+          onSignInByometrics();
+        } else {
+          console.log('user cancelled biometric prompt');
+        }
+      })
+      .catch(() => {
+        console.log('biometrics failed');
+      });
+  };
+
   const onAuthenticate = () => {
     rnBiometrics.isSensorAvailable().then(async resultObject => {
       const {available, biometryType} = resultObject;
 
       if (available && biometryType === BiometryTypes.TouchID) {
         console.log('TouchID is supported');
+        onBiometrycsSupported();
       } else if (available && biometryType === BiometryTypes.FaceID) {
         console.log('FaceID is supported');
-        rnBiometrics
-          .simplePrompt({promptMessage: 'Confirm fingerprint'})
-          .then(res => {
-            const {success} = res;
-
-            if (success) {
-              console.log('successful biometrics provided');
-              onSignInByometrics();
-            } else {
-              console.log('user cancelled biometric prompt');
-            }
-          })
-          .catch(() => {
-            console.log('biometrics failed');
-          });
+        onBiometrycsSupported();
       } else if (available && biometryType === BiometryTypes.Biometrics) {
         console.log('Biometrics is supported');
+        onBiometrycsSupported();
       } else {
         console.log('Biometrics not supported');
       }
