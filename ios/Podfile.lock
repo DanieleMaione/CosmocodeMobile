@@ -458,6 +458,8 @@ PODS:
     - StripeUICore (= 22.8.4)
   - StripeUICore (22.8.4):
     - StripeCore (= 22.8.4)
+  - TouchID (4.4.1):
+    - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -535,6 +537,7 @@ DEPENDENCIES:
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - "stripe-react-native (from `../node_modules/@stripe/stripe-react-native`)"
+  - TouchID (from `../node_modules/react-native-touch-id`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -655,6 +658,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-vector-icons"
   stripe-react-native:
     :path: "../node_modules/@stripe/stripe-react-native"
+  TouchID:
+    :path: "../node_modules/react-native-touch-id"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -725,6 +730,7 @@ SPEC CHECKSUMS:
   StripeCore: 193f27552fb98108ebfe0df11651fe5f38948305
   StripeFinancialConnections: 955c345ada7d0dff1a9bd15c4ebc97eacce4ac75
   StripeUICore: 6a5bbea0164d63bd91000f001903e7901859e1a4
+  TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
   Yoga: 921eb014669cf9c718ada68b08d362517d564e0c
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
